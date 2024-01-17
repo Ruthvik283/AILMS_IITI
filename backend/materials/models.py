@@ -32,5 +32,5 @@ class Purchase(models.Model):
     def __str__(self):
         # print(self.material.quantity)
         return self.material.material_name + ' ' + str(self.purchase_id)
-
-        
+    
+       
