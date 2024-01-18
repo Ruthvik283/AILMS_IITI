@@ -1,11 +1,12 @@
 from django.db import models
 
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from materials.models import *
 # from django.db import models
-# from django.contrib.auth.models import AbstractUser
-# from django.conf import settings
-# from rest_framework.authtoken.models import Token
-# from django.contrib.auth.models import AbstractUser, Group, Permission
-# #from django.db import models
 
 # class BaseUser(AbstractUser):
 #     # Your other fields and methods here
@@ -18,12 +19,21 @@ from django.db import models
 #     user_user_permissions = models.ManyToManyField(Permission, related_name='user_set_permissions')
 
 
-# class User(AbstractUser):
-#     ROLE_CHOICES = (
-#         ('administrator', 'Administrator'),
-#         ('teacher', 'Teacher'),
-#         ('student', 'Student'),
-#         ('staff', 'Staff'),
-#     )
+class User(AbstractUser):
+    ROLE_CHOICES = (
+        ('administrator', 'Administrator'),
+        ('technician', 'Tecnician'),
+        ('engineer', 'Engineer'),
+        ('student', 'Student'),
+    )
 
-#     role = models.CharField(max_length=15, choices=ROLE_CHOICES)
+    # role = models.OneToOneField(
+    #     Role,
+    #     on_delete=models.CASCADE,
+    #     default=None,
+    #     null=True,
+    # )
+    
+    
+    # role = models.ForeignKey(Role, on_delete=models.SET_NULL)
+    # department=models.ForeignKey()
