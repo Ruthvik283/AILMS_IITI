@@ -36,3 +36,9 @@ def getRoutes(request):
     ]
 
     return Response(routes)
+
+@api_view(['GET'])
+def testData(request):
+    items = User.objects.all()
+    serializer = TestSerializer(items,many=True)
+    return Response(serializer.data)

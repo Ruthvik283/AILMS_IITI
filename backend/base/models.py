@@ -5,7 +5,8 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import AbstractUser, Group, Permission
-#from django.db import models
+from materials.models import *
+# from django.db import models
 
 # class BaseUser(AbstractUser):
 #     # Your other fields and methods here
@@ -21,9 +22,18 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 class User(AbstractUser):
     ROLE_CHOICES = (
         ('administrator', 'Administrator'),
-        ('teacher', 'Teacher'),
+        ('technician', 'Tecnician'),
+        ('engineer', 'Engineer'),
         ('student', 'Student'),
-        ('staff', 'Staff'),
     )
 
-    role = models.CharField(max_length=15, choices=ROLE_CHOICES)
+    # role = models.OneToOneField(
+    #     Role,
+    #     on_delete=models.CASCADE,
+    #     default=None,
+    #     null=True,
+    # )
+    
+    
+    # role = models.ForeignKey(Role, on_delete=models.SET_NULL)
+    # department=models.ForeignKey()
