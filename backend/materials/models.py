@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 # Create your models here.
@@ -39,6 +40,10 @@ class Purchase(models.Model):
 
 class Department(models.Model):
     department_name = models.CharField(max_length=255, default="Un-named")
+    
+    def __str__(self):
+    # print(self.material.quantity)
+        return self.department_name
     # extras to be asked
 
 
