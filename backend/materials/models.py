@@ -51,6 +51,7 @@ class Sanction(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     date_time = models.DateTimeField()
     quantity_sanctioned = models.IntegerField(null=False)
+    
 
     def is_valid(self):
         if (self.quantity_sanctioned >= self.material.quantity):
