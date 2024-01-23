@@ -5,7 +5,8 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from materials.models import *
+# from materials.models import Department
+
 # from django.db import models
 
 # class BaseUser(AbstractUser):
@@ -26,6 +27,9 @@ class User(AbstractUser):
         ('engineer', 'Engineer'),
         ('student', 'Student'),
     )
+    # from materials.models import Department
+    
+    department = models.ForeignKey('materials.Department', on_delete=models.CASCADE, null=True, blank=True)
 
     # role = models.OneToOneField(
     #     Role,

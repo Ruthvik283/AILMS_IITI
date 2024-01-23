@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 # Create your models here.
@@ -39,6 +40,10 @@ class Purchase(models.Model):
 
 class Department(models.Model):
     department_name = models.CharField(max_length=255, default="Un-named")
+    
+    def __str__(self):
+    # print(self.material.quantity)
+        return self.department_name
     # extras to be asked
 
 
@@ -51,6 +56,7 @@ class Sanction(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     date_time = models.DateTimeField()
     quantity_sanctioned = models.IntegerField(null=False)
+    
 
     def is_valid(self):
         if (self.quantity_sanctioned >= self.material.quantity):
