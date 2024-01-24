@@ -40,9 +40,9 @@ class Purchase(models.Model):
 
 class Department(models.Model):
     department_name = models.CharField(max_length=255, default="Un-named")
-    
+
     def __str__(self):
-    # print(self.material.quantity)
+        # print(self.material.quantity)
         return self.department_name
     # extras to be asked
 
@@ -54,14 +54,13 @@ class Sanction(models.Model):
     engineer_id = models.IntegerField(null=False)
     technician_id = models.IntegerField(null=False)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    date_time = models.DateTimeField()
+    date_time = models.DateTimeField(auto_now=True)
     quantity_sanctioned = models.IntegerField(null=False)
-    
 
     def is_valid(self):
-        if (self.quantity_sanctioned >= self.material.quantity):
-            return True
-        return False
+        if (self.quantity_sanctioned <= self.material.quantity):
+            return [True]
+        return [False, self.material.quantity, self.quantity_sanctioned]
 
     def save(self, *args, **kwargs):
         # Call the original save method
@@ -73,4 +72,4 @@ class Sanction(models.Model):
 
 
 class Role(models.Model):
-    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
