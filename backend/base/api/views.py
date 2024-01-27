@@ -76,6 +76,27 @@ def departmentData(request, id):
     return Response(res)
 
 
+@api_view(['GET', 'POST'])
+def departments_data(request):
+    try:
+        departments = Department.objects.all()
+    except Department.DoesNotExist:
+        raise NotFound("Departments not found")
+    
+    department_data = []
+
+    for department in departments:
+        users = department.user_set.all()
+        user_serializer = UserSerializer(users, many=True)
+        department_data.append({
+            "users": user_serializer.data,
+            "department_id": department.id,
+            "department_name": department.department_name
+        })
+
+    return Response(department_data)
+
+
 class PurchasesBetweenDates(APIView):
     def get(self, request, start_date, end_date):
         try:
