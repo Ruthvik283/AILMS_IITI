@@ -23,7 +23,7 @@ class Purchase(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity_purchased = models.IntegerField(null=False)
     vendor_details = models.TextField(blank=True, null=True)
-    date_time = models.DateTimeField()
+    date_time = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         # Call the original save method
@@ -35,7 +35,7 @@ class Purchase(models.Model):
 
     def __str__(self):
         # print(self.material.quantity)
-        return self.material.material_name + ' ' + str(self.purchase_id)
+        return self.material.material_name + '  ' + str(self.purchase_id)+'  ' + str(self.date_time.date())
 
 
 class Department(models.Model):

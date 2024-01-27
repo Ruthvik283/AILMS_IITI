@@ -153,3 +153,36 @@ def sanction_material(request):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(['POST'])
+def purchase_material(request):
+    try:
+        data = request.data
+
+        p = Purchase(
+            material=Material.objects.filter(
+                material_id=data['material']).first(),
+            quantity_purchased=data['quantity_purchased'],
+            vendor_details=data['vendor_details']
+        )
+
+        """
+        (To be added) add feature to automatically handle 
+        materials not yet present in models.Material
+        """
+
+        p.save()
+
+        return Response(
+            {
+                "success": True
+            }
+        )
+    except Exception as e:
+        return Response(
+            {
+                "success": False,
+                "message": str(e)
+            }
+        )
