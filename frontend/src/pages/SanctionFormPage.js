@@ -8,12 +8,13 @@ export default function SanctionFormPage() {
 
     return (
         <>
+        <div className="min-h-screen">
 
             <Navbar></Navbar>
             
             
             <SanctionForm/>
-
+        </div>
             <Footer2></Footer2>
 
         </>
