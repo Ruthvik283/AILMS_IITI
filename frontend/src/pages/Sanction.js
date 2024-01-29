@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Footer2  from '../components/Footer'
 import Navbar  from '../components/Navbar'
+import SanctionTable from '../components/SanctionTable';
 
 
-export default function Home() {
+export default function Sanction() {
 
     return (
         <>
 
             <Navbar></Navbar>
             
-            <div className="bg-slate-300 h-10">Welcome to Home page</div>
+            <SanctionTable/>
 
             <Footer2></Footer2>
 

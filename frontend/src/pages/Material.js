@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Footer2  from '../components/Footer'
 import Navbar  from '../components/Navbar'
+import PurchaseTable from '../components/PurchaseTable';
+import MaterialsTable from '../components/MaterialsTable';
 
 
-export default function Home() {
+export default function Material() {
 
     return (
         <>
 
             <Navbar></Navbar>
             
-            <div className="bg-slate-300 h-10">Welcome to Home page</div>
+            
+            <MaterialsTable/>
 
             <Footer2></Footer2>
 
