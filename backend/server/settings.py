@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +44,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'materials',
     'base.apps.BaseConfig',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    
 ]
 
 AUTH_USER_MODEL = 'base.User'
