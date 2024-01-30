@@ -16,18 +16,20 @@ export const AuthProvider = ({ children }) => {
     // let [username, setUsername] = useState(null)
     let [loading, setLoading] = useState(true)
 
-    // useEffect(() => {
-    //     if(username !== null) { 
-    //         toast.success(`Hi, ${user.username}!`)
-    //     }
-    // }, [username])
+    let [userData, setUserData] = useState({
+        id: null,
+        username: '',
+        email: '',
+        departmentName: ''
+    });
+
+
 
 
     const Navigate = useNavigate()
 
-    let setUserData = (x) => {
-        setUsername(x)
-    }
+
+
     // let set_username = (x) => {
     //     setUser(x)
     // }
@@ -46,11 +48,23 @@ export const AuthProvider = ({ children }) => {
         let data = await response.json()
 
         if (response.status === 200) {
+            let response2 = await fetch('http://127.0.0.1:8000/api/get_username/1')
+            let total_user_data = await response2.json()
+            console.log(total_user_data)
+            setUserData(
+                {
+                    id:total_user_data.id,
+                    username: total_user_data.username,
+                    email: total_user_data.email,
+                    departmentName: total_user_data.departmentName
+                }
+            )
             let user_data = jwtDecode(data.access)
+            console.log("user_data",user_data)
             setAuthTokens(data)
             setUser(user_data)
             localStorage.setItem('authTokens', JSON.stringify(data))
-            console.log(user_data.username)
+            //console.log(user_data.username)
             localStorage.setItem('username', user_data.username)
             Navigate(next_url)
 
@@ -60,7 +74,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    let signupUser = async (e, next_url = '/d') => {
+    let signupUser = async (e, next_url = '/') => {
         console.log("SignupUser")
         // console.log(e.target.password.value)
         // console.log(e.target.confirmpassword.value)
@@ -69,7 +83,7 @@ export const AuthProvider = ({ children }) => {
             alert('Passwords don\'t match')
             return;
         }
-        let response = await fetch('/api/register/', {
+        let response = await fetch('http://127.0.0.1:8000/api/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +96,7 @@ export const AuthProvider = ({ children }) => {
             // setUser(jwtDecode(data.access))
             // localStorage.setItem('authTokens', JSON.stringify(data))
             
-            let response = await fetch('/api/token/', {
+            let response = await fetch('http://127.0.0.1:8000/api/token/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -92,16 +106,27 @@ export const AuthProvider = ({ children }) => {
             let data = await response.json()
     
             if (response.status === 200) {
-                let user_data = jwtDecode(data.access)
-                setAuthTokens(data)
-                setUser(user_data)
-                localStorage.setItem('username', user_data.username)
-                localStorage.setItem('authTokens', JSON.stringify(data))
-                // console.log(user_data.username)
-                // localStorage.setItem('username', user_data.username)
-                Navigate(next_url)
+            let response2 = await fetch('http://127.0.0.1:8000/api/get_username/1')
+            let total_user_data = await response2.json()
+            console.log(total_user_data)
+            setUserData(
+                {
+                    id:total_user_data.id,
+                    username: total_user_data.username,
+                    email: total_user_data.email,
+                    departmentName: total_user_data.departmentName
+                }
+            )
+            let user_data = jwtDecode(data.access)
+            console.log("user_data",user_data)
+            setAuthTokens(data)
+            setUser(user_data)
+            localStorage.setItem('authTokens', JSON.stringify(data))
+            //console.log(user_data.username)
+            localStorage.setItem('username', user_data.username)
+            Navigate(next_url)
 
-                toast.success(`Hi, ${localStorage.getItem('username')}!`)
+            toast.success(`Hi, ${localStorage.getItem('username')}!`)
             } else {
                 toast.error('Something went wrong!')
             }
@@ -122,8 +147,14 @@ export const AuthProvider = ({ children }) => {
         console.log("logoutUser")
         if(user !== null) {
             toast.success('Logged out successfully!')
-            Navigate('/dashboard')
+            Navigate('/')
         }
+        setUserData({
+            id: null,
+            username: '',
+            email: '',
+            departmentName: ''
+        });
         setAuthTokens(null)
         setUser(null)
         setUsername('null')
@@ -188,6 +219,7 @@ export const AuthProvider = ({ children }) => {
         setUserData: setUserData,
         setUser: setUser,
         setAuthTokens: setAuthTokens,
+        userData: userData,
     }
 
 

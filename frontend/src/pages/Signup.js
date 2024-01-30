@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../context/AuthContext'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-
+import { Link, useLocation } from 'react-router-dom'
 import {Icon} from 'react-icons-kit';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff';
 import {eye} from 'react-icons-kit/feather/eye'
 
-
-const LoginPage = () => {
+const SignupPage = () => {
     const [password, setPassword] = useState("");
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
@@ -21,6 +19,8 @@ const LoginPage = () => {
         }
      }
      useEffect(()=>{
+
+            setP(password)
     
             if(password===""){
                 document.querySelector("#password_btn").classList.add('opacity-0')
@@ -35,85 +35,111 @@ const LoginPage = () => {
         },[password])
 
 
-
-
-
-
-
-
-    let { loginUser } = useContext(AuthContext)
-    const contextData  = useContext(AuthContext)
-    const Navigate = useNavigate();
+    let {signupUser}=useContext(AuthContext)
     const location = useLocation();
 
-    useEffect(() => {
-        // if(contextData.user!=null){
-        //     Navigate('/')
-        // }
-        document.title = "Login - Sports League"
-        window.scrollTo(0, 0)
-    }, [])
-
     const handleSubmit = (e) => {
-        // To navigate to the page where an action was performed without logging in.
-        loginUser(e, location.state?.next_url);
+        // To navigate to the page where an action was performed without signing up.
+        signupUser(e, location.state?.next_url);
     }
 
+    useEffect(() => {
+        document.title = "Sign Up - Sports League"
+        window.scrollTo(0, 0)
+    }, [])
+    
+    const [p, setP] = useState('');
+    const [c, setC] = useState('');
+    useEffect(()=>{
+    
+        if(p===c){
+            document.querySelector("#diff_passwords").classList.add('opacity-0')
+            //document.querySelector("#confirmpassword").classList.add('mb3')
+            //console.log(document.querySelector("#confirmpassword").classList)
+            // console.log('matched')
+        }
+        else{
+            document.querySelector("#diff_passwords").classList.remove('opacity-0')
+            //document.querySelector("#confirmpassword").classList.remove('mb3')
+            // document.querySelector("#confirmpassword").classList.remove('mb3')
+            // console.log(document.querySelector("#confirmpassword").classList)
+            // console.log('different')
+        }
+    },[p,c])
     return (
         <>
-            <div className='min-h-screen flex flex-col py-[3%] justify-center bg-slate-600'>
+            <div className='bg-slate-600 min-h-screen py-[3%] flex flex-col justify-center'>
+                <Link to='/' className='sticky top-[2%]'>
+                    <div className='flex justify-end mr-[2%] z-50'>
+                        <button className="py-2 px-4 absolute top-[2%] text-black text-base font-bold rounded-[50px] overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-blue-800 before:to-blue-400 before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-[50px] hover:before:left-0">
+                            Skip Login »
+                        </button>
+                    </div>
+                </Link>
                 <div className="flex justify-center main md:mt-0 mt-2">
-                    <div className="md:my-auto px-[5%] md:px-[10%] my-[4%]">
+                    <div className="my-auto px-[5%] md:px-[10%]">
 
                         <div className="bg-black m-auto  text-white rounded-lg md:flex  shadow-2xl">
 
-                            <div className=" md:w-[50%]  h-full  rounded-r-lg md:rounded-r-none bg-gradient-to-r from-slate-950 to-slate-800 rounded-l-lg p-10">
-                                <form onSubmit={ handleSubmit }>
+                            <div className=" md:w-[50%]  h-full  bg-gradient-to-r from-slate-950 to-slate-800 rounded-l-lg p-10">
+                            <form onSubmit={ handleSubmit }>
                                     <div className="text-center">
                                         <img
                                             className="mx-auto md:h-32 h-[10%]"
                                             src='images/logo.png'
-                                            alt="logo" />
+                                            alt="logo" 
+                                        />
 
                                         <h4 className="mb-[6%] mt-1 pb-1 text-xl font-semibold">
-                                            Login to Sports League
+                                            Register
                                         </h4>
 
                                         <h2 className="text-base md:text-xl">Enter your credentials:</h2>
-                                        <div className=" flex flex-col  items-center gap-3 text-sm pt-5">
+                                        <div className="flex flex-col items-center gap-3 text-sm pt-5">
 
-                                            <div className="flex justify-center w-[100%] ">
-                                                <input className="w-3/4 shadow appearance-none  rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" />
+                                            <div className="flex justify-center w-[100%]">
+                                                <input required className="w-3/4 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" />
                                             </div>
-                                            
+
+                                            <div className="flex justify-center w-[100%]">
+                                                <input required className="w-3/4 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email-id" />
+                                            </div>
+
                                             <div className="flex justify-center w-[100%]">
                                                 <span className="w-3/4 relative">
-                                                    <input className="w-full shadow appearance-none  rounded py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type={type} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                                                    <input className="w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type={type} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
                                                     <span id="password_btn" className="border-0 border-black absolute right-0" onClick={handleToggle}>
                                                         <Icon className="text-gray-500 my-auto mr-3 mt-1" icon={icon} size={25}/>
                                                     </span>
                                                 </span>
                                             </div>
+
+
+                                            <div className="flex justify-center w-[100%]">
+                                                <input required className="w-3/4 shadow appearance-none border  rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="confirmpassword" type="password" placeholder="Confirm Password"  onChange={(e)=>setC(e.target.value)} />
+                                            </div>
+                                            
+                                            <p className="text-red-400 mt-1 opacity-0" id="diff_passwords">Passwords don't match!</p>
                                         </div>
                                     </div>
-                                    <div className="text-center pt-4 pb-5 ">
-
-                                        <button className="rounded h-10 text-sm md:text-base w-[65%] btn1" >
-                                            Continue
+                                    <div className="text-center pt-1 pb-5 ">
+                                        
+                                        <button className="rounded h-10 w-3/4 btn1" >
+                                            Sign Up
                                         </button>
+
+                                        <p className=" text-sm pt-[5%] pb-2"> 
+                                            Already have an account? 
+                                            <span className='px-[2%] text-blue-500 hover:text-blue-300 hover:underline'>
+                                                <Link to='/login' state={ { 'next_url': location.state?.next_url } }> 
+                                                    Login
+                                                </Link>
+                                            </span>
+                                        </p>
 
                                     </div>
 
-                                </form>
-
-                                <p className="text-center text-sm my-[2%] pb-2">
-                                    <span className='px-[0.5rem] text-blue-500 hover:text-blue-300 hover:underline'>
-                                        <Link to='/login' >
-                                            Sign Up
-                                        </Link>
-                                    </span>
-                                    instead?
-                                </p>
+                            </form>
                             </div>
 
                             <div className=" md:w-[50%] rounded-tr-none rounded-b-lg md:rounded-r-lg flex items-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-5">
@@ -152,7 +178,7 @@ const LoginPage = () => {
                 </div>
             </div>
 
-            <style jsx="true">
+            <style jsx = 'true'>
                 {
                     `
                         .btn1 {
@@ -167,13 +193,13 @@ const LoginPage = () => {
                             .svg-container {
                                 width: 25vw;
                             }
-                        }
-
+                        }  
+                        
                         @media screen and (max-width: 768px) {
                             .main {
                                 flex-direction: column;
                             }
-                        }
+                        }  
                     `
                 }
             </style>
@@ -181,4 +207,4 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage
+export default SignupPage

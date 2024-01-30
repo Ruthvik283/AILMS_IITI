@@ -8,6 +8,7 @@ import SanctionFormPage from './pages/SanctionFormPage';
 import PurchaseFormPage from './pages/PurchaseFormPage';
 import LoginPage from './pages/Login';
 import { AuthProvider } from './context/AuthContext'
+import SignupPage from './pages/Signup';
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
             <AuthProvider>
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/purchase" element={<Purchase />} />
                 <Route path="/sanction" element={<Sanction />} />
