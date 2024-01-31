@@ -10,8 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'department_name']
-
+        fields = ['id','username', 'email','department_name','password']
+    
     def get_department_name(self, obj):
         return obj.department.department_name if obj.department else None
 
