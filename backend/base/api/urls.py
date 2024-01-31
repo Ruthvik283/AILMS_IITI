@@ -22,5 +22,6 @@ urlpatterns = [
     path('purchases/<str:start_date>/<str:end_date>/',
          PurchasesBetweenDates.as_view(), name='purchases-between-dates'),
     path('sanction/', views.sanction_material, name='sanction-material'),
+    path('sanctions/', views.sanctionsData, name='sanction-data'),
     path('purchase/', views.purchase_material, name='purchase-material')
 ]

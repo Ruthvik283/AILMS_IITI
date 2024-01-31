@@ -82,7 +82,7 @@ def departments_data(request):
         departments = Department.objects.all()
     except Department.DoesNotExist:
         raise NotFound("Departments not found")
-    
+
     department_data = []
 
     for department in departments:
@@ -112,7 +112,7 @@ class PurchasesBetweenDates(APIView):
         return Response(serializer.data)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def sanction_material(request):
     data = request.data
 
@@ -186,3 +186,10 @@ def purchase_material(request):
                 "message": str(e)
             }
         )
+
+
+@api_view(['GET', 'POST'])
+def sanctionsData(request):
+    res = SanctionSerializer(Sanction.objects.all(), many=True)
+
+    return Response(res.data)
