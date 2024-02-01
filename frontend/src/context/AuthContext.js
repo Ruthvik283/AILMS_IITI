@@ -48,7 +48,9 @@ export const AuthProvider = ({ children }) => {
         let data = await response.json()
 
         if (response.status === 200) {
-            let response2 = await fetch('http://127.0.0.1:8000/api/get_username/1')
+            let data2 = jwtDecode(data.access)
+            console.log("data: ",data2.id)
+            let response2 = await fetch(`http://127.0.0.1:8000/api/get_username/${data2.id}`)
             let total_user_data = await response2.json()
             console.log(total_user_data)
             setUserData(
@@ -106,8 +108,11 @@ export const AuthProvider = ({ children }) => {
             let data = await response.json()
     
             if (response.status === 200) {
-            let response2 = await fetch('http://127.0.0.1:8000/api/get_username/1')
+            let data2 = jwtDecode(data.access)
+            console.log("data: ",data2.id)
+            let response2 = await fetch(`http://127.0.0.1:8000/api/get_username/${data2.id}`)
             let total_user_data = await response2.json()
+            console.log("data: ")
             console.log(total_user_data)
             setUserData(
                 {
@@ -147,7 +152,7 @@ export const AuthProvider = ({ children }) => {
         console.log("logoutUser")
         if(user !== null) {
             toast.success('Logged out successfully!')
-            Navigate('/')
+            Navigate('/login')
         }
         setUserData({
             id: null,
@@ -199,6 +204,22 @@ export const AuthProvider = ({ children }) => {
                 setUser(jwtDecode(data.access))
                 console.log(jwtDecode(data.access))
                 localStorage.setItem('authTokens', JSON.stringify(data))
+
+    //JUST FOR EXTRA SECURITY , NOT REQUIRED!
+            //     let data2 = jwtDecode(data.access)
+            // console.log("data: ",data2.id)
+            // let response2 = await fetch(`http://127.0.0.1:8000/api/get_username/${data2.id}`)
+            // let total_user_data = await response2.json()
+            // console.log("data: ")
+            // console.log(total_user_data)
+            // setUserData(
+            //     {
+            //         id:total_user_data.id,
+            //         username: total_user_data.username,
+            //         email: total_user_data.email,
+            //         departmentName: total_user_data.departmentName
+            //     }
+            // )
             } else {
                 logoutUser()
             }
