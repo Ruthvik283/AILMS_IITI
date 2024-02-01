@@ -1,9 +1,40 @@
 import React from 'react';
 import purchaseData from './purchaseData';
+import { useEffect, useState } from 'react';
 
 const PurchaseTable = () => {
+  const [purchaseData, setPurchaseData] = useState([]);
+  const [startDate, setStartDate] = useState([]);
+  const [endDate, setEndDate] = useState([]);
+  const [Dates, setDates] = useState(["NULL","NULL"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/purchases/NULL/NULL/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setPurchaseData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div>
+      <input type="date" />
+      <input type="date" />
       <h2 className="text-xl font-bold mb-4">Purchase List</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
