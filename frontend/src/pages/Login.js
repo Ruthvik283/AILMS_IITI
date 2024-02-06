@@ -67,7 +67,7 @@ const LoginPage = () => {
 
                         <div className="bg-black m-auto  text-white rounded-lg md:flex  shadow-2xl">
 
-                            <div className=" md:w-[100%]  h-full  rounded-lg md:rounded-r-none bg-white rounded-lg p-10">
+                            <div className=" md:w-[100%]  h-full md:rounded-r-none bg-white rounded-lg p-10">
                                 <form onSubmit={ handleSubmit }>
                                     <div className="text-center">
                                         <img
