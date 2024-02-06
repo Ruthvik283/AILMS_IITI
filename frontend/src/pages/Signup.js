@@ -68,7 +68,7 @@ const SignupPage = () => {
     },[p,c])
     return (
         <>
-            <div className='bg-slate-600 min-h-screen py-[3%] flex flex-col justify-center bg-gray-300'>
+            <div className=' min-h-screen py-[3%] flex flex-col justify-center bg-gray-300'>
                 <Link to='/' className='sticky top-[2%]'>
                     <div className='flex justify-end mr-[2%] z-50'>
                         <button className="py-2 px-4 absolute top-[2%] text-black text-base font-bold rounded-[50px] overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-blue-800 before:to-blue-400 before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-[50px] hover:before:left-0">
@@ -81,7 +81,7 @@ const SignupPage = () => {
 
                         <div className="bg-black m-auto  text-white rounded-lg md:flex  shadow-2xl">
 
-                            <div className="md:w-[100%] h-[50%]  rounded-lg md:rounded-r-none bg-white rounded-lg p-10">
+                            <div className="md:w-[100%] h-[50%] md:rounded-r-none bg-white rounded-lg p-10">
                             <form onSubmit={ handleSubmit }>
                                     <div className="text-center">
                                         <img

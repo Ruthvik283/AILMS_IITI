@@ -10,8 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id','username', 'email','department_name','password']
-    
+        fields = ['id', 'username', 'email', 'department_name', 'password']
+
     def get_department_name(self, obj):
         return obj.department.department_name if obj.department else None
 
@@ -22,27 +22,31 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password']
+        model = Material
+        fields = '__all__'
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
     material_name = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Purchase
         fields = ['purchase_id', 'material', 'quantity_purchased',
-                  'vendor_details', 'date_time', 'material_name']
+                  'vendor_details', 'date_time', 'material_name', 'price']
 
     def get_material_name(self, obj):
         return obj.material.material_name if obj.material else None
 
+    def get_price(self, obj):
+        return obj.material.price if obj.material else None
+
 
 class SanctionSerializer(serializers.ModelSerializer):
+
+    material_name = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Sanction
@@ -54,5 +58,13 @@ class SanctionSerializer(serializers.ModelSerializer):
             "technician_id",
             "material",
             "date_time",
-            "quantity_sanctioned"
+            "quantity_sanctioned",
+            "material_name",
+            "price",
         ]
+
+    def get_material_name(self, obj):
+        return obj.material.material_name if obj.material else None
+
+    def get_price(self, obj):
+        return obj.material.price if obj.material else None

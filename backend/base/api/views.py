@@ -77,6 +77,12 @@ def departmentData(request, id):
 
 
 @api_view(['GET', 'POST'])
+def AllMaterials(request):
+    materials = MaterialSerializer(Material.objects.all(), many=True)
+    return Response(materials.data)
+
+
+@api_view(['GET', 'POST'])
 def departments_data(request):
     try:
         departments = Department.objects.all()
@@ -133,7 +139,7 @@ def sanction_material(request):
             technician_id=data['technician_id'],
             material=Material.objects.filter(
                 material_id=data['material_id'])[0],
-            quantity_sanctioned=data['quantity_sanctioned'],
+            quantity_sanctioned=int(data['quantity_sanctioned']),
         )
 
         is_valid = sct.is_valid()
