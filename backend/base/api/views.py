@@ -11,6 +11,7 @@ from django.db import models
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 User = get_user_model()
 
 
@@ -105,13 +106,23 @@ def departments_data(request):
 
 class PurchasesBetweenDates(APIView):
     def get(self, request, start_date, end_date):
-        if start_date == "NULL" and end_date == "NULL":
-            return Response(
-                PurchaseSerializer(
-                    Purchase.objects.all(),
-                    many=True
-                ).data
-            )
+        """
+        settings.USE_TZ set to False to prevent 
+
+        'RuntimeWarning: DateTimeField Purchase.date_time
+        received a naive datetime (YYYY-MM-DD HH:MM:SS)
+        while time zone support is active' 
+
+        warning in API calls.
+
+        Please fix this if you know how to...
+        """
+
+        if start_date == "NULL":
+            start_date = "1970-01-01"
+
+        if end_date == "NULL":
+            end_date = datetime.now().date().__str__()
 
         try:
             start_date = datetime.strptime(start_date, "%Y-%m-%d").date()

@@ -29,7 +29,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,7 +47,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    
+
 ]
 
 AUTH_USER_MODEL = 'base.User'
@@ -170,7 +169,8 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+# Set to False for base.api.views.PurchasesBetweenDates() api warning
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
