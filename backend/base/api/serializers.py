@@ -7,13 +7,18 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
 
     department_name = serializers.SerializerMethodField()
+    role_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'department_name', 'password']
+        fields = ['id', 'username', 'email',
+                  'department_name', 'role_name', 'password']
 
     def get_department_name(self, obj):
         return obj.department.department_name if obj.department else None
+
+    def get_role_name(self, obj):
+        return obj.role.role_name if obj.role else None
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
@@ -24,7 +29,6 @@ class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
         fields = '__all__'
-
 
 
 class PurchaseSerializer(serializers.ModelSerializer):

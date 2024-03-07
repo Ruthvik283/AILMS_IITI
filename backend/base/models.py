@@ -21,15 +21,17 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('administrator', 'Administrator'),
-        ('technician', 'Tecnician'),
-        ('engineer', 'Engineer'),
-        ('student', 'Student'),
-    )
+
     # from materials.models import Department
     
     department = models.ForeignKey('materials.Department', on_delete=models.CASCADE, null=True, blank=True)
+    role = models.ForeignKey('materials.Role', on_delete=models.CASCADE, null=True, blank=True)
+    # ROLE_CHOICES = (
+    #     ('administrator', 'Administrator'),
+    #     ('technician', 'Tecnician'),
+    #     ('engineer', 'Engineer'),
+    #     ('student', 'Student'),
+    # )
 
     # role = models.OneToOneField(
     #     Role,

@@ -9,18 +9,19 @@ export default function Home() {
   const contextData = useContext(AuthContext);
 
   useEffect(() => {
-    const isEngineer = false;
+    //const isEngineer = false;
+    console.log("At engineerpage, but role-> ", contextData.userData.role);
 
-    if (contextData.userData.role === "Engineer") {
-      navigate("/engineer");
+    if (contextData.userData.role === "Manager") {
+      navigate("/");
     }
   }, [navigate]);
   return (
     <>
       <div className="min-h-screen">
         <Navbar />
-        <div className="bg-slate-300 min-h-screen text-center">
-          Welcome to Home page
+        <div className="bg-slate-100 min-h-screen text-center">
+          Welcome to ENGINEER page
         </div>
       </div>
       <Footer2 />

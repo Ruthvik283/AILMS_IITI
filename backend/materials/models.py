@@ -72,4 +72,8 @@ class Sanction(models.Model):
 
 
 class Role(models.Model):
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    # department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    role_name = models.CharField(max_length=255, default="Student")
+    def __str__(self):
+        # print(self.material.quantity)
+        return self.role_name   
