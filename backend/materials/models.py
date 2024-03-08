@@ -4,9 +4,18 @@ User = get_user_model()
 
 
 # Create your models here.
+class Category(models.Model):
+    name = models.CharField(max_length=128)
+    parent_category = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategories')
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
+    def __str__(self):
+        return self.name
 
 class Material(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='materials',null=True,blank=True)
     material_id = models.AutoField(primary_key=True)
     material_name = models.CharField(max_length=255, default="Un-named")
     price = models.IntegerField(null=False)
