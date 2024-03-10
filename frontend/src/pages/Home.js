@@ -8,10 +8,15 @@ export default function Home() {
   const navigate = useNavigate(); // Use useNavigate hook for navigation
   const contextData = useContext(AuthContext);
 
+  let { logoutUser } = useContext(AuthContext)
   useEffect(() => {
     const isEngineer = false;
+    
 
-    if (contextData.userData.role === "Engineer") {
+    if (contextData.userData.id === null) {
+      logoutUser();
+    }
+    else if (contextData.userData.role === "Engineer") {
       navigate("/engineer");
     }
   }, [navigate]);

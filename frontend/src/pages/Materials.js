@@ -7,8 +7,8 @@ export default function Materials() {
     related_categories: [],
     related_materials: [],
   });
-  const [path, setPath] = useState([]);
-  const [newpath, setnewPath] = useState([]);
+  const [path, setPath] = useState([{ id: 1, name: "All Materials" }]);
+  const [newpath, setnewPath] = useState([{ id: 1, name: "All Materials" }]);
   const [categoryId, setCategoryId] = useState(1);
   const navigate = useNavigate();
 
@@ -50,7 +50,14 @@ export default function Materials() {
     <div className="p-4">
       <div className="p-4 bg-gray-200">
         <p className="text-gray-600">
-          All Materials:
+          {/* <button
+            key={1}
+            className="text-blue-600 hover:text-blue-800 mx-1 focus:outline-none"
+            onClick={() => handleCategoryClick(1, "All Materials")}
+          >
+            All Materials
+          </button> */}
+          Path
           {path.map((x) => (
             <button
               key={x.id}
