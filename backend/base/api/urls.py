@@ -24,5 +24,6 @@ urlpatterns = [
     path('sanction/', views.sanction_material, name='sanction-material'),
     path('sanctions/', views.sanctionsData, name='sanction-data'),
     path('purchase/', views.purchase_material, name='purchase-material'),
-    path('materials/', views.AllMaterials, name='all materials')
+    path('materials/', views.AllMaterials, name='all materials'),
+    path('categories/<int:category_id>/related/', get_related_categories, name='related_categories')
 ]

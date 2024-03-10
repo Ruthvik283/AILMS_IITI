@@ -30,6 +30,10 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = '__all__'
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 class PurchaseSerializer(serializers.ModelSerializer):
     material_name = serializers.SerializerMethodField()
