@@ -61,6 +61,16 @@ class getUsernameById(APIView):
 
         return Response(user_data)
 
+@api_view(['GET', 'POST'])    
+def get_related_categories(request, category_id):
+    # Retrieve the current category
+    current_category = Category.objects.get(pk=category_id)
+    related_categories = Category.objects.filter(parent_category=current_category)
+    related_categories_data = list(related_categories.values())
+    related_materials = Material.objects.filter(category=current_category)
+    related_materials_data = list(related_materials.values())
+    return Response({'related_categories': related_categories_data,'related_materials': related_materials_data})
+
 
 @api_view(['GET', 'POST'])
 def departmentData(request, id):
