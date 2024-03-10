@@ -2,6 +2,33 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 const SanctionTable = () => {
+  //fectching the data
+  const [materialsData, setMaterialsData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/materials", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setMaterialsData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const [sanctionData, setSanctionData] = useState([]);
 
   useEffect(() => {
@@ -28,19 +55,195 @@ const SanctionTable = () => {
     fetchData();
   }, []);
 
+  const [departmentData, setDepartmentData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/departments", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setDepartmentData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setFilteredList(sanctionData);
+  }, [sanctionData]);
+
   const materialWisePrice = sanctionData.reduce((acc, purchase) => {
     acc["Total Price"] = acc["Total Price"] || 0;
     acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
 
     acc[purchase.material_name] = acc[purchase.material_name] || 0;
-    acc[purchase.material_name] += purchase.price * purchase.quantity_sanctioned;
+    acc[purchase.material_name] +=
+      purchase.price * purchase.quantity_sanctioned;
     return acc;
   }, {});
 
-  // console.log(sanctionData);
+
+
+
+
+
+  // List of all cars satisfing all the filters
+  const [filteredList, setFilteredList] = useState(sanctionData);
+
+  // Selected MaterialName name filter
+  const [selectedMaterialName, setSelectedMaterialName] = useState("");
+  const [selectedDepartmentName, setSelectedDepartmentName] = useState("");
+
+  const filterByMaterialName = (filteredData) => {
+    // Avoid filter for empty string
+    if (!selectedMaterialName) {
+      return filteredList;
+    }
+
+    const filteredMaterialName = filteredData.filter(
+      (car) => car.material_name == selectedMaterialName
+    );
+    return filteredMaterialName;
+  };
+
+
+  const filterByDepartmentName = (filteredData, departmentData) => {
+    // Avoid filtering for empty string
+    if (!selectedDepartmentName) {
+      return filteredData;
+    }
+
+    // Create a mapping of department_id to department_name from departmentData
+    const departmentIdToNameMap = {};
+    departmentData.map((dept) => {
+      departmentIdToNameMap[dept.department_id] = dept.department_name;
+    });
+
+    const filteredDataWithDepartmentNames = filteredData.filter(
+      (car) => departmentIdToNameMap[car.department] == selectedDepartmentName
+    );
+    console.log(departmentIdToNameMap);
+    console.log(filteredData);
+
+    return filteredDataWithDepartmentNames;
+  };
+
+  // const handleMaterialNameChange = (event) => {
+  //   setSelectedMaterialName(event.target.value);
+
+  // };
+
+  const handleMaterialNameChange = (event) => {
+    const selectedValue = event.target.value;
+
+    // If the user selects "All", reset the selectedMaterialName to an empty string
+    if (selectedValue === "") {
+      setSelectedMaterialName("");
+      return;
+    }
+
+    // Otherwise, update the selectedMaterialName with the selected value
+    setSelectedMaterialName(selectedValue);
+  };
+  const handleDepartmentNameChange = (departmentName) => {
+    if (departmentName === "") {
+      setSelectedDepartmentName("");
+      return;
+    }
+    setSelectedDepartmentName(departmentName);
+  };
+
+  // useEffect(() => {
+  //   setFilteredList(sanctionData);
+  //   var filteredData = filterByMaterialName(filteredList);
+  //   filteredData = filterByDepartmentName(filteredData, departmentData);
+  //   setFilteredList(filteredData);
+  // }, [selectedMaterialName, selectedDepartmentName]);
+
+  useEffect(() => {
+    // Apply filters directly to sanctionData
+    let filteredData = sanctionData;
+  
+    if (selectedMaterialName) {
+      filteredData = filterByMaterialName(filteredData);
+    }
+  
+    if (selectedDepartmentName) {
+      filteredData = filterByDepartmentName(filteredData, departmentData);
+    }
+  
+    // Set the filtered data to the filteredList state
+    setFilteredList(filteredData);
+  }, [selectedMaterialName, selectedDepartmentName]);
+  
+
+  const [input, setInput] = useState("");
+  const [results, setResults] = useState([]);
+
+  const handleChange = (value) => {
+    setInput(value);
+    const filteredResults = departmentData.filter((name) =>
+      name.department_name.toLowerCase().includes(value.toLowerCase())
+    );
+    setResults(filteredResults);
+  };
 
   return (
     <div>
+      <div className="input-wrapper">
+        <input
+          placeholder="Type to search..."
+          value={input}
+          onChange={(e) => handleChange(e.target.value)}
+        />
+      </div>
+      <div className="results-list">
+        <div
+          className="search-result"
+          onClick={() => handleDepartmentNameChange("")}
+        >
+          All
+        </div>
+        {results.map((result, id) => (
+          <div
+            className="search-result"
+            onClick={() => handleDepartmentNameChange(result.department_name)}
+            key={id}
+          >
+            {result.department_name}
+          </div>
+        ))}
+      </div>
+
+      <div className="MaterialName-filter">
+        <div>Filter by MaterialName :</div>
+        <select
+          id="MaterialName-input"
+          value={selectedMaterialName}
+          onChange={(e) => handleMaterialNameChange(e)}
+        >
+          <option value="">All</option>
+          {materialsData.map((material, index) => (
+            <option key={index} value={material.name}>
+              {material.material_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <h2 className="text-xl font-bold mb-4">Sanction List</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
@@ -72,7 +275,7 @@ const SanctionTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {sanctionData.map((sanction) => (
+          {filteredList.map((sanction) => (
             <tr key={sanction.sanction_id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 {sanction.sanction_id}

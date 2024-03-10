@@ -61,7 +61,7 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
   return (
-<div className="container relative m-auto p-3 flex justify-between items-center bg-[#00203FFF]">
+<div className="w-full container relative p-3 flex justify-between items-center bg-[#00203FFF]">
   <h1 className="font-xl font-bold text-white pl-5">AILMS</h1>
   <nav className={isOpen ? "flex" : "hidden md:flex"}>
     <div className="flex bg-[#00203FFF] absolute md:relative flex-col md:flex-row w-full shadow md:shadow-none text-center top-12 left-0 md:top-0 md:flex">

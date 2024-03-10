@@ -1,5 +1,4 @@
 import React from "react";
-//import materialsData from "./materialsData";
 import { useEffect, useState } from "react";
 
 const MaterialsTable = () => {
