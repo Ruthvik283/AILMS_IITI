@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../components/Navbar";
+import Footer2 from "../components/Footer";
 
 export default function Materials() {
   const [relatedData, setRelatedData] = useState({
@@ -47,59 +49,63 @@ export default function Materials() {
   //   };
 
   return (
-    <div className="p-4">
-      <div className="p-4 bg-gray-200">
-        <p className="text-gray-600">
-          {/* <button
+    <>
+      <div className="min-h-screen">
+        <Navbar></Navbar>
+        <div className="p-4 bg-gray-200">
+          <p className="text-gray-600">
+            {/* <button
             key={1}
             className="text-blue-600 hover:text-blue-800 mx-1 focus:outline-none"
             onClick={() => handleCategoryClick(1, "All Materials")}
           >
             All Materials
           </button> */}
-          Path
-          {path.map((x) => (
-            <button
-              key={x.id}
-              className="text-blue-600 hover:text-blue-800 mx-1 focus:outline-none"
-              onClick={() => handleCategoryClick(x.id, x.name)}
-            >
-              -{">"} {x.name}
-            </button>
-          ))}
-        </p>
-      </div>
+            Path
+            {path.map((x) => (
+              <button
+                key={x.id}
+                className="text-blue-600 hover:text-blue-800 mx-1 focus:outline-none"
+                onClick={() => handleCategoryClick(x.id, x.name)}
+              >
+                -{">"} {x.name}
+              </button>
+            ))}
+          </p>
+        </div>
 
-      <h2 className="text-xl font-bold mb-4">Related Categories</h2>
-      <ul className="space-y-2">
-        {relatedData.related_categories.map((category) => (
-          <li
-            key={category.id}
-            className="bg-blue-200 hover:bg-blue-300 cursor-pointer rounded p-2"
-            onClick={() => handleCategoryClick(category.id, category.name)}
-          >
-            {category.name}
-          </li>
-        ))}
-      </ul>
-      <h2 className="text-xl font-bold mt-8 mb-4">Related Materials</h2>
-      <ul className="space-y-2">
-        {relatedData.related_materials.map((material) => (
-          <li
-            key={material.material_id}
-            className="bg-blue-200 hover:bg-blue-300 cursor-pointer rounded p-2"
-          >
-            <span className="font-bold">{material.material_name}</span> -{" "}
-            {material.price}
-          </li>
-        ))}
-      </ul>
-      {/* <button
+        <h2 className="text-xl font-bold mb-4">Related Categories</h2>
+        <ul className="space-y-2">
+          {relatedData.related_categories.map((category) => (
+            <li
+              key={category.id}
+              className="bg-blue-200 hover:bg-blue-300 cursor-pointer rounded p-2"
+              onClick={() => handleCategoryClick(category.id, category.name)}
+            >
+              {category.name}
+            </li>
+          ))}
+        </ul>
+        <h2 className="text-xl font-bold mt-8 mb-4">Related Materials</h2>
+        <ul className="space-y-2">
+          {relatedData.related_materials.map((material) => (
+            <li
+              key={material.material_id}
+              className="bg-blue-200 hover:bg-blue-300 cursor-pointer rounded p-2"
+            >
+              <span className="font-bold">{material.material_name}</span> -{" "}
+              {material.price}
+            </li>
+          ))}
+        </ul>
+        {/* <button
         className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
         onClick={handleGoBack}
       >
         Go Back
       </button> */}
-    </div>
+      </div>
+      <Footer2 />
+    </>
   );
 }
