@@ -30,4 +30,6 @@ urlpatterns = [
     path('belowCritical/', views.BelowCriticalQuantity,
          name='below critical quantity materials'),
     path('sendmail/', views.SendMail, name='send email'),
+    path('create-category/', CategoryCreateView.as_view(), name='create-category'),
+    path('create-material/', MaterialCreateView.as_view(), name='create-material'),
 ]

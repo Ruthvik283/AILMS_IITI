@@ -80,7 +80,7 @@ class Sanction(models.Model):
         self.log = self.log + [str(datetime.now()), -quantity]
         self.quantity_sanctioned -= quantity
         self.material.quantity += quantity
-        super.save()
+        super().save()
         self.material.save()
 
     def sanction_add(self, quantity: int):
@@ -89,7 +89,7 @@ class Sanction(models.Model):
         self.log = self.log + [str(datetime.now()), quantity]
         self.quantity_sanctioned += quantity
         self.material.quantity -= quantity
-        super.save()
+        super().save()
         self.material.save()
 
     def is_valid(self):
