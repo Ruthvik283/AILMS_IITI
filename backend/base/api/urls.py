@@ -25,5 +25,9 @@ urlpatterns = [
     path('sanctions/', views.sanctionsData, name='sanction-data'),
     path('purchase/', views.purchase_material, name='purchase-material'),
     path('materials/', views.AllMaterials, name='all materials'),
-    path('categories/<int:category_id>/related/', get_related_categories, name='related_categories')
+    path('categories/<int:category_id>/related/',
+         get_related_categories, name='related_categories'),
+    path('belowCritical/', views.BelowCriticalQuantity,
+         name='below critical quantity materials'),
+    path('sendmail/', views.SendMail, name='send email'),
 ]

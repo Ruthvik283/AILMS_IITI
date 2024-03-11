@@ -12,6 +12,9 @@ from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.db.models import F
+from django.core.mail import send_mail
+from django.conf import settings
 User = get_user_model()
 
 
@@ -92,6 +95,27 @@ def AllMaterials(request):
     materials = MaterialSerializer(Material.objects.all(), many=True)
     return Response(materials.data)
 
+@api_view(['GET', 'POST'])
+def BelowCriticalQuantity(request):
+# quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
+# F('critical_quantity'): This is a Django F() expression that references the critical_quantity field of the same model. F() expressions allow us to reference the values of model fields within queries.
+    materials = MaterialSerializer(Material.objects.filter(quantity__lt=F('critical_quantity')), many=True)
+    return Response(materials.data)
+
+@api_view(['GET', 'POST'])
+def SendMail(request):
+    materials = Material.objects.all()  # Retrieve all materials
+
+    # Iterate over materials and check if quantity is below critical level
+    for material in materials:
+        if material.quantity < material.critical_quantity:
+            subject = f' {material.material_name}\'s Critical Quantity Alert'
+            message = f'The quantity of {material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            from_email = settings.EMAIL_HOST_USER
+            to_email = ['ailmsiiti123@gmail.com']  # Specify the recipient email address
+            send_mail(subject, message, from_email, to_email)
+
+    return Response({'message': 'Emails sent for materials with critical quantity.'}, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST'])
 def departments_data(request):

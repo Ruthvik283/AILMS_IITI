@@ -20,6 +20,7 @@ class Material(models.Model):
     material_name = models.CharField(max_length=255, default="Un-named")
     price = models.IntegerField(null=False)
     quantity = models.IntegerField(null=False)
+    critical_quantity = models.IntegerField(null=False,default=5)
     rack_number = models.CharField(max_length=255, null=True, blank=True)
     row_number = models.CharField(max_length=255, null=True, blank=True)
 

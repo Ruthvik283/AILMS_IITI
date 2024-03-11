@@ -1,18 +1,16 @@
 import React from "react";
-import purchaseData from "./purchaseData";
 import { useEffect, useState } from "react";
 
 const PurchaseTable = () => {
   const [purchaseData, setPurchaseData] = useState([]);
-  const [startDate, setStartDate] = useState([]);
-  const [endDate, setEndDate] = useState([]);
-  const [Dates, setDates] = useState(["NULL", "NULL"]);
+  const [startDate, setStartDate] = useState("NULL");
+  const [endDate, setEndDate] = useState("NULL");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/purchases/NULL/NULL/",
+          `http://127.0.0.1:8000/api/purchases/${startDate}/${endDate}/`,
           {
             method: "GET",
             headers: {
@@ -33,7 +31,7 @@ const PurchaseTable = () => {
     };
 
     fetchData();
-  }, []);
+  }, [startDate, endDate]);
   const materialWisePrice = purchaseData.reduce((acc, purchase) => {
     acc["Total Price"] = acc["Total Price"] || 0;
     acc["Total Price"] += purchase.price * purchase.quantity_purchased;
@@ -42,10 +40,17 @@ const PurchaseTable = () => {
     acc[purchase.material_name] += purchase.price * purchase.quantity_purchased;
     return acc;
   }, {});
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value || "NULL");
+  };
+
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value || "NULL");
+  };
   return (
     <div>
-      <input type="date" />
-      <input type="date" />
+      <input type="date" onChange={handleStartDateChange} />
+      <input type="date" onChange={handleEndDateChange} />
       <h2 className="text-xl font-bold mb-4">Purchase List</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
