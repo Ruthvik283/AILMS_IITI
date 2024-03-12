@@ -1,5 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { BiChevronDown } from "react-icons/bi";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const SanctionTable = () => {
   //fectching the data
@@ -95,11 +97,6 @@ const SanctionTable = () => {
     return acc;
   }, {});
 
-
-
-
-
-
   // List of all cars satisfing all the filters
   const [filteredList, setFilteredList] = useState(sanctionData);
 
@@ -118,7 +115,6 @@ const SanctionTable = () => {
     );
     return filteredMaterialName;
   };
-
 
   const filterByDepartmentName = (filteredData, departmentData) => {
     // Avoid filtering for empty string
@@ -176,72 +172,141 @@ const SanctionTable = () => {
   useEffect(() => {
     // Apply filters directly to sanctionData
     let filteredData = sanctionData;
-  
+
     if (selectedMaterialName) {
       filteredData = filterByMaterialName(filteredData);
     }
-  
+
     if (selectedDepartmentName) {
       filteredData = filterByDepartmentName(filteredData, departmentData);
     }
-  
+
     // Set the filtered data to the filteredList state
     setFilteredList(filteredData);
   }, [selectedMaterialName, selectedDepartmentName]);
-  
 
-  const [input, setInput] = useState("");
-  const [results, setResults] = useState([]);
+  // const [input, setInput] = useState("");
+  // const [results, setResults] = useState([]);
 
-  const handleChange = (value) => {
-    setInput(value);
-    const filteredResults = departmentData.filter((name) =>
-      name.department_name.toLowerCase().includes(value.toLowerCase())
-    );
-    setResults(filteredResults);
-  };
+  // const handleChange = (value) => {
+  //   setInput(value);
+  //   const filteredResults = departmentData.filter((name) =>
+  //     name.department_name.toLowerCase().includes(value.toLowerCase())
+  //   );
+  //   setResults(filteredResults);
+  // };
+
+  const [inputValue, setInputValue] = useState("");
+  const [selected, setSelected] = useState("All");
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
-      <div className="input-wrapper">
-        <input
-          placeholder="Type to search..."
-          value={input}
-          onChange={(e) => handleChange(e.target.value)}
-        />
-      </div>
-      <div className="results-list">
-        <div
-          className="search-result"
-          onClick={() => handleDepartmentNameChange("")}
-        >
-          All
-        </div>
-        {results.map((result, id) => (
-          <div
-            className="search-result"
-            onClick={() => handleDepartmentNameChange(result.department_name)}
-            key={id}
-          >
-            {result.department_name}
+      <div className="px-10 py-10 mx-10 my-10 border border-gray-400">
+        <div class="flex items-left flex-col px-10 py-1">
+          <div>Select Material</div>
+          <div className="w-full">
+            <select
+              id="MaterialName-input"
+              value={selectedMaterialName}
+              onChange={(e) => handleMaterialNameChange(e)}
+              class="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option value="">All</option>
+              {materialsData.map((material, index) => (
+                <option key={index} value={material.name}>
+                  {material.material_name}
+                </option>
+              ))}
+            </select>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className="MaterialName-filter">
-        <div>Filter by MaterialName :</div>
-        <select
-          id="MaterialName-input"
-          value={selectedMaterialName}
-          onChange={(e) => handleMaterialNameChange(e)}
-        >
-          <option value="">All</option>
-          {materialsData.map((material, index) => (
-            <option key={index} value={material.name}>
-              {material.material_name}
-            </option>
-          ))}
-        </select>
+        <div class="flex items-left flex-col px-10 py-1">
+          <div>Select Department</div>
+          <div class="w-full">
+            <div
+              onClick={() => setOpen(!open)}
+              class={`bg-white p-2 flex items-center justify-between rounded ${
+                !selected && "text-gray-700"
+              }`}
+            >
+              {selected
+                ? selected?.length > 25
+                  ? selected?.substring(0, 25) + "..."
+                  : selected
+                : "Select Department"}
+              <BiChevronDown size={20} class={`${open && "rotate-180"}`} />
+            </div>
+            <ul
+              class={`bg-white mt-2 overflow-y-auto ${
+                open ? "max-h-60" : "max-h-0"
+              } `}
+            >
+              <div class="flex items-center px-2 sticky top-0 bg-white">
+                <AiOutlineSearch size={18} class="text-gray-700" />
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value.toLowerCase())}
+                  placeholder="Enter department name"
+                  class="placeholder:text-gray-700 p-2 outline-none w-full"
+                />
+              </div>
+              {/* Add the 'All' option */}
+              <li
+                key="all"
+                class={`p-2 text-sm hover:bg-sky-600 hover:text-white
+                                    ${!selected && "bg-sky-600 text-white"}
+                                    ${
+                                      selected === "All" &&
+                                      "bg-sky-600 text-white"
+                                    }
+                                `}
+                onClick={() => {
+                  setSelected("All");
+                  setOpen(false);
+                  setInputValue("");
+                  handleDepartmentNameChange("");
+                }}
+              >
+                All
+              </li>
+              {/* Map other department data */}
+              {departmentData?.map((dept) => (
+                <li
+                  key={dept?.department_id}
+                  class={`p-2 text-sm hover:bg-sky-600 hover:text-white
+                                    ${
+                                      dept?.department_name?.toLowerCase() ===
+                                        selected?.toLowerCase() &&
+                                      "bg-sky-600 text-white"
+                                    }
+                                    ${
+                                      dept?.department_name
+                                        ?.toLowerCase()
+                                        .startsWith(inputValue)
+                                        ? "block"
+                                        : "hidden"
+                                    }`}
+                  onClick={() => {
+                    if (
+                      dept?.department_name?.toLowerCase() !==
+                      selected.toLowerCase()
+                    ) {
+                      setSelected(dept?.department_name);
+                      setOpen(false);
+                      setInputValue("");
+                      handleDepartmentNameChange(dept?.department_name);
+                    }
+                  }}
+                >
+                  {dept?.department_name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
 
       <h2 className="text-xl font-bold mb-4">Sanction List</h2>
