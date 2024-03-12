@@ -5,7 +5,7 @@ User = get_user_model()
 
 # Create your models here.
 class Category(models.Model):
-    name = models.CharField(max_length=128)
+    category_name = models.CharField(max_length=128)
     parent_category = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategories')
     class Meta:
         verbose_name = "Category"
