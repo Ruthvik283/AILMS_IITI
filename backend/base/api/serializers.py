@@ -55,6 +55,7 @@ class SanctionSerializer(serializers.ModelSerializer):
 
     material_name = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
+    log = serializers.SerializerMethodField()
 
     class Meta:
         model = Sanction
@@ -69,6 +70,7 @@ class SanctionSerializer(serializers.ModelSerializer):
             "quantity_sanctioned",
             "material_name",
             "price",
+            "log"
         ]
 
     def get_material_name(self, obj):
@@ -76,3 +78,6 @@ class SanctionSerializer(serializers.ModelSerializer):
 
     def get_price(self, obj):
         return obj.material.price if obj.material else None
+    
+    def get_log(self, obj):
+        return obj.log
