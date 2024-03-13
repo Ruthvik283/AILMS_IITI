@@ -71,9 +71,10 @@ class Sanction(models.Model):
     date_time = models.DateTimeField(auto_now=True)
     quantity_sanctioned = models.IntegerField(null=False)
     log = PickledObjectField(default=list)
+    closed = models.BooleanField(default = False)
 
     def sanction_return(self, quantity: int):
-        if quantity > self.quantity_sanctioned:
+        if quantity > self.quantity_sanctioned or quantity <= 0 or self.closed:
             return False
         self.log = self.log + [str(datetime.now()), -quantity]
         self.quantity_sanctioned -= quantity
@@ -82,13 +83,20 @@ class Sanction(models.Model):
         self.material.save()
 
     def sanction_add(self, quantity: int):
-        if quantity > self.material.quantity:
+        if quantity > self.material.quantity or quantity <= 0 or self.closed:
             return False
         self.log = self.log + [str(datetime.now()), quantity]
         self.quantity_sanctioned += quantity
         self.material.quantity -= quantity
         super().save()
         self.material.save()
+    
+    def sanction_close(self):
+        if self.closed:
+            return False
+        self.closed = True
+        self.log = self.log + [str(datetime.now()), 0]
+        super().save()
 
     def is_valid(self):
         if (self.quantity_sanctioned <= self.material.quantity):
