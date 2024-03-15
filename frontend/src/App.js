@@ -19,6 +19,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
+import ModifySanctionForm from "./components/ModifySanction";
 
 export default function App() {
   //const contextData = useContext(AuthContext);
@@ -72,6 +73,8 @@ export default function App() {
             <Route path="/materials" element={<Materials />} />
             <Route path="/purchaseform" element={<PurchaseFormPage />} />
             <Route path="/sanctionform" element={<SanctionFormPage />} />
+            <Route path="/modifysanction/" element={<ModifySanctionForm />} />
+            <Route path="/modifysanction/:sanct_id" element={<ModifySanctionForm />} />
             {/* </Route> */}
           </Routes>
         </AuthProvider>

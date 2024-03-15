@@ -366,6 +366,9 @@ const SanctionTable = () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 {sanction.quantity_sanctioned}
               </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <a href={`modifysanction\\${sanction.sanction_id}`}>MODIFY SANCTION</a>
+              </td>
             </tr>
           ))}
         </tbody>

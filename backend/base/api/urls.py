@@ -23,8 +23,12 @@ urlpatterns = [
          PurchasesBetweenDates.as_view(), name='purchases-between-dates'),
     path('sanction/', views.sanction_material, name='sanction-material'),
     path('sanctions/', views.sanctionsData, name='sanction-data'),
+    path('sanctions/<int:sanct_id>',
+         views.sanctionsDataId, name='sanction-data-id'),
     path('purchase/', views.purchase_material, name='purchase-material'),
     path('materials/', views.AllMaterials, name='all materials'),
+    path('materials/<int:material_id>',
+         views.MaterialbyID, name='material-by-id'),
     path('categories/<int:category_id>/related/',
          get_related_categories, name='related_categories'),
     path('belowCritical/', views.BelowCriticalQuantity,
@@ -32,4 +36,5 @@ urlpatterns = [
     path('sendmail/', views.SendMail, name='send email'),
     path('create-category/', CategoryCreateView.as_view(), name='create-category'),
     path('create-material/', MaterialCreateView.as_view(), name='create-material'),
+    path('modifysanction/', views.modify_sanction, name='modify-sanction'),
 ]
