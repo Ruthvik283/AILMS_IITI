@@ -30,10 +30,12 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = '__all__'
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
 
 class PurchaseSerializer(serializers.ModelSerializer):
     material_name = serializers.SerializerMethodField()
@@ -70,7 +72,8 @@ class SanctionSerializer(serializers.ModelSerializer):
             "quantity_sanctioned",
             "material_name",
             "price",
-            "log"
+            "log",
+            "closed"
         ]
 
     def get_material_name(self, obj):
@@ -78,6 +81,6 @@ class SanctionSerializer(serializers.ModelSerializer):
 
     def get_price(self, obj):
         return obj.material.price if obj.material else None
-    
+
     def get_log(self, obj):
         return obj.log

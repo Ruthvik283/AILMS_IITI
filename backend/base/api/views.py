@@ -100,6 +100,12 @@ def AllMaterials(request):
 
 
 @api_view(['GET', 'POST'])
+def MaterialbyID(request, material_id):
+    materials = MaterialSerializer(Material.objects.all(), many=True)
+    return Response(materials.data[material_id - 1])
+
+
+@api_view(['GET', 'POST'])
 def BelowCriticalQuantity(request):
     # quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
     # F('critical_quantity'): This is a Django F() expression that references the critical_quantity field of the same model. F() expressions allow us to reference the values of model fields within queries.
@@ -261,10 +267,41 @@ def sanctionsData(request):
 
     return Response(res.data)
 
+
+@api_view(['GET', 'POST'])
+def sanctionsDataId(request, sanct_id):
+    res = SanctionSerializer(Sanction.objects.all(), many=True)
+    return Response(res.data[sanct_id - 1])
+
+
 class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 class MaterialCreateView(generics.CreateAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
+
+
+@api_view(['POST'])
+def modify_sanction(request):
+    data = request.data
+    print(data)
+    return Response(
+        {
+            "success": True
+        }
+    )
+    quantity = data['quantity']
+    sanction_id = data['sanct_id']
+    type = data['type']
+
+    sanct = Sanction.objects.all()[sanction_id - 1]
+
+    if type == 'add':
+        sanct.sanction_add(quantity)
+    elif type == 'return':
+        sanct.sanction_return(quantity)
+    elif type == 'close':
+        sanct.sanction_close()
