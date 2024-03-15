@@ -32,4 +32,5 @@ urlpatterns = [
     path('sendmail/', views.SendMail, name='send email'),
     path('create-category/', CategoryCreateView.as_view(), name='create-category'),
     path('create-material/', MaterialCreateView.as_view(), name='create-material'),
+    path('create-department/', DepartmentCreateView.as_view(), name='create-department'),
 ]

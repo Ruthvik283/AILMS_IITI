@@ -88,8 +88,11 @@ def departmentData(request, id):
     users = dept.user_set.all()
     serializer = UserSerializer(users, many=True)
     res = {}
-    res["users"] = serializer.data
+    sub_departments = Department.objects.filter(parentDepartment=dept)
+    # sub_departments = dept.parentDepartment_set.all()
     res["department_name"] = dept.department_name
+    res["sub_departments"] = DepartmentSerializer(sub_departments, many=True).data
+    res["users"] = serializer.data
     return Response(res)
 
 
@@ -116,7 +119,8 @@ def SendMail(request):
     for material in materials:
         if material.quantity < material.critical_quantity:
             subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'The quantity of {material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            message = f'The quantity of {
+                material.material_name} is below the critical level. Current quantity: {material.quantity}'
             from_email = settings.EMAIL_HOST_USER
             # Specify the recipient email address
             to_email = ['ailmsiiti123@gmail.com']
@@ -261,10 +265,17 @@ def sanctionsData(request):
 
     return Response(res.data)
 
+
 class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 class MaterialCreateView(generics.CreateAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
+
+
+class DepartmentCreateView(generics.CreateAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer

@@ -14,7 +14,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return self.name
+        return self.category_name
 
 
 class Material(models.Model):
@@ -54,11 +54,10 @@ class Purchase(models.Model):
 
 class Department(models.Model):
     department_name = models.CharField(max_length=255, default="Un-named")
-
+    parentDepartment = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='sub_departments')
     def __str__(self):
-        # print(self.material.quantity)
         return self.department_name
-    # extras to be asked
+
 
 
 class Sanction(models.Model):
