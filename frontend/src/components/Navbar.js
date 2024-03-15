@@ -58,6 +58,13 @@ function Navbar() {
           >
             Purchases
           </Link>
+          <Link
+            to="/report"
+            activeClassName="text-yellow-400"
+            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+          >
+            Report
+          </Link>
           <button
             onClick={handleLogout}
             className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
