@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
+import MaterialGraph from "./Graph";
 
 const SanctionTable = () => {
   //fectching the data
@@ -358,7 +359,7 @@ const SanctionTable = () => {
                 {sanction.technician_id}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                {sanction.material}
+                {sanction.material_name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {new Date(sanction.date_time).toLocaleString()}
@@ -367,7 +368,9 @@ const SanctionTable = () => {
                 {sanction.quantity_sanctioned}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <a href={`modifysanction\\${sanction.sanction_id}`}>MODIFY SANCTION</a>
+                <a href={`modifysanction\\${sanction.sanction_id}`}>
+                  MODIFY SANCTION
+                </a>
               </td>
             </tr>
           ))}
@@ -399,6 +402,10 @@ const SanctionTable = () => {
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="container">
+        <h1 className=" text-center">Materials Graph</h1>
+        <MaterialGraph data={sanctionData} />
       </div>
     </div>
   );
