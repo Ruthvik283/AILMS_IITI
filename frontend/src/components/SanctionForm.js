@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 const SanctionForm = () => {
+  const contextData = useContext(AuthContext);
   const Navigate = useNavigate();
   const [ticketId, setTicketId] = useState("");
   const [department, setDepartment] = useState("");
@@ -11,31 +13,6 @@ const SanctionForm = () => {
   const [material, setMaterial] = useState("");
   const [quantitySanctioned, setQuantitySanctioned] = useState("");
   //const toaster = useToaster();
-
-  const [materialsData, setMaterialsData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/materials", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setMaterialsData(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   //   const rrr = () => {
   //     console.log('here')
@@ -156,7 +133,7 @@ const SanctionForm = () => {
           >
             <option value="">Select a material</option>
             {/* Assuming materials is an array of material names */}
-            {materialsData.map((material) => (
+            {contextData.materialsData.map((material) => (
               <option key={material.material_id} value={material.material_id}>
                 {material.material_name}
               </option>

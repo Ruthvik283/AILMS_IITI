@@ -1,36 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { MultiSelect } from "primereact/multiselect";
+import AuthContext from "../context/AuthContext";
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Purchase from "../pages/Purchase";
 
 export default function Report() {
+  const contextData = useContext(AuthContext);
   // collect all the datas
-
-  const [materialsData, setMaterialsData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/materials", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setMaterialsData(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const [sanctionData, setSanctionData] = useState([]);
   useEffect(() => {
@@ -74,7 +51,7 @@ export default function Report() {
 
         const data = await response.json();
         setDepartmentData(data);
-        console.log("fetched_department_data",data);
+        console.log("fetched_department_data", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -214,7 +191,7 @@ export default function Report() {
           <MultiSelect
             value={selectedMaterials}
             onChange={(e) => setSelectedMaterials(e.value)}
-            options={materialsData}
+            options={contextData.materialsData}
             optionLabel="material_name"
             placeholder="Select Materials"
             maxSelectedLabels={3}

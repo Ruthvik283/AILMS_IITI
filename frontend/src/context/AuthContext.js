@@ -33,6 +33,33 @@ export const AuthProvider = ({ children }) => {
     role: "",
   });
 
+  
+//Data fetched here to reduce redundancy
+  const [materialsData, setMaterialsData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/materials", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setMaterialsData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const Navigate = useNavigate();
 
   // let set_username = (x) => {
@@ -267,6 +294,7 @@ export const AuthProvider = ({ children }) => {
     setUserData: setUserData,
     setUser: setUser,
     setAuthTokens: setAuthTokens,
+    materialsData: materialsData,
     userData: userData,
   };
 
