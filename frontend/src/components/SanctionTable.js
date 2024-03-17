@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 import MaterialGraph from "./Graph";
+import MaterialPieChart from "./piechart";
 
 const SanctionTable = () => {
   //fectching the data
@@ -406,6 +407,9 @@ const SanctionTable = () => {
       <div className="container">
         <h1 className=" text-center">Materials Graph</h1>
         <MaterialGraph data={sanctionData} />
+      </div>
+      <div className="container">
+        <MaterialPieChart data={sanctionData} />
       </div>
     </div>
   );
