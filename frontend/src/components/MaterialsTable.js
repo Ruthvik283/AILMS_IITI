@@ -1,31 +1,9 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const MaterialsTable = () => {
-  const [materialsData, setMaterialsData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/materials", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setMaterialsData(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const contextData = useContext(AuthContext);
   return (
     <>
       <div className="min-h-screen">
@@ -54,7 +32,7 @@ const MaterialsTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {materialsData.map((material) => (
+            {contextData.materialsData.map((material) => (
               <tr key={material.material_id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   {material.material_id}

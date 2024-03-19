@@ -30,7 +30,11 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = '__all__'
 
-
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = '__all__'
+        
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category

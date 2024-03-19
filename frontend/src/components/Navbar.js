@@ -17,7 +17,7 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
   return (
-    <div className="container relative m-auto p-3 flex justify-between items-center bg-[#00203FFF]">
+    <div className=" relative m-auto p-3 flex justify-between items-center bg-[#00203FFF]">
       <h1 className="font-xl font-bold text-white pl-5">
         AILMS: {userData.username}
       </h1>

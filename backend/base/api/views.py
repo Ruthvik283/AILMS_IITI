@@ -88,8 +88,12 @@ def departmentData(request, id):
     users = dept.user_set.all()
     serializer = UserSerializer(users, many=True)
     res = {}
-    res["users"] = serializer.data
+    sub_departments = Department.objects.filter(parentDepartment=dept)
+    # sub_departments = dept.parentDepartment_set.all()
     res["department_name"] = dept.department_name
+    res["sub_departments"] = DepartmentSerializer(
+        sub_departments, many=True).data
+    res["users"] = serializer.data
     return Response(res)
 
 
@@ -101,8 +105,9 @@ def AllMaterials(request):
 
 @api_view(['GET', 'POST'])
 def MaterialbyID(request, material_id):
-    materials = MaterialSerializer(Material.objects.all(), many=True)
-    return Response(materials.data[material_id - 1])
+    materials = MaterialSerializer(
+        Material.objects.filter(material_id=material_id)[0])
+    return Response(materials.data)
 
 
 @api_view(['GET', 'POST'])
@@ -122,7 +127,8 @@ def SendMail(request):
     for material in materials:
         if material.quantity < material.critical_quantity:
             subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'The quantity of {material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            message = f'The quantity of {
+                material.material_name} is below the critical level. Current quantity: {material.quantity}'
             from_email = settings.EMAIL_HOST_USER
             # Specify the recipient email address
             to_email = ['ailmsiiti123@gmail.com']
@@ -144,9 +150,10 @@ def departments_data(request):
         users = department.user_set.all()
         user_serializer = UserSerializer(users, many=True)
         department_data.append({
-            "users": user_serializer.data,
             "department_id": department.id,
-            "department_name": department.department_name
+            "department_name": department.department_name,
+            "sub_departments": DepartmentSerializer(Department.objects.filter(parentDepartment=department), many=True).data,
+            "users": user_serializer.data,
         })
 
     return Response(department_data)
@@ -270,8 +277,8 @@ def sanctionsData(request):
 
 @api_view(['GET', 'POST'])
 def sanctionsDataId(request, sanct_id):
-    res = SanctionSerializer(Sanction.objects.all(), many=True)
-    return Response(res.data[sanct_id - 1])
+    res = SanctionSerializer(Sanction.objects.filter(sanction_id=sanct_id)[0])
+    return Response(res.data)
 
 
 class CategoryCreateView(generics.CreateAPIView):
@@ -282,6 +289,11 @@ class CategoryCreateView(generics.CreateAPIView):
 class MaterialCreateView(generics.CreateAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
+
+
+class DepartmentCreateView(generics.CreateAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
 
 
 @api_view(['POST'])
@@ -297,7 +309,7 @@ def modify_sanction(request):
     sanction_id = data['sanct_id']
     type = data['type']
 
-    sanct = Sanction.objects.all()[sanction_id - 1]
+    sanct = Sanction.objects.filter()
 
     if type == 'add':
         sanct.sanction_add(quantity)

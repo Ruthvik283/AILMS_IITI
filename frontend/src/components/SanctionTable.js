@@ -1,37 +1,20 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
+import MaterialGraph from "./Graph";
+import MaterialPieChart from "./piechart";
+import AuthContext from "../context/AuthContext";
 
 const SanctionTable = () => {
   //fectching the data
-  const [materialsData, setMaterialsData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/materials", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setMaterialsData(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+//   const [materialsData, setMaterialsData] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const contextData = useContext(AuthContext);
 
   const [sanctionData, setSanctionData] = useState([]);
+  let [materialWisePrice, setmaterialWisePrice] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +32,17 @@ const SanctionTable = () => {
 
         const data = await response.json();
         setSanctionData(data);
+        setmaterialWisePrice(
+          data.reduce((acc, purchase) => {
+            acc["Total Price"] = acc["Total Price"] || 0;
+            acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+
+            acc[purchase.material_name] = acc[purchase.material_name] || 0;
+            acc[purchase.material_name] +=
+              purchase.price * purchase.quantity_sanctioned;
+            return acc;
+          }, {})
+        );
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -86,16 +80,6 @@ const SanctionTable = () => {
   useEffect(() => {
     setFilteredList(sanctionData);
   }, [sanctionData]);
-
-  const materialWisePrice = sanctionData.reduce((acc, purchase) => {
-    acc["Total Price"] = acc["Total Price"] || 0;
-    acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
-
-    acc[purchase.material_name] = acc[purchase.material_name] || 0;
-    acc[purchase.material_name] +=
-      purchase.price * purchase.quantity_sanctioned;
-    return acc;
-  }, {});
 
   // List of all cars satisfing all the filters
   const [filteredList, setFilteredList] = useState(sanctionData);
@@ -135,6 +119,24 @@ const SanctionTable = () => {
     console.log(filteredData);
 
     return filteredDataWithDepartmentNames;
+  };
+
+  const filterByDate = (filteredData) => {
+    let filteredByDate = filteredData;
+
+    // If start date is null, set it to the earliest possible date
+    const startDateFilter = startDate ? new Date(startDate) : new Date(0);
+
+    // If end date is null, set it to the current date
+    const endDateFilter = endDate ? new Date(endDate) : new Date();
+
+    filteredByDate = filteredData.filter(
+      (sanction) =>
+        new Date(sanction.date_time) >= startDateFilter &&
+        new Date(sanction.date_time) <= endDateFilter
+    );
+
+    return filteredByDate;
   };
 
   // const handleMaterialNameChange = (event) => {
@@ -181,9 +183,24 @@ const SanctionTable = () => {
       filteredData = filterByDepartmentName(filteredData, departmentData);
     }
 
+    filteredData = filterByDate(filteredData);
+    console.log("filteredData", filteredData);
+
+    setmaterialWisePrice(
+      filteredData.reduce((acc, purchase) => {
+        acc["Total Price"] = acc["Total Price"] || 0;
+        acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+
+        acc[purchase.material_name] = acc[purchase.material_name] || 0;
+        acc[purchase.material_name] +=
+          purchase.price * purchase.quantity_sanctioned;
+        return acc;
+      }, {})
+    );
+
     // Set the filtered data to the filteredList state
     setFilteredList(filteredData);
-  }, [selectedMaterialName, selectedDepartmentName]);
+  }, [selectedMaterialName, selectedDepartmentName, startDate, endDate]);
 
   // const [input, setInput] = useState("");
   // const [results, setResults] = useState([]);
@@ -202,6 +219,25 @@ const SanctionTable = () => {
 
   return (
     <div>
+      <div className="flex items-left flex-col px-10 py-1">
+        <div>Select Start Date</div>
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
+
+      <div className="flex items-left flex-col px-10 py-1">
+        <div>Select End Date</div>
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
       <div className="px-10 py-10 mx-10 my-10 border border-gray-400">
         <div class="flex items-left flex-col px-10 py-1">
           <div>Select Material</div>
@@ -213,7 +249,7 @@ const SanctionTable = () => {
               class="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             >
               <option value="">All</option>
-              {materialsData.map((material, index) => (
+              {contextData.materialsData.map((material, index) => (
                 <option key={index} value={material.name}>
                   {material.material_name}
                 </option>
@@ -358,7 +394,7 @@ const SanctionTable = () => {
                 {sanction.technician_id}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                {sanction.material}
+                {sanction.material_name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {new Date(sanction.date_time).toLocaleString()}
@@ -367,7 +403,9 @@ const SanctionTable = () => {
                 {sanction.quantity_sanctioned}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <a href={`modifysanction\\${sanction.sanction_id}`}>MODIFY SANCTION</a>
+                <a href={`modifysanction\\${sanction.sanction_id}`}>
+                  MODIFY SANCTION
+                </a>
               </td>
             </tr>
           ))}
@@ -399,6 +437,13 @@ const SanctionTable = () => {
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="container">
+        <h1 className=" text-center">Materials Graph</h1>
+        <MaterialGraph data={sanctionData} />
+      </div>
+      <div className="container">
+        <MaterialPieChart data={sanctionData} />
       </div>
     </div>
   );
