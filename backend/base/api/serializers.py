@@ -30,11 +30,13 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = '__all__'
 
+
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = '__all__'
-        
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -88,3 +90,11 @@ class SanctionSerializer(serializers.ModelSerializer):
 
     def get_log(self, obj):
         return obj.log
+
+
+class PurchaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purchase
+        fields = ['purchase_id', 'material', 'quantity_purchased',
+                  'vendor_details', 'pdf_file', 'date_time']
+        read_only_fields = ['purchase_id', 'date_time']

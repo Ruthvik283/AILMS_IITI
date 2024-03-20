@@ -9,6 +9,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from django.db import models
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
@@ -235,37 +236,47 @@ def sanction_material(request):
         )
 
 
-@api_view(['POST'])
-def purchase_material(request):
-    try:
-        data = request.data
+# @api_view(['POST'])
+# def purchase_material(request):
+#     try:
+#         data = request.data
 
-        p = Purchase(
-            material=Material.objects.filter(
-                material_id=data['material']).first(),
-            quantity_purchased=data['quantity_purchased'],
-            vendor_details=data['vendor_details']
-        )
+#         p = Purchase(
+#             material=Material.objects.filter(
+#                 material_id=data['material']).first(),
+#             quantity_purchased=data['quantity_purchased'],
+#             vendor_details=data['vendor_details']
+#         )
 
-        """
-        (To be added) add feature to automatically handle 
-        materials not yet present in models.Material
-        """
+#         """
+#         (To be added) add feature to automatically handle
+#         materials not yet present in models.Material
+#         """
 
-        p.save()
+#         p.save()
 
-        return Response(
-            {
-                "success": True
-            }
-        )
-    except Exception as e:
-        return Response(
-            {
-                "success": False,
-                "message": str(e)
-            }
-        )
+#         return Response(
+#             {
+#                 "success": True
+#             }
+#         )
+#     except Exception as e:
+#         return Response(
+#             {
+#                 "success": False,
+#                 "message": str(e)
+#             }
+#         )
+
+class PurchaseAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        serializer = PurchaseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
