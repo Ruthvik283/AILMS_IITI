@@ -8,7 +8,9 @@ User = get_user_model()
 # Create your models here.
 class Category(models.Model):
     category_name = models.CharField(max_length=128)
-    parent_category = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategories')
+    parent_category = models.ForeignKey(
+        'self', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategories')
+
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
@@ -38,6 +40,7 @@ class Purchase(models.Model):
     quantity_purchased = models.IntegerField(null=False)
     vendor_details = models.TextField(blank=True, null=True)
     date_time = models.DateTimeField(auto_now=True)
+    pdf_file = models.FileField(upload_to='pdfs/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         # Call the original save method
@@ -54,10 +57,11 @@ class Purchase(models.Model):
 
 class Department(models.Model):
     department_name = models.CharField(max_length=255, default="Un-named")
-    parentDepartment = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='sub_departments')
+    parentDepartment = models.ForeignKey(
+        'self', on_delete=models.SET_NULL, null=True, blank=True, related_name='sub_departments')
+
     def __str__(self):
         return self.department_name
-
 
 
 class Sanction(models.Model):
@@ -70,7 +74,7 @@ class Sanction(models.Model):
     date_time = models.DateTimeField(auto_now=True)
     quantity_sanctioned = models.IntegerField(null=False)
     log = PickledObjectField(default=list)
-    closed = models.BooleanField(default = False)
+    closed = models.BooleanField(default=False)
 
     def sanction_return(self, quantity: int):
         if quantity > self.quantity_sanctioned or quantity <= 0 or self.closed:
@@ -89,7 +93,7 @@ class Sanction(models.Model):
         self.material.quantity -= quantity
         super().save()
         self.material.save()
-    
+
     def sanction_close(self):
         if self.closed:
             return False
