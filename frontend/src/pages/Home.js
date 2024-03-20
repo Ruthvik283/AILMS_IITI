@@ -24,7 +24,7 @@ export default function Home() {
     <>
       <div className="min-h-screen">
         <Navbar />
-        <div className="bg-slate-300 min-h-screen text-center">
+        <div className="bg-[#c8d8d4] min-h-screen text-center">
           Welcome to Home page
         </div>
       </div>
