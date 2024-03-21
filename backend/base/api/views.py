@@ -189,9 +189,15 @@ class PurchasesBetweenDates(APIView):
         purchases = Purchase.objects.filter(
             date_time__range=[start_date, end_date + timedelta(days=1)])
         serializer = PurchaseSerializer(purchases, many=True)
-
-        return Response(serializer.data)
-
+        # adding price to PurchaseData
+        x = serializer.data
+        z = 0
+        for y in x:
+            y["price"] = purchases[z].material.price
+            y["material_name"] = purchases[z].material.material_name
+            z += 1
+            # y["price"] = 1
+        return Response(x)
 
 @api_view(['POST'])
 def sanction_material(request):

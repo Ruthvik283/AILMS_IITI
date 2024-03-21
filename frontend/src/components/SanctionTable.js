@@ -129,11 +129,15 @@ const SanctionTable = () => {
 
     // If end date is null, set it to the current date
     const endDateFilter = endDate ? new Date(endDate) : new Date();
+    const nextDayDate = endDateFilter;
+    nextDayDate.setDate(nextDayDate.getDate() + 1);
+    //endDate.setendDate(endDate.getDate() + 1);
+    //console.log(startDateFilter, endDateFilter);
 
     filteredByDate = filteredData.filter(
-      (sanction) =>
-        new Date(sanction.date_time) >= startDateFilter &&
-        new Date(sanction.date_time) <= endDateFilter
+      (purchase) =>
+        new Date(purchase.date_time) >= startDateFilter &&
+        new Date(purchase.date_time) < nextDayDate
     );
 
     return filteredByDate;

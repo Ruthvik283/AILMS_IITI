@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 
 const PurchaseTable = () => {
   const [purchaseData, setPurchaseData] = useState([]);
-  const [startDate, setStartDate] = useState("NULL");
-  const [endDate, setEndDate] = useState("NULL");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  let [materialWisePrice, setmaterialWisePrice] = useState({});
+  const [filteredList, setFilteredList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/purchases/${startDate}/${endDate}/`,
+          `http://127.0.0.1:8000/api/purchases/NULL/NULL/`,
           {
             method: "GET",
             headers: {
@@ -25,27 +27,84 @@ const PurchaseTable = () => {
 
         const data = await response.json();
         setPurchaseData(data);
+        //console.log("PurchaseData", data);
+        setmaterialWisePrice(
+          data.reduce((acc, purchase) => {
+            acc["Total Price"] = acc["Total Price"] || 0;
+            acc["Total Price"] += purchase.price * purchase.quantity_purchased;
+
+            acc[purchase.material] = acc[purchase.material] || 0;
+            acc[purchase.material] +=
+              purchase.price * purchase.quantity_purchased;
+            return acc;
+          }, {})
+        );
+
+        setFilteredList(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [startDate, endDate]);
-  const materialWisePrice = purchaseData.reduce((acc, purchase) => {
-    acc["Total Price"] = acc["Total Price"] || 0;
-    acc["Total Price"] += purchase.price * purchase.quantity_purchased;
+  }, []);
+  const filterByDate = (filteredData) => {
+    let filteredByDate = filteredData;
 
-    acc[purchase.material_name] = acc[purchase.material_name] || 0;
-    acc[purchase.material_name] += purchase.price * purchase.quantity_purchased;
-    return acc;
-  }, {});
+    // If start date is null, set it to the earliest possible date
+    const startDateFilter = startDate ? new Date(startDate) : new Date(0);
+
+    // If end date is null, set it to the current date
+    const endDateFilter = endDate ? new Date(endDate) : new Date();
+    const nextDayDate = endDateFilter;
+    nextDayDate.setDate(nextDayDate.getDate() + 1);
+    //endDate.setendDate(endDate.getDate() + 1);
+    //console.log(startDateFilter, endDateFilter);
+
+    filteredByDate = filteredData.filter(
+      (purchase) =>
+        new Date(purchase.date_time) >= startDateFilter &&
+        new Date(purchase.date_time) < nextDayDate
+    );
+
+    return filteredByDate;
+  };
+  
+
+  useEffect(() => {
+    // Apply filters directly to purchaseData
+    let filteredData = purchaseData;
+    filteredData = filterByDate(filteredData);
+    //console.log("filteredData", filteredData);
+
+    setmaterialWisePrice(
+      filteredData.reduce((acc, purchase) => {
+        acc["Total Price"] = acc["Total Price"] || 0;
+        acc["Total Price"] += purchase.price * purchase.quantity_purchased;
+
+        acc[purchase.material] = acc[purchase.material] || 0;
+        acc[purchase.material] += purchase.price * purchase.quantity_purchased;
+        return acc;
+      }, {})
+    );
+
+    // Set the filtered data to the filteredList state
+    setFilteredList(filteredData);
+  }, [startDate, endDate]);
+  //   const materialWisePrice = purchaseData.reduce((acc, purchase) => {
+  //     acc["Total Price"] = acc["Total Price"] || 0;
+  //     acc["Total Price"] += purchase.price * purchase.quantity_purchased;
+
+  //     acc[purchase.material] = acc[purchase.material] || 0;
+  //     acc[purchase.material] += purchase.price * purchase.quantity_purchased;
+  //     return acc;
+  //   }, {});
   const handleStartDateChange = (event) => {
-    setStartDate(event.target.value || "NULL");
+    setStartDate(event.target.value);
   };
 
   const handleEndDateChange = (event) => {
-    setEndDate(event.target.value || "NULL");
+    setEndDate(event.target.value);
   };
   return (
     <div>
@@ -73,7 +132,7 @@ const PurchaseTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {purchaseData.map((purchase) => (
+          {filteredList.map((purchase) => (
             <tr key={purchase.purchase_id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 {purchase.purchase_id}
