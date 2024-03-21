@@ -6,7 +6,29 @@ function isNumeric(str) {
     return !isNaN(str) && !isNaN(parseInt(str))
 }
 
+function stringlog(log) {
+    console.log(log);
+    // return log;
+    try {
+        let res = "";
+        for (let i = 0; i < log.length; i++) {
+            res += log[i][0].slice(0, 19) + " : " + (Number(log[i][1]) > 0 ? `${log[i][1]} Added(+)` : `${log[i][1]} Returned(-)`) + '\n';
+        }
+        return res;
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+    return ""
+
+}
+
 const ModifySanctionForm = () => {
+
+    const nav = useNavigate()
+    nav('/modifysanction', { shallow: true });
+
     const [sanctionData, setsanctionData] = useState({})
     const [materialData, setmaterialData] = useState({})
     const [quantity, setquantity] = useState('')
@@ -35,8 +57,8 @@ const ModifySanctionForm = () => {
 
                         const data1 = await response1.json();
                         setsanctionData(data1);
-                        console.log(data1);
-                        console.log(data1.material);
+                        // console.log(data1);
+                        // console.log(data1.material);
 
                         const response2 = await fetch(`http://127.0.0.1:8000/api/materials/${data1.material}`, {
                             method: "GET",
@@ -51,11 +73,11 @@ const ModifySanctionForm = () => {
 
                         const data2 = await response2.json();
                         setmaterialData(data2);
-                        console.log(data2);
+                        // console.log(data2);
                     } catch (error) {
                         setsanctionData({})
                         setmaterialData({})
-                        console.error("Error fetching data:", error);
+                        // console.error("Error fetching data:", error);
                     }
                 };
                 fetchData();
@@ -84,8 +106,8 @@ const ModifySanctionForm = () => {
 
                     const data1 = await response1.json();
                     setsanctionData(data1);
-                    console.log(data1);
-                    console.log(data1.material);
+                    // console.log(data1);
+                    // console.log(data1.material);
 
                     const response2 = await fetch(`http://127.0.0.1:8000/api/materials/${data1.material}`, {
                         method: "GET",
@@ -100,11 +122,11 @@ const ModifySanctionForm = () => {
 
                     const data2 = await response2.json();
                     setmaterialData(data2);
-                    console.log(data2);
+                    // console.log(data2);
                 } catch (error) {
                     setsanctionData({})
                     setmaterialData({})
-                    console.error("Error fetching data:", error);
+                    // console.error("Error fetching data:", error);
                 }
             };
             fetchData();
@@ -112,9 +134,9 @@ const ModifySanctionForm = () => {
     }, []);
 
     function modify_sanction() {
-        console.log("modify_sanction")
+        // console.log("modify_sanction")
         const err = []
-        console.log([type, quantity, sanctionData.quantity_sanctioned])
+        // console.log([type, quantity, sanctionData.quantity_sanctioned])
         if (sancData == {}) {
             err.push("Invalid Sanction ID")
         }
@@ -138,7 +160,7 @@ const ModifySanctionForm = () => {
         }
 
         setmessages(err)
-        console.log(messages)
+        // console.log(messages)
 
         if (err.length == 0) {
             const submitData = async () => {
@@ -160,10 +182,11 @@ const ModifySanctionForm = () => {
                     }
 
                 } catch (error) {
-                    console.error("Error  data:", error);
+                    console.error("Error data:", error);
                 }
             };
             submitData();
+            window.location.reload();
         }
     }
 
@@ -181,6 +204,7 @@ const ModifySanctionForm = () => {
             <input type="text" name="quantity" id="quantity" className="border border-black" onChange={event => setquantity(event.target.value)} />
             <button onClick={modify_sanction}>Modify</button>
             <h1>{messages[0]}</h1>
+            <textarea className="border border-black" rows="10" cols="50" value={stringlog(sanctionData.log)} readOnly></textarea>
         </div>
     );
 };

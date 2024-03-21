@@ -79,7 +79,7 @@ class Sanction(models.Model):
     def sanction_return(self, quantity: int):
         if quantity > self.quantity_sanctioned or quantity <= 0 or self.closed:
             return False
-        self.log = self.log + [str(datetime.now()), -quantity]
+        self.log = self.log + [[str(datetime.now()), -quantity]]
         self.quantity_sanctioned -= quantity
         self.material.quantity += quantity
         super().save()
@@ -88,7 +88,7 @@ class Sanction(models.Model):
     def sanction_add(self, quantity: int):
         if quantity > self.material.quantity or quantity <= 0 or self.closed:
             return False
-        self.log = self.log + [str(datetime.now()), quantity]
+        self.log = self.log + [[str(datetime.now()), quantity]]
         self.quantity_sanctioned += quantity
         self.material.quantity -= quantity
         super().save()
@@ -98,13 +98,16 @@ class Sanction(models.Model):
         if self.closed:
             return False
         self.closed = True
-        self.log = self.log + [str(datetime.now()), 0]
+        self.log = self.log + [[str(datetime.now()), 0]]
         super().save()
 
     def is_valid(self):
         if (self.quantity_sanctioned <= self.material.quantity):
             return [True]
         return [False, self.material.quantity, self.quantity_sanctioned]
+
+    def raw_save(self, *args, **kwargs):
+        super().save()
 
     def save(self, *args, **kwargs):
         # Call the original save method

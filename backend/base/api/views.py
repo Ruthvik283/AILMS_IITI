@@ -128,8 +128,7 @@ def SendMail(request):
     for material in materials:
         if material.quantity < material.critical_quantity:
             subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'The quantity of {
-                material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            message = f'The quantity of {material.material_name} is below the critical level. Current quantity: {material.quantity}'
             from_email = settings.EMAIL_HOST_USER
             # Specify the recipient email address
             to_email = ['ailmsiiti123@gmail.com']
@@ -311,16 +310,16 @@ class DepartmentCreateView(generics.CreateAPIView):
 def modify_sanction(request):
     data = request.data
     print(data)
-    return Response(
-        {
-            "success": True
-        }
-    )
+    # return Response(
+    #     {
+    #         "success": True
+    #     }
+    # )
     quantity = data['quantity']
     sanction_id = data['sanct_id']
     type = data['type']
 
-    sanct = Sanction.objects.filter()
+    sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
 
     if type == 'add':
         sanct.sanction_add(quantity)
@@ -328,3 +327,8 @@ def modify_sanction(request):
         sanct.sanction_return(quantity)
     elif type == 'close':
         sanct.sanction_close()
+    return Response(
+        {
+            "success": True
+        }
+    )
