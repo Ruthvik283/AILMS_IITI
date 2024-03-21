@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MultiSelect } from "primereact/multiselect";
 import AuthContext from "../context/AuthContext";
+import MaterialGraph from "./Graph"
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Purchase from "../pages/Purchase";
@@ -66,7 +67,7 @@ export default function Report() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/purchases/${startDate}/${endDate}/`,
+          "http://127.0.0.1:8000/api/purchases/${startDate}/${endDate}/",
           {
             method: "GET",
             headers: {
@@ -106,6 +107,9 @@ export default function Report() {
   const [selectedMaterials, setSelectedMaterials] = useState(null);
   const [selectedFields, setSelectedFields] = useState(null);
   const [selectedDepartments, setSelectedDepartments] = useState(null);
+
+  const [selectedShowSubDepartments, setSelectedShowSubDepartments] = useState(null);
+  const [selectedSubDepartments, setSelectedSubDepartments] = useState(null);
 
   const [filteredSanctionList, setFilteredSanctionList] = useState([]);
   const [filteredPurchaseList, setFilteredPurchaseList] = useState([]);
@@ -173,16 +177,46 @@ export default function Report() {
     {}
   );
 
+
+  useEffect(() => {
+    setSelectedShowSubDepartments(null);
+    const subDepartments = departmentData
+      .filter(department => selectedDepartments.includes(department))
+      .map(department => department.sub_departments)
+      .flat();
+      setSelectedShowSubDepartments(subDepartments);
+  }, [selectedDepartments]);
+
+  const handleDepartmentChange = (e) => {
+    setSelectedDepartments(e.value);
+    setSelectedSubDepartments([]); // Resetting selected sub-departments
+  };
+  console.log(selectedDepartments);
+
   return (
     <>
+    <div className="FILTERS">
+
+
       <div className="mx-60 my-5 w-1/4">
         <div className="card flex justify-content-center my-10">
           <MultiSelect
-            value={selectedFields}
-            onChange={(e) => setSelectedFields(e.value)}
-            options={fields}
-            optionLabel="name"
-            placeholder="Select Fields"
+            value={selectedDepartments}
+            onChange={handleDepartmentChange}
+            options={departmentData}
+            optionLabel="department_name"
+            placeholder="Select Department"
+            maxSelectedLabels={3}
+            className="w-full md:w-20rem"
+          />
+        </div>
+        <div className="card flex justify-content-center my-10">
+          <MultiSelect
+            value={selectedSubDepartments}
+            onChange={(e) => setSelectedSubDepartments(e.value)}
+            options={selectedShowSubDepartments}
+            optionLabel="department_name"
+            placeholder="Select Sub Department"
             maxSelectedLabels={3}
             className="w-full md:w-20rem"
           />
@@ -200,11 +234,11 @@ export default function Report() {
         </div>
         <div className="card flex justify-content-center my-10">
           <MultiSelect
-            value={selectedDepartments}
-            onChange={(e) => setSelectedDepartments(e.value)}
-            options={departmentData}
-            optionLabel="department_name"
-            placeholder="Select Department"
+            value={selectedFields}
+            onChange={(e) => setSelectedFields(e.value)}
+            options={fields}
+            optionLabel="name"
+            placeholder="Select Fields"
             maxSelectedLabels={3}
             className="w-full md:w-20rem"
           />
@@ -249,8 +283,10 @@ export default function Report() {
           </div>
         </div>
       </div>
+      </div>
 
-      <div>{/* <button onClick={filterSanctionData}>Filter</button> */}</div>
+<div className="TABLES">
+
 
       <div className="mx-20 my-10">
         {showSanctionTable && (
@@ -417,6 +453,13 @@ export default function Report() {
         </div>
         {/* <button onClick={filterByMaterialName()}></button> */}
       </div>
+      </div>
+
+      <div className="GRAPHS">
+
+      <MaterialGraph data={sanctionData}/>
+      </div>
+
     </>
   );
 }
