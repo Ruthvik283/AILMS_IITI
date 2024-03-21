@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import Footer2 from "../components/Footer";
 import Navbar from "../components/Navbar";
+import Navbar2 from "../components/Navbar2";
+import OffCanvasNavbar from "../components/OffCanvasNavbar";
 import AuthContext from "../context/AuthContext";
 
 export default function Home() {
@@ -19,7 +21,10 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen">
+        {/* <Navbar2 />
+        <OffCanvasNavbar /> */}
         <Navbar />
+
         <div className="bg-slate-100 min-h-screen text-center">
           Welcome to ENGINEER page
         </div>

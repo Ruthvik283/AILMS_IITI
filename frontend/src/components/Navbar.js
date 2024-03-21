@@ -17,57 +17,58 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
   return (
-    <div className=" relative m-auto p-3 flex justify-between items-center bg-[#00203FFF]">
-      <h1 className="font-xl font-bold text-white pl-5">
+    <div className="container relative m-auto p-3 flex justify-between items-center bg-white max-w-screen-2xl">
+      <h1 className="font-xl font-bold text-black pl-5">
         AILMS: {userData.username}
       </h1>
-      <nav className={isOpen ? "flex" : "hidden md:flex"}>
-        <div className="flex bg-[#00203FFF] absolute md:relative flex-col md:flex-row w-full shadow md:shadow-none text-center top-12 left-0 md:top-0 md:flex">
+      <nav className={isOpen ? "flex" : "hidden md:flex space-x-4"}>
+        <div className="flex bg-white absolute md:relative flex-col md:flex-row w-full shadow md:shadow-none text-center top-12 left-0 md:top-0 md:flex">
           <Link
             to="/"
             activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            className="px-3 py-2 cursor-pointer rounded hover:underline text-black bg-inherit"
           >
             Home
           </Link>
           <Link
             to="/material"
-            activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            activeClassName="underline"
+            className="px-3 py-2 cursor-pointer rounded text-black hover:underline bg-inherit"
+            
           >
             MaterialsTable
           </Link>
           <Link
             to="/materials"
             activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            className="px-3 py-2 cursor-pointer rounded hover:underline text-black bg-inherit"
           >
             Materials
           </Link>
           <Link
             to="/sanction"
             activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            className="px-3 py-2 cursor-pointer rounded hover:underline text-black bg-inherit"
           >
             Sanctions
           </Link>
           <Link
             to="/purchase"
             activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            className="px-3 py-2 cursor-pointer rounded hover:underline text-black bg-inherit"
           >
             Purchases
           </Link>
           <Link
-            to="/report"
+            to="/Report"
             activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            className="px-3 py-2 cursor-pointer rounded hover:underline text-black bg-inherit"
           >
             Report
           </Link>
           <button
             onClick={handleLogout}
-            className="px-3 py-2 cursor-pointer rounded hover:bg-[#668cff] text-white bg-inherit"
+            className="px-3 py-2 cursor-pointer rounded hover:underline text-black bg-inherit"
           >
             Logout
           </button>
@@ -114,3 +115,4 @@ function Navbar() {
   );
 }
 export default Navbar;
+
