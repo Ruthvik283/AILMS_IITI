@@ -9,7 +9,7 @@ export default function ReportPage() {
 
   return (
     <>
-      <div className="min-h-screen">
+      <div className=" bg-[#c8d8d4] min-h-screen">
         <Navbar />
         <Report/>
       </div>
