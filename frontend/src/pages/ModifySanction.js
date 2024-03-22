@@ -7,28 +7,6 @@ function isNumeric(str) {
   return !isNaN(str) && !isNaN(parseInt(str));
 }
 
-function stringlog(log) {
-  console.log(log);
-  // return log;
-  try {
-    let res = "";
-    for (let i = 0; i < log.length; i++) {
-      res +=
-        log[i][0].slice(0, 19) +
-        " : " +
-        (Number(log[i][1]) > 0
-          ? `${log[i][1]} Added(+)`
-          : `${log[i][1]} Returned(-)`) +
-        "\n";
-    }
-    return res;
-  } catch (err) {
-    console.log(err);
-  }
-
-  return "";
-}
-
 const ModifySanctionForm = () => {
   const [sanctionData, setsanctionData] = useState({});
   const [materialData, setmaterialData] = useState({});
@@ -155,6 +133,7 @@ const ModifySanctionForm = () => {
           } else {
             setX(!X);
             Navigate(`/modifysanction/${sanctionData.sanction_id}`);
+            toast.success(`Sanction updated successfully!`);
           }
         } catch (error) {
           console.error("Error data:", error);

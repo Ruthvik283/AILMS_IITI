@@ -57,6 +57,7 @@ class Purchase(models.Model):
 
 class Department(models.Model):
     department_name = models.CharField(max_length=255, default="Un-named")
+    is_main = models.BooleanField(default=False)
     parentDepartment = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True, blank=True, related_name='sub_departments')
 

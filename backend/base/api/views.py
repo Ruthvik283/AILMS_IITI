@@ -128,7 +128,8 @@ def SendMail(request):
     for material in materials:
         if material.quantity < material.critical_quantity:
             subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'The quantity of {material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            message = f'The quantity of {
+                material.material_name} is below the critical level. Current quantity: {material.quantity}'
             from_email = settings.EMAIL_HOST_USER
             # Specify the recipient email address
             to_email = ['ailmsiiti123@gmail.com']
@@ -152,6 +153,7 @@ def departments_data(request):
         department_data.append({
             "department_id": department.id,
             "department_name": department.department_name,
+            "is_main": department.is_main,
             "sub_departments": DepartmentSerializer(Department.objects.filter(parentDepartment=department), many=True).data,
             "users": user_serializer.data,
         })
@@ -197,6 +199,7 @@ class PurchasesBetweenDates(APIView):
             z += 1
             # y["price"] = 1
         return Response(x)
+
 
 @api_view(['POST'])
 def sanction_material(request):
