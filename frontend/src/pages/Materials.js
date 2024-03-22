@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer2 from "../components/Footer";
+import toast from "react-hot-toast";
 
 export default function Materials() {
   const [relatedData, setRelatedData] = useState({
@@ -76,6 +77,7 @@ export default function Materials() {
       })
       .then((response) => {
         console.log("Material created successfully:", response.data);
+        toast.success("Material created successfully");
         setx(!x);
         setShowAddMaterialsForm(!showAddMaterialsForm);
         setMaterialFormData({
@@ -89,6 +91,7 @@ export default function Materials() {
       })
       .catch((error) => {
         console.error("Error creating material:", error);
+        toast.error("Error creating material")
       });
   };
 
@@ -102,6 +105,7 @@ export default function Materials() {
       })
       .then((response) => {
         console.log("Category created successfully:", response.data);
+        toast.success("Category created successfully");
         setx(!x);
         setShowAddCategoryForm(!showAddCategoryForm);
         setCategoryFormData({
@@ -110,6 +114,7 @@ export default function Materials() {
       })
       .catch((error) => {
         console.error("Error creating category:", error);
+        toast.error("Error creating category")
       });
   };
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { MultiSelect } from "primereact/multiselect";
 import AuthContext from "../context/AuthContext";
 import MaterialGraph from "./Graph";
+import SanctionGraph from "./SanctionGraph";
+import MaterialPieChart from "./piechart";
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Purchase from "../pages/Purchase";
@@ -341,7 +343,7 @@ export default function Report() {
                           {sanction.technician_id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.material}
+                          {sanction.material_name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {new Date(sanction.date_time).toLocaleString()}
@@ -455,8 +457,15 @@ export default function Report() {
         </div>
       </div>
 
-      <div className="GRAPHS">
-        <MaterialGraph data={sanctionData} />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-4 py-4">
+        <div className="text-center">
+          <h3 className="text-lg font-bold mb-2">Material Graph</h3>
+          <MaterialGraph data={filteredSanctionList} />
+          <SanctionGraph data={filteredSanctionList} />
+        </div>
+        <div className="text-center">
+                  <MaterialPieChart data={filteredSanctionList} />
+        </div>
       </div>
     </>
   );
