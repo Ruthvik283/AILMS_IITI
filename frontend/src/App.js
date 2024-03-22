@@ -20,7 +20,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
-import ModifySanctionForm from "./components/ModifySanction";
+import ModifySanctionForm from "./pages/ModifySanction";
 
 
 export default function App() {
