@@ -5,6 +5,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import MaterialGraph from "./Graph";
 import MaterialPieChart from "./piechart";
 import AuthContext from "../context/AuthContext";
+import SanctionGraph from "./SanctionGraph";
+
 
 const SanctionTable = () => {
   //fectching the data
@@ -466,6 +468,7 @@ const SanctionTable = () => {
                     Material Graph
                   </h3>
                   <MaterialGraph data={sanctionData} />
+                  <SanctionGraph data={sanctionData} />
                 </div>
                 <div className="text-center">
                   <MaterialPieChart data={sanctionData} />
