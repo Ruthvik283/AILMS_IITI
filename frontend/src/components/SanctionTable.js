@@ -3,10 +3,9 @@ import { useEffect, useState, useContext } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 import MaterialGraph from "./Graph";
-import MaterialPieChart from "./piechart";
+import MaterialPieChartSanction from "./MaterialPieChartSanction";
 import AuthContext from "../context/AuthContext";
 import SanctionGraph from "./SanctionGraph";
-
 
 const SanctionTable = () => {
   //fectching the data
@@ -224,7 +223,6 @@ const SanctionTable = () => {
 
   return (
     <div className="overflow-x-auto bg-[#c8d8d4]">
-
       <div className="flex items-left flex-col px-10 py-1 mr-5">
         <div>Select Start Date</div>
         <input
@@ -247,8 +245,7 @@ const SanctionTable = () => {
         />
       </div>
 
-
-      <div >
+      <div>
         <div className="flex items-left flex-row flex-wrap">
           <div className="flex mr-2">
             <div class="flex items-left flex-col px-10 py-1 pt-2">
@@ -276,8 +273,9 @@ const SanctionTable = () => {
               <div class="w-full">
                 <div
                   onClick={() => setOpen(!open)}
-                  class={`bg-white px-2 py-1 max-w-xs flex items-center justify-between rounded-lg hover:border-black ${!selected && "text-gray-700"
-                    } `}
+                  class={`bg-white px-2 py-1 max-w-xs flex items-center justify-between rounded-lg hover:border-black ${
+                    !selected && "text-gray-700"
+                  } `}
                 >
                   {selected
                     ? selected?.length > 25
@@ -287,16 +285,19 @@ const SanctionTable = () => {
                   <BiChevronDown size={20} class={`${open && "rotate-180"}`} />
                 </div>
                 <ul
-                  class={`bg-white  overflow-y-auto absolute z-10  max-w-xs rounded-lg ${open ? "max-h-60" : "max-h-0"
-                    } `}
-                  style={{ width: 'max-content' }}
+                  class={`bg-white  overflow-y-auto absolute z-10  max-w-xs rounded-lg ${
+                    open ? "max-h-60" : "max-h-0"
+                  } `}
+                  style={{ width: "max-content" }}
                 >
                   <div class="flex items-center px-2 sticky top-0 bg-white ">
                     <AiOutlineSearch size={18} class="text-gray-700" />
                     <input
                       type="text"
                       value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value.toLowerCase())}
+                      onChange={(e) =>
+                        setInputValue(e.target.value.toLowerCase())
+                      }
                       placeholder="Enter department name"
                       class="placeholder:text-gray-700 p-2 outline-none w-full"
                     />
@@ -306,9 +307,10 @@ const SanctionTable = () => {
                     key="all"
                     class={`p-2 text-sm hover:bg-sky-600 hover:text-white
                                     ${!selected && "bg-sky-600 text-white"}
-                                    ${selected === "All" &&
-                      "bg-sky-600 text-white"
-                      }
+                                    ${
+                                      selected === "All" &&
+                                      "bg-sky-600 text-white"
+                                    }
                                 `}
                     onClick={() => {
                       setSelected("All");
@@ -324,16 +326,18 @@ const SanctionTable = () => {
                     <li
                       key={dept?.department_id}
                       class={`p-2 text-sm hover:bg-sky-600 hover:text-white
-                                    ${dept?.department_name?.toLowerCase() ===
-                        selected?.toLowerCase() &&
-                        "bg-sky-600 text-white"
-                        }
-                                    ${dept?.department_name
-                          ?.toLowerCase()
-                          .startsWith(inputValue)
-                          ? "block"
-                          : "hidden"
-                        }`}
+                                    ${
+                                      dept?.department_name?.toLowerCase() ===
+                                        selected?.toLowerCase() &&
+                                      "bg-sky-600 text-white"
+                                    }
+                                    ${
+                                      dept?.department_name
+                                        ?.toLowerCase()
+                                        .startsWith(inputValue)
+                                        ? "block"
+                                        : "hidden"
+                                    }`}
                       onClick={() => {
                         if (
                           dept?.department_name?.toLowerCase() !==
@@ -435,43 +439,48 @@ const SanctionTable = () => {
                 <h3 className="text-lg font-bold mb-2">
                   Total Price: {materialWisePrice["Total Price"]}
                 </h3>
-                <h3 className="text-xl font-bold mb-2">Material-wise Prices:</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  Material-wise Prices:
+                </h3>
               </div>
               {/* <div className="overflow-x-auto pt-4 ">
                 <div className="inline-block min-w-full shadow overflow-hidden rounded-lg "> */}
-                  <table className=" max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-4 py-4 w-full">
-                    <thead>
-                      <tr className="bg-[#2b6777]">
-                        <th className="px-4 py-2 text-centre text-xs font-medium text-white">MATERIAL</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-white">PRICE</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(materialWisePrice).map(
-                        ([material, price]) =>
-                          material !== "Total Price" && (
-                            <tr key={material} className="border-b border-gray-300">
-                              <td className="px-4 py-2 bg-white text-center">{material}</td>
-                              <td className="px-4 py-2 bg-white">{price}</td>
-                            </tr>
-                          )
-                      )}
-                    </tbody>
-
-                  </table>
-                {/* </div>
+              <table className=" max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-4 py-4 w-full">
+                <thead>
+                  <tr className="bg-[#2b6777]">
+                    <th className="px-4 py-2 text-centre text-xs font-medium text-white">
+                      MATERIAL
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white">
+                      PRICE
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(materialWisePrice).map(
+                    ([material, price]) =>
+                      material !== "Total Price" && (
+                        <tr key={material} className="border-b border-gray-300">
+                          <td className="px-4 py-2 bg-white text-center">
+                            {material}
+                          </td>
+                          <td className="px-4 py-2 bg-white">{price}</td>
+                        </tr>
+                      )
+                  )}
+                </tbody>
+              </table>
+              {/* </div>
               </div> */}
 
               <div className="container mx-auto px-4 sm:px-6 lg:px-4 py-4">
                 <div className="text-center">
-                  <h3 className="text-lg font-bold mb-2">
-                    Material Graph
-                  </h3>
+                  <h3 className="text-lg font-bold mb-2">Material Graph</h3>
                   <MaterialGraph data={sanctionData} />
                   <SanctionGraph data={sanctionData} />
                 </div>
                 <div className="text-center">
-                  <MaterialPieChart data={sanctionData} />
+                  <MaterialPieChartSanction data={sanctionData} />
                 </div>
               </div>
             </div>

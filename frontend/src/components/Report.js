@@ -3,10 +3,14 @@ import { MultiSelect } from "primereact/multiselect";
 import AuthContext from "../context/AuthContext";
 import MaterialGraph from "./Graph";
 import SanctionGraph from "./SanctionGraph";
-import MaterialPieChart from "./piechart";
+import MaterialPieChartSanction from "./MaterialPieChartSanction";
+import { Link } from "react-router-dom";
+import "./Report.css";
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Purchase from "../pages/Purchase";
+import MaterialPieChartPurchase from "./MaterialPieChartPurchase";
+import PricePieChartSanction from "./PricePieChartSanction";
 
 export default function Report() {
   const contextData = useContext(AuthContext);
@@ -106,13 +110,14 @@ export default function Report() {
   };
 
   //for the filtering
-  const [selectedMaterials, setSelectedMaterials] = useState(null);
-  const [selectedFields, setSelectedFields] = useState(null);
-  const [selectedDepartments, setSelectedDepartments] = useState(null);
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [selectedFields, setSelectedFields] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
 
-  const [selectedShowSubDepartments, setSelectedShowSubDepartments] =
-    useState(null);
-  const [selectedSubDepartments, setSelectedSubDepartments] = useState(null);
+  const [selectedShowSubDepartments, setSelectedShowSubDepartments] = useState(
+    []
+  );
+  const [selectedSubDepartments, setSelectedSubDepartments] = useState([]);
 
   const [filteredSanctionList, setFilteredSanctionList] = useState([]);
   const [filteredPurchaseList, setFilteredPurchaseList] = useState([]);
@@ -195,208 +200,279 @@ export default function Report() {
   };
   console.log(selectedDepartments);
 
+  const [showReport, setShowReport] = useState(false);
+
   return (
     <>
-      <div className="FILTERS">
-        <div className="mx-60 my-5 w-1/4">
-          <div className="card flex justify-content-center my-10">
+      <div className="FILTERS bg-white my-10 rounded shadow-md">
+        <div className="px-10 py-5">
+          Please select the fields you wish to include in the report.
+        </div>
+        <hr class="border-t border-gray-300 mx-10" />
+
+        <div className="ml-20 mr-10 my-5">
+          <div className="card flex justify-content-center my-5">
             <MultiSelect
               value={selectedDepartments}
               onChange={handleDepartmentChange}
               options={departmentData}
               optionLabel="department_name"
               placeholder="Select Department"
-              maxSelectedLabels={3}
-              className="w-full md:w-20rem"
+              maxSelectedLabels={5}
+              className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div className="card flex justify-content-center my-10">
+          <div className="card flex justify-content-center my-5">
             <MultiSelect
               value={selectedSubDepartments}
               onChange={(e) => setSelectedSubDepartments(e.value)}
               options={selectedShowSubDepartments}
               optionLabel="department_name"
               placeholder="Select Sub Department"
-              maxSelectedLabels={3}
-              className="w-full md:w-20rem"
+              maxSelectedLabels={10}
+              className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div className="card flex justify-content-center my-10">
+          <div className="card flex justify-content-center my-5">
             <MultiSelect
               value={selectedMaterials}
               onChange={(e) => setSelectedMaterials(e.value)}
               options={contextData.materialsData}
               optionLabel="material_name"
               placeholder="Select Materials"
-              maxSelectedLabels={3}
-              className="w-full md:w-20rem"
+              maxSelectedLabels={20}
+              className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div className="card flex justify-content-center my-10">
+          <div className="card flex justify-content-center my-5">
             <MultiSelect
               value={selectedFields}
               onChange={(e) => setSelectedFields(e.value)}
               options={fields}
               optionLabel="name"
               placeholder="Select Fields"
-              maxSelectedLabels={3}
-              className="w-full md:w-20rem"
+              maxSelectedLabels={10}
+              className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div>
-            <input
-              className="px-5"
-              type="date"
-              onChange={handleStartDateChange}
-            />
-            <input
-              className="px-5"
-              type="date"
-              onChange={handleEndDateChange}
-            />
-          </div>
-          <div className="flex justify-center items-center py-10">
-            <div className="flex justify-center items-center py-10">
-              <button
-                type="button"
-                className="inline-block rounded bg-neutral-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-600 shadow-light-3 transition duration-150 ease-in-out hover:bg-neutral-200 hover:shadow-light-2 focus:bg-neutral-200 focus:shadow-light-2 focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-light-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-                onClick={() => {
-                  if (
-                    selectedFields &&
-                    selectedFields.some((obj) => obj.name.includes("Sanction"))
-                  ) {
-                    setShowSanctionTable(true);
-                    filterSanctionData();
-                  } else {
-                    setShowSanctionTable(false);
-                  }
-
-                  if (
-                    selectedFields &&
-                    selectedFields.some((obj) => obj.name.includes("Purchase"))
-                  ) {
-                    setShowPurchaseTable(true);
-                    filterPurchaseData();
-                  } else {
-                    setShowPurchaseTable(false);
-                  }
-                }}
-              >
-                FILTER
-              </button>
+          <div className="DATE flex flex-wrap">
+            <div>
+              <label className="text-gray-700">Start Date: </label>
+              <input
+                className="px-5 py-3 border border-gray-100 rounded mr-10 text-gray-500"
+                type="date"
+                onChange={handleStartDateChange}
+              />
+            </div>
+            <div>
+              <label className="text-gray-700">End Date: </label>
+              <input
+                className="px-5 py-3 border border-gray-100 rounded text-gray-500"
+                type="date"
+                onChange={handleEndDateChange}
+              />
             </div>
           </div>
+          <div className="flex justify-center items-center py-5">
+            <button
+              type="button"
+              onClick={() => {
+                setShowReport(true);
+                filterSanctionData();
+                filterPurchaseData();
+              }}
+              className="flex-1 font-bold text-xl bg-white px-6 py-3 rounded-xl w-full button-48"
+            >
+              <span className="text">GENERATE REPORT</span>
+            </button>
+            {/* </div> */}
+          </div>
         </div>
+        {/* <hr class="border-t border-gray-300 w-full" /> */}
       </div>
 
-      <div className="TABLES">
-        <div className="mx-20 my-10">
-          {showSanctionTable && (
-            <div className="mx-20 my-10">
-              <div>
-                <h2 className="text-xl font-bold mb-4">Sanction List</h2>
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Sanction ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Ticket ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Department
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Engineer ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Technician ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Material
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date & Time
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Quantity Sanctioned
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredSanctionList.map((sanction) => (
-                      <tr key={sanction.sanction_id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.sanction_id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.ticket_id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.department}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.engineer_id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.technician_id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.material_name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {new Date(sanction.date_time).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {sanction.quantity_sanctioned}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+      {showReport && (
+        <div className="REPORT_RESULTS justify-center items-center py-20 mx-10">
+          
+          <div className="SANCTION_REPORT shadow-inner bg-[#ffffff] p-10 rounded mx-5 my-5">
+            <h1 className="text-3xl font-bold text-left pb-5">
+              Sanction Report
+            </h1>
+            <hr class="border-t border-gray-150" />
+
+            <div className="Stats w-full flex flex-wrap">
+              <div className="bg-gray-200 p-4 m-2 flex-1">
+                <header className="font-bold mb-2">Number of Sanctions</header>
+                <p className="text-lg">234</p>
               </div>
-              <table className="table-auto w-full border-collapse border border-gray-400">
+              <div className="bg-gray-200 p-4 m-2 flex-1">
+                <header className="font-bold mb-2">
+                  Prize worth of Sanctions
+                </header>
+                <p className="text-lg">$10 million</p>
+              </div>
+              <div className="bg-gray-200 p-4 m-2 flex-1">
+                <header className="font-bold mb-2">
+                  Prize worth of Sanctions
+                </header>
+                <p className="text-lg">$10 million</p>
+              </div>
+            </div>
+            <div className="Graphical Stats my-10">
+              <div class="flex flex-row flex-wrap justify-around">
+                <MaterialPieChartSanction data={filteredSanctionList} />
+                <PricePieChartSanction data={filteredSanctionList} />
+                <SanctionGraph data={filteredSanctionList} />
+              </div>
+            </div>
+            <div className="SANCTION_TABLE">
+              <table className="w-full leading-normal table-auto border rounded-lg">
+                <caption class="caption-bottom">Table : Sanctions</caption>
                 <thead>
-                  <tr className="bg-gray-200">
-                    <th className="px-4 py-2 text-left">Material</th>
-                    <th className="px-4 py-2 text-left">Price</th>
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Sanction ID
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Ticket ID
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Department
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Engineer ID
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Technician ID
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Material
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Date and Time
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider bg-[#c8d8e4] ">
+                      Quantity Sanctioned
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredSanctionList.map((sanction) => (
+                    <tr key={sanction.sanction_id} className="hover:bg-gray-50">
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.sanction_id}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.ticket_id}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.department}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.engineer_id}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.technician_id}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.material}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {new Date(sanction.date_time).toLocaleString()}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {sanction.quantity_sanctioned}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="Materialwisesanction my-20">
+              <table className="w-full leading-normal table-auto border rounded-lg">
+                <caption class="caption-bottom">
+                  Table : Materials Wise Sanction Cost
+                </caption>
+                <thead>
+                  <tr className="bg-[#c8d8e4]">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
+                      Material
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
+                      Price
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
                   {Object.entries(materialSanctionWisePrice).map(
                     ([material, price]) =>
                       material !== "Total Price" && (
-                        <tr key={material} className="border-b border-gray-300">
-                          <td className="px-4 py-2">{material}</td>
-                          <td className="px-4 py-2">{price}</td>
+                        <tr key={material} className="hover:bg-gray-50">
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            {material}
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            {price}
+                          </td>
                         </tr>
                       )
                   )}
                 </tbody>
               </table>
             </div>
-          )}
 
-          {showPurchaseTable && (
-            <div className="mx-20 my-10">
-              <h2 className="text-xl font-bold mb-4">Purchase List</h2>
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <MaterialGraph data={filteredSanctionList} />
+          </div>
+
+          <div className="PURCHASE_REPORT shadow-inner bg-[#ffffff] p-10 rounded mx-5 mt-20">
+            <h1 className="text-3xl font-bold text-left pb-5">
+              Purchase Report
+            </h1>
+            <hr class="border-t border-gray-150" />
+
+            <div className="Stats w-full flex flex-wrap">
+              <div className="bg-gray-200 p-4 m-2 flex-1">
+                <header className="font-bold mb-2">Number of Purchases</header>
+                <p className="text-lg">234</p>
+              </div>
+              <div className="bg-gray-200 p-4 m-2 flex-1">
+                <header className="font-bold mb-2">
+                  Prize worth of Purchases
+                </header>
+                <p className="text-lg">$10 million</p>
+              </div>
+              <div className="bg-gray-200 p-4 m-2 flex-1">
+                <header className="font-bold mb-2">
+                  Prize worth of Sanctions
+                </header>
+                <p className="text-lg">$10 million</p>
+              </div>
+            </div>
+            <div className="Graphical Stats my-10">
+              <div class="flex flex-row flex-wrap justify-around">
+                <MaterialPieChartPurchase data={filteredPurchaseList} />
+                <PricePieChartSanction data={filteredSanctionList} />
+              </div>
+            </div>
+
+            <div className="PURCHASE_TABLE">
+              <table className="min-w-full divide-y divide-gray-200 table-auto border rounded-lg">
+                <caption class="caption-bottom">Table : Purchases</caption>
+                <thead className="bg-[#c8d8e4]">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Purchase ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Material
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Quantity Purchased
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Vendor Details
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Date & Time
                     </th>
                   </tr>
@@ -404,69 +480,64 @@ export default function Report() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredPurchaseList.map((purchase) => (
                     <tr key={purchase.purchase_id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-2 whitespace-nowrap">
                         {purchase.purchase_id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-2 whitespace-nowrap">
                         {purchase.material_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-2 whitespace-nowrap">
                         {purchase.quantity_purchased}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-2 whitespace-nowrap">
                         {purchase.vendor_details}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-2 whitespace-nowrap">
                         {new Date(purchase.date_time).toLocaleString()}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <table className="table-auto w-full border-collapse border border-gray-400">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="px-4 py-2 text-left">Material</th>
-                    <th className="px-4 py-2 text-left">Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(materialPurchaseWisePrice).map(
-                    ([material, price]) =>
-                      material !== "Total Price" && (
-                        <tr key={material} className="border-b border-gray-300">
-                          <td className="px-4 py-2">{material}</td>
-                          <td className="px-4 py-2">{price}</td>
-                        </tr>
-                      )
-                  )}
-                </tbody>
-              </table>
             </div>
-          )}
-
-          <div className="flex flex-center justify-content-center align-items-center">
-            <button
-              type="button"
-              class="inline-block rounded bg-neutral-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-600 shadow-light-3 transition duration-150 ease-in-out hover:bg-neutral-200 hover:shadow-light-2 focus:bg-neutral-200 focus:shadow-light-2 focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-light-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-            >
-              GENERATE REPORT
-            </button>
+            <div className="Materialwisepurchase my-20"> 
+            <table className="min-w-full divide-y divide-gray-200 table-auto border rounded-lg">
+            <caption class="caption-bottom">
+                  Table : Materials Wise Purchase Cost
+                </caption>
+              <thead className="bg-[#c8d8e4]">
+                <tr>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Material
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Price
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {Object.entries(materialPurchaseWisePrice).map(
+                  ([material, price]) =>
+                    material !== "Total Price" && (
+                      <tr key={material} className="border-b border-gray-300">
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {material}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap">{price}</td>
+                      </tr>
+                    )
+                )}
+              </tbody>
+            </table>
+            </div>
           </div>
-          {/* <button onClick={filterByMaterialName()}></button> */}
-        </div>
-      </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-4 py-4">
-        <div className="text-center">
-          <h3 className="text-lg font-bold mb-2">Material Graph</h3>
-          <MaterialGraph data={filteredSanctionList} />
-          <SanctionGraph data={filteredSanctionList} />
-        </div>
-        <div className="text-center">
-                  <MaterialPieChart data={filteredSanctionList} />
-        </div>
-      </div>
+          
+          </div>
+
+        
+        
+      )}
     </>
   );
 }

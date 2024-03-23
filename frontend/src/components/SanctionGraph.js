@@ -10,7 +10,6 @@ import {
 } from "recharts";
 
 const SanctionGraph = ({ data }) => {
-
   // Calculate total quantity and number of sanctions for each date
   const dateData = data.reduce((acc, item) => {
     const dateStr = new Date(item.date_time).toLocaleDateString();
@@ -35,10 +34,12 @@ const SanctionGraph = ({ data }) => {
   return (
     <div>
       <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <h3 className="text-lg font-semibold mb-2 text-center">Sanctions Over Time</h3>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div style={{ width: "48%" }}>
-            <LineChart width={400} height={300} data={chartData}>
+        <h3 className="text-lg font-semibold mb-2 text-center">
+          Sanctions Over Time
+        </h3>
+        <div className="flex flex-wrap justify-around">
+   
+            <LineChart width={350} height={250} data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="date"
@@ -65,9 +66,8 @@ const SanctionGraph = ({ data }) => {
                 activeDot={{ r: 6 }} // Custom active dot style
               />
             </LineChart>
-          </div>
-          <div style={{ width: "48%" }}>
-            <LineChart width={400} height={300} data={chartData}>
+    
+            <LineChart width={350} height={250} data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="date"
@@ -94,7 +94,7 @@ const SanctionGraph = ({ data }) => {
                 activeDot={{ r: 6 }} // Custom active dot style
               />
             </LineChart>
-          </div>
+        
         </div>
       </div>
     </div>
