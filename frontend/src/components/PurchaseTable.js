@@ -109,8 +109,8 @@ const PurchaseTable = () => {
   return (
 
     <div className="bg-[#c8d8d4]">
-        <div className="flex items-center">
-          <div className="flex items-left flex-col px-10 py-1 mr-5">
+        {/* <div className="flex items-center"> */}
+          <div className="flex items-left flex-col px-10 py-1">
             <div>Select Start Date</div>
             <input
               type="date"
@@ -121,7 +121,7 @@ const PurchaseTable = () => {
             />
           </div>
 
-          <div className="flex items-left flex-col px-4 py-1">
+          <div className="flex items-left flex-col px-10 py-1">
             <div>Select End Date</div>
             <input
               type="date"
@@ -131,8 +131,7 @@ const PurchaseTable = () => {
               style={{ width: "150px" }}
             />
           </div>
-        
-      </div>
+        {/* </div> */}
       <div className=" bg-[#c8d8d4] overflow-x-auto">
         <h1 className="text-2xl font-bold mb-4 p-2 ">Material List</h1>
         <div className="flex">
