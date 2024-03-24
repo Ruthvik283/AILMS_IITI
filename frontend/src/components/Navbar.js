@@ -18,11 +18,11 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-[#2b6777]">
+    <nav className="bg-[#fffafa]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <h1 className="text-white font-bold text-xl">
+            <h1 className="text-black font-bold text-xl">
               AILMS: {userData.username}
             </h1>
           </div>
@@ -30,56 +30,56 @@ function Navbar() {
             <div className="ml-10 flex items-baseline space-x-4">
               <Link
                 to="/"
-                activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                activeClassName="text-white bg-gray-900 hover:bg-blue"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Home
               </Link>
               <Link
                 to="/material"
                 activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 MaterialsTable
               </Link>
               <Link
                 to="/materials"
                 activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Materials
               </Link>
               <Link
                 to="/departments"
                 activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Departments
               </Link>
               <Link
                 to="/sanction"
                 activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Sanctions
               </Link>
               <Link
                 to="/purchase"
                 activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Purchases
               </Link>
               <Link
                 to="/Report"
                 activeClassName="text-white bg-gray-900 hover:bg-gray-700"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Report
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-[#414a4c] hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Logout
               </button>
@@ -125,48 +125,48 @@ function Navbar() {
           <Link
             to="/"
             activeClassName="bg-gray-900 text-white"
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             Home
           </Link>
           <Link
             to="/material"
             activeClassName="bg-gray-900 text-white"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             MaterialsTable
           </Link>
           <Link
             to="/materials"
             activeClassName="bg-gray-900 text-white"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             Materials
           </Link>
           <Link
             to="/sanction"
             activeClassName="bg-gray-900 text-white"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             Sanctions
           </Link>
           <Link
             to="/purchase"
             activeClassName="bg-gray-900 text-white"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             Purchases
           </Link>
           <Link
             to="/Report"
             activeClassName="bg-gray-900 text-white"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             Report
           </Link>
           <button
             onClick={handleLogout}
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-[#414a4c] hover:text-white hover:bg-gray-700"
           >
             Logout
           </button>
