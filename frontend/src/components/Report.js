@@ -215,7 +215,9 @@ export default function Report() {
             <MultiSelect
               value={selectedDepartments}
               onChange={handleDepartmentChange}
-              options={departmentData}
+              options={departmentData.filter(
+                (department) => (department.is_main === true)
+              )}
               optionLabel="department_name"
               placeholder="Select Department"
               maxSelectedLabels={5}
@@ -293,7 +295,6 @@ export default function Report() {
 
       {showReport && (
         <div className="REPORT_RESULTS justify-center items-center py-20 mx-10">
-          
           <div className="SANCTION_REPORT shadow-inner bg-[#ffffff] p-10 rounded mx-5 my-5">
             <h1 className="text-3xl font-bold text-left pb-5">
               Sanction Report
@@ -500,43 +501,40 @@ export default function Report() {
                 </tbody>
               </table>
             </div>
-            <div className="Materialwisepurchase my-20"> 
-            <table className="min-w-full divide-y divide-gray-200 table-auto border rounded-lg">
-            <caption class="caption-bottom">
+            <div className="Materialwisepurchase my-20">
+              <table className="min-w-full divide-y divide-gray-200 table-auto border rounded-lg">
+                <caption class="caption-bottom">
                   Table : Materials Wise Purchase Cost
                 </caption>
-              <thead className="bg-[#c8d8e4]">
-                <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
-                    Material
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
-                    Price
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {Object.entries(materialPurchaseWisePrice).map(
-                  ([material, price]) =>
-                    material !== "Total Price" && (
-                      <tr key={material} className="border-b border-gray-300">
-                        <td className="px-4 py-2 whitespace-nowrap">
-                          {material}
-                        </td>
-                        <td className="px-4 py-2 whitespace-nowrap">{price}</td>
-                      </tr>
-                    )
-                )}
-              </tbody>
-            </table>
+                <thead className="bg-[#c8d8e4]">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
+                      Material
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">
+                      Price
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {Object.entries(materialPurchaseWisePrice).map(
+                    ([material, price]) =>
+                      material !== "Total Price" && (
+                        <tr key={material} className="border-b border-gray-300">
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            {material}
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            {price}
+                          </td>
+                        </tr>
+                      )
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-
-          
-          </div>
-
-        
-        
+        </div>
       )}
     </>
   );

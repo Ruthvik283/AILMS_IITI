@@ -23,18 +23,26 @@ const MaterialGraph = ({ data }) => {
     return acc;
   }, {});
 
+  // Sort data by date
+  const sortedMaterialData = Object.entries(materialData).map(
+    ([materialName, materialEntries]) => ({
+      materialName,
+      materialEntries: materialEntries.sort((a, b) => a.date - b.date),
+    })
+  );
+
   return (
     <div>
-    <div className="flex flex-wrap justify-around">
-      {Object.entries(materialData).map(([materialName, materialEntries]) => (
+      {sortedMaterialData.map(({ materialName, materialEntries }) => (
         <div
           key={materialName}
-          className="bg-white rounded-lg shadow-md p-4 mb-4 "
+          className="bg-white rounded-lg shadow-md p-4 mb-4"
         >
           <h3 className="text-lg font-semibold mb-2">{materialName}</h3>
-          
-            <div className="flex">
-                <LineChart width={350} height={250} data={materialEntries}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ width: "48%" }}>
+              <div style={{ width: "100%", height: "300px" }}>
+                <LineChart width={400} height={250} data={materialEntries}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="date"
@@ -55,12 +63,16 @@ const MaterialGraph = ({ data }) => {
                     type="monotone"
                     dataKey="quantity"
                     name="Quantity"
-                    stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // Random color for each line
+                    stroke={`#${Math.floor(Math.random() * 16777215).toString(
+                      16
+                    )}`} // Random color for each line
                   />
                 </LineChart>
-              
-            
-                <LineChart width={350} height={250} data={materialEntries}>
+              </div>
+            </div>
+            <div style={{ width: "48%" }}>
+              <div style={{ width: "100%", height: "300px" }}>
+                <LineChart width={400} height={250} data={materialEntries}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="date"
@@ -81,17 +93,17 @@ const MaterialGraph = ({ data }) => {
                     type="monotone"
                     dataKey="sanctionCount"
                     name="Number of Sanctions"
-                    stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // Random color for each line
+                    stroke={`#${Math.floor(Math.random() * 16777215).toString(
+                      16
+                    )}`} // Random color for each line
                   />
                 </LineChart>
-                </div> 
+              </div>
+            </div>
+          </div>
         </div>
       ))}
     </div>
-      <div className="text-center">
-        Number of Sanction and Quantity over Time
-      </div>
-      </div>
   );
 };
 

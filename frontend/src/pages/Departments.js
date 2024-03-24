@@ -3,19 +3,61 @@ import { useNavigate } from "react-router-dom";
 import Footer2 from "../components/Footer";
 import Navbar from "../components/Navbar";
 import AuthContext from "../context/AuthContext";
-import { TbH1 } from "react-icons/tb";
 
-const DepartmentCard = ({ department, onClick }) => {
+const DepartmentCard = ({ department }) => {
   const { department_name, is_main, sub_departments, users } = department;
+  const [openDropdown, setOpenDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setOpenDropdown(!openDropdown);
+  };
+
+  const handleOutsideClick = (e) => {
+    if (e.target.closest(".department-card") === null) {
+      setOpenDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 m-4 cursor-pointer">
-      <h2 className="text-lg font-semibold">{department_name}</h2>
-      {is_main && (
-        <>
-          <h1 className=" text-pretty">Main Department</h1>
+    <div className="border border-gray-200 rounded-lg p-4 m-4 department-card">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">{department_name}</h2>
+        {is_main && (
+          <span className="text-green-500 font-semibold">Main Department</span>
+        )}
+        <span
+          className={`${
+            openDropdown ? "rotate-180" : ""
+          } transition-transform cursor-pointer`}
+          onClick={toggleDropdown}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </span>
+      </div>
+      {openDropdown && (
+        <div className="mt-4">
           {sub_departments.length > 0 ? (
-            <div className="mt-2">
+            <div>
               <h3 className="text-gray-600 text-sm font-semibold">
                 Sub-departments:
               </h3>
@@ -26,22 +68,24 @@ const DepartmentCard = ({ department, onClick }) => {
               </ul>
             </div>
           ) : (
-            <h1>No Sub-departments</h1>
+            <h4 className="text-gray-500">No Sub-departments</h4>
           )}
-        </>
-      )}
 
-      {users.length > 0 && (
-        <div className="mt-4">
-          <h3 className="text-gray-600 text-sm font-semibold">Users:</h3>
-          <ul className="ml-4">
-            {users.map((user) => (
-              <li key={user.id}>
-                <span className="font-semibold">{user.username}</span> -{" "}
-                {user.email}
-              </li>
-            ))}
-          </ul>
+          {users.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-gray-600 text-sm font-semibold">Users:</h3>
+              <ul className="ml-4">
+                {users.map((user) => (
+                  <li key={user.id}>
+                    <h1>{user.role_name}</h1>
+                    <span className="font-semibold">
+                      {user.username}
+                    </span> - {user.email}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -62,11 +106,9 @@ export default function Departments() {
             "Content-Type": "application/json",
           },
         });
-
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
         const data = await response.json();
         setDepartmentData(data);
         console.log("fetched_department_data", data);
