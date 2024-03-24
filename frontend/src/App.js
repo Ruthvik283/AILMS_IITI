@@ -18,6 +18,7 @@ import PurchaseFormPage from "./pages/PurchaseFormPage";
 import LoginPage from "./pages/Login";
 import ReportPage from "./pages/ReportPage";
 import { AuthProvider } from "./context/AuthContext";
+import { DataProvider } from "./context/DataContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
@@ -67,6 +68,7 @@ export default function App() {
       <Toaster />
       <Router scrollBehavior="auto">
         <AuthProvider>
+        <DataProvider>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
@@ -85,6 +87,7 @@ export default function App() {
             <Route path="/report" element={<ReportPage />} />
             {/* </Route> */}
           </Routes>
+        </DataProvider>
         </AuthProvider>
       </Router>
     </>

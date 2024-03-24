@@ -5,6 +5,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import MaterialGraph from "./Graph";
 import MaterialPieChartSanction from "./MaterialPieChartSanction";
 import AuthContext from "../context/AuthContext";
+import DataContext from "../context/DataContext";
 import SanctionGraph from "./SanctionGraph";
 
 const SanctionTable = () => {
@@ -13,43 +14,63 @@ const SanctionTable = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const contextData = useContext(AuthContext);
+  const contextData1 = useContext(DataContext);
   const [sanctionData, setSanctionData] = useState([]);
   let [materialWisePrice, setmaterialWisePrice] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/sanctions/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch("http://127.0.0.1:8000/api/sanctions/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+            body: JSON.stringify(contextData.userData),
+          });
+          console.log("rrr", contextData.userData);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setSanctionData(data);
+          setmaterialWisePrice(
+            data.reduce((acc, purchase) => {
+              acc["Total Price"] = acc["Total Price"] || 0;
+              acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+
+              acc[purchase.material_name] = acc[purchase.material_name] || 0;
+              acc[purchase.material_name] +=
+                purchase.price * purchase.quantity_sanctioned;
+              return acc;
+            }, {})
+          );
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
+      };
 
-        const data = await response.json();
-        setSanctionData(data);
-        setmaterialWisePrice(
-          data.reduce((acc, purchase) => {
-            acc["Total Price"] = acc["Total Price"] || 0;
-            acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+      fetchData();
+    }, []);
+//   useEffect(() => {
+//     //contextData1.fetchData();
+//     setSanctionData(contextData1.sanctionData);
+//     console.log("ttt", contextData1.sanctionData);
+//     setmaterialWisePrice(
+//       contextData1.sanctionData.reduce((acc, purchase) => {
+//         acc["Total Price"] = acc["Total Price"] || 0;
+//         acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
 
-            acc[purchase.material_name] = acc[purchase.material_name] || 0;
-            acc[purchase.material_name] +=
-              purchase.price * purchase.quantity_sanctioned;
-            return acc;
-          }, {})
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+//         acc[purchase.material_name] = acc[purchase.material_name] || 0;
+//         acc[purchase.material_name] +=
+//           purchase.price * purchase.quantity_sanctioned;
+//         return acc;
+//       }, {})
+//     );
+//   }, []);
 
   const [departmentData, setDepartmentData] = useState([]);
 

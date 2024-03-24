@@ -128,7 +128,8 @@ def SendMail(request):
     for material in materials:
         if material.quantity < material.critical_quantity:
             subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'The quantity of {material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            message = f'The quantity of {
+                material.material_name} is below the critical level. Current quantity: {material.quantity}'
             from_email = settings.EMAIL_HOST_USER
             # Specify the recipient email address
             to_email = ['ailmsiiti123@gmail.com']
@@ -286,11 +287,17 @@ class PurchaseAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def sanctionsData(request):
-    res = SanctionSerializer(Sanction.objects.all(), many=True)
 
-    return Response(res.data)
+    data = request.data
+    if (data["role"] == "Manager"):
+        res = SanctionSerializer(Sanction.objects.all(), many=True)
+        return Response(res.data if res else [])
+    else:
+        res = SanctionSerializer(
+            Sanction.objects.filter(engineer_id=data["id"]), many=True)
+        return Response(res.data if res else [])
 
 
 @api_view(['GET', 'POST'])

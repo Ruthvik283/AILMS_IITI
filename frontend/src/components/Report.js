@@ -67,13 +67,13 @@ export default function Report() {
   }, []);
 
   const [purchaseData, setPurchaseData] = useState([]);
-  const [startDate, setStartDate] = useState("NULL");
-  const [endDate, setEndDate] = useState("NULL");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/purchases/${startDate}/${endDate}/`,
+          `http://127.0.0.1:8000/api/purchases/NULL/NULL/`,
           {
             method: "GET",
             headers: {
@@ -94,7 +94,33 @@ export default function Report() {
     };
 
     fetchData();
-  }, [startDate, endDate]);
+  }, []);
+
+  const filterByDate = (filteredData) => {
+    let filteredByDate = filteredData;
+
+    // If start date is null, set it to the earliest possible date
+    const startDateFilter = startDate ? new Date(startDate) : new Date(0);
+
+    // If end date is null, set it to the current date
+    const endDateFilter = endDate ? new Date(endDate) : new Date();
+    const nextDayDate = endDateFilter;
+    nextDayDate.setDate(nextDayDate.getDate() + 1);
+    //endDate.setendDate(endDate.getDate() + 1);
+    //console.log(startDateFilter, endDateFilter);
+
+    filteredByDate = filteredData.filter(
+      (purchase) =>
+        new Date(purchase.date_time) >= startDateFilter &&
+        new Date(purchase.date_time) < nextDayDate
+    );
+
+    return filteredByDate;
+  };
+  //   useEffect(() => {
+  //     console.log("new", filterByDate(purchaseData));
+  //     setPurchaseData(filterByDate(purchaseData));
+  //   }, [startDate, endDate]);
 
   const fields = [
     { name: "Purchase", code: "NY" },
@@ -102,11 +128,11 @@ export default function Report() {
   ];
 
   const handleStartDateChange = (event) => {
-    setStartDate(event.target.value || "NULL");
+    setStartDate(event.target.value);
   };
 
   const handleEndDateChange = (event) => {
-    setEndDate(event.target.value || "NULL");
+    setEndDate(event.target.value);
   };
 
   //for the filtering
@@ -134,7 +160,7 @@ export default function Report() {
         (mat) => mat.material_name === sanction.material_name
       );
     });
-
+    filteredData = filterByDate(filteredData);
     setFilteredSanctionList(filteredData);
   };
 
@@ -150,6 +176,8 @@ export default function Report() {
         (mat) => mat.material_name === sanction.material_name
       );
     });
+
+    filteredData = filterByDate(filteredData);
 
     setFilteredPurchaseList(filteredData);
   };
@@ -216,7 +244,7 @@ export default function Report() {
               value={selectedDepartments}
               onChange={handleDepartmentChange}
               options={departmentData.filter(
-                (department) => (department.is_main === true)
+                (department) => department.is_main === true
               )}
               optionLabel="department_name"
               placeholder="Select Department"
@@ -376,7 +404,7 @@ export default function Report() {
                         {sanction.technician_id}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
-                        {sanction.material}
+                        {sanction.material_name}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
                         {new Date(sanction.date_time).toLocaleString()}
