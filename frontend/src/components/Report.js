@@ -21,10 +21,11 @@ export default function Report() {
     const fetchData = async () => {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/sanctions/", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(contextData.userData),
         });
 
         if (!response.ok) {
@@ -32,6 +33,7 @@ export default function Report() {
         }
 
         const data = await response.json();
+        //console.log("report-sanctions", data);
         setSanctionData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
