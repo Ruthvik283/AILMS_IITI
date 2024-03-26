@@ -282,7 +282,10 @@ class PurchaseAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = PurchaseSerializer(data=request.data)
         if serializer.is_valid():
+            print("here")
             serializer.save()
+        else:
+            print(serializer.errors)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
