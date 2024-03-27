@@ -8,7 +8,7 @@ const SanctionForm = () => {
   const Navigate = useNavigate();
   const [ticketId, setTicketId] = useState("");
   const [department, setDepartment] = useState("");
-  const [engineerId, setEngineerId] = useState("");
+  const [engineerId, setEngineerId] = useState(contextData.userData.id);
   const [technicianId, setTechnicianId] = useState("");
   const [material, setMaterial] = useState("");
   const [quantitySanctioned, setQuantitySanctioned] = useState("");
@@ -89,13 +89,24 @@ const SanctionForm = () => {
           <label htmlFor="engineerId" className="block mb-1">
             ENGINEER ID
           </label>
-          <input
-            type="text"
-            id="engineerId"
-            value={engineerId}
-            onChange={(e) => setEngineerId(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
+          {contextData.userData.role === "Manager" ? (
+            <input
+              type="text"
+              id="engineerId"
+              value={engineerId}
+              onChange={(e) => setEngineerId(e.target.value)}
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            />
+          ) : (
+            <input
+              type="text"
+              id="engineerId"
+              value={contextData.userData.id}
+              readOnly
+              style={{ pointerEvents: "none" }}
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            />
+          )}
         </div>
         <div>
           <label htmlFor="technicianId" className="block mb-1">
@@ -123,7 +134,7 @@ const SanctionForm = () => {
         </div> */}
         <div>
           <label htmlFor="materialCode" className="block mb-1">
-            Material code
+            Material
           </label>
           <select
             id="materialCode"

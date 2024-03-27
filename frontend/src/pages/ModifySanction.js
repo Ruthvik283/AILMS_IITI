@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
+import AuthContext from "../context/AuthContext";
 
 function isNumeric(str) {
   return !isNaN(str) && !isNaN(parseInt(str));
 }
 
 const ModifySanctionForm = () => {
+  const contextData = useContext(AuthContext);
+  const Navigate = useNavigate();
   const [sanctionData, setsanctionData] = useState({});
   const [materialData, setmaterialData] = useState({});
   const [quantity, setquantity] = useState("");
@@ -39,6 +42,13 @@ const ModifySanctionForm = () => {
 
             const data1 = await response1.json();
             setsanctionData(data1);
+            if (contextData.userData.role != "Manager") {
+              if (data1.engineer_id != contextData.userData.id) {
+                toast.error("You are not allowed to modify that sanction");
+                Navigate("/sanction");
+              }
+            }
+
             console.log("sanc_req", data1);
 
             const response2 = await fetch(
@@ -70,7 +80,6 @@ const ModifySanctionForm = () => {
   };
 
   const { sanct_id } = useParams();
-  const Navigate = useNavigate();
   useEffect(() => {
     console.log("called again");
     if (sanct_id !== undefined) {

@@ -13,20 +13,18 @@ export default function Home() {
   useEffect(() => {
     if (!userData.id) {
       logoutUser();
-    } else if (userData.role === "Engineer") {
-      navigate("/engineer");
     }
+    // else if (userData.role === "Engineer") {
+    //   navigate("/engineer");
+    // }
 
     // Initialize Typed.js
     const typedText = new Typed("#typed-text", {
       strings: ["Welcome to AILMS"],
-      
+
       typeSpeed: 50,
       showCursor: false,
-      onComplete: function() {
-      
-        ;
-      },
+      onComplete: function () {},
     });
 
     return () => {
@@ -48,9 +46,9 @@ export default function Home() {
       />
       <motion.div
         className="relative z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+        // initial={{ opacity: 0 }}
+        // animate={{ opacity: 1 }}
+        // transition={{ duration: 1 }}
       >
         <Navbar />
         <div className="content-container text-center pt-16">
