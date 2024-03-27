@@ -18,59 +18,59 @@ const SanctionTable = () => {
   const [sanctionData, setSanctionData] = useState([]);
   let [materialWisePrice, setmaterialWisePrice] = useState([]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await fetch("http://127.0.0.1:8000/api/sanctions/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/sanctions/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-            body: JSON.stringify(contextData.userData),
-          });
-          console.log("rrr", contextData.userData);
+          body: JSON.stringify(contextData.userData),
+        });
+        console.log("rrr", contextData.userData);
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          setSanctionData(data);
-          setmaterialWisePrice(
-            data.reduce((acc, purchase) => {
-              acc["Total Price"] = acc["Total Price"] || 0;
-              acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
-
-              acc[purchase.material_name] = acc[purchase.material_name] || 0;
-              acc[purchase.material_name] +=
-                purchase.price * purchase.quantity_sanctioned;
-              return acc;
-            }, {})
-          );
-        } catch (error) {
-          console.error("Error fetching data:", error);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      };
 
-      fetchData();
-    }, []);
-//   useEffect(() => {
-//     //contextData1.fetchData();
-//     setSanctionData(contextData1.sanctionData);
-//     console.log("ttt", contextData1.sanctionData);
-//     setmaterialWisePrice(
-//       contextData1.sanctionData.reduce((acc, purchase) => {
-//         acc["Total Price"] = acc["Total Price"] || 0;
-//         acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+        const data = await response.json();
+        setSanctionData(data);
+        setmaterialWisePrice(
+          data.reduce((acc, purchase) => {
+            acc["Total Price"] = acc["Total Price"] || 0;
+            acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
 
-//         acc[purchase.material_name] = acc[purchase.material_name] || 0;
-//         acc[purchase.material_name] +=
-//           purchase.price * purchase.quantity_sanctioned;
-//         return acc;
-//       }, {})
-//     );
-//   }, []);
+            acc[purchase.material_name] = acc[purchase.material_name] || 0;
+            acc[purchase.material_name] +=
+              purchase.price * purchase.quantity_sanctioned;
+            return acc;
+          }, {})
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  //   useEffect(() => {
+  //     //contextData1.fetchData();
+  //     setSanctionData(contextData1.sanctionData);
+  //     console.log("ttt", contextData1.sanctionData);
+  //     setmaterialWisePrice(
+  //       contextData1.sanctionData.reduce((acc, purchase) => {
+  //         acc["Total Price"] = acc["Total Price"] || 0;
+  //         acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+
+  //         acc[purchase.material_name] = acc[purchase.material_name] || 0;
+  //         acc[purchase.material_name] +=
+  //           purchase.price * purchase.quantity_sanctioned;
+  //         return acc;
+  //       }, {})
+  //     );
+  //   }, []);
 
   const [departmentData, setDepartmentData] = useState([]);
 
@@ -399,7 +399,7 @@ const SanctionTable = () => {
                       Department
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                      Engineer ID
+                      Engineer Name
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Technician ID
@@ -428,10 +428,10 @@ const SanctionTable = () => {
                         {sanction.ticket_id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {sanction.department}
+                        {sanction.department_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {sanction.engineer_id}
+                        {sanction.engineer_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {sanction.technician_id}

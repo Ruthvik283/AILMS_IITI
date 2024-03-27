@@ -207,12 +207,16 @@ class PurchasesBetweenDates(APIView):
 @api_view(['POST'])
 def sanction_material(request):
     data = request.data
-
+    if data['userData']['role'] == "Manager":
+        department1 = data['department']
+    else:
+        department1 = data['userData']['departmentName']
     try:
+
         sct = Sanction(
+
             ticket_id=data['ticket_id'],
-            department=User.objects.filter(
-                id=data['engineer_id'])[0].department,
+            department=Department.objects.filter(id=int(department1))[0],
             engineer_id=data['engineer_id'],
             technician_id=data['technician_id'],
             material=Material.objects.filter(
