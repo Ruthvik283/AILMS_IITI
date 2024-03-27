@@ -4,6 +4,8 @@ from picklefield.fields import PickledObjectField
 from datetime import datetime
 User = get_user_model()
 
+def pdf_path(instance, filename):
+    return f'files//purchase_{instance.purchase_id}.pdf'
 
 # Create your models here.
 class Category(models.Model):
@@ -40,7 +42,10 @@ class Purchase(models.Model):
     quantity_purchased = models.IntegerField(null=False)
     vendor_details = models.TextField(blank=True, null=True)
     date_time = models.DateTimeField(auto_now=True)
-    pdf_file = models.FileField(upload_to='pdfs/', blank=True, null=True)
+    pdf_file = models.FileField(upload_to=pdf_path, blank=True, null=True)
+
+    def raw_save(self,*args,**kwargs):
+        super().save()
 
     def save(self, *args, **kwargs):
         # Call the original save method

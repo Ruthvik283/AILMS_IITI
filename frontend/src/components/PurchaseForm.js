@@ -10,6 +10,13 @@ const PurchaseForm = () => {
   const [vendorDetails, setVendorDetails] = useState("");
   const [invoicePdf, setInvoicePdf] = useState(null);
 
+  function setPdf(targ) {
+    console.log(targ.files);
+    console.log(JSON.stringify(targ.files[0]));
+    setInvoicePdf(targ.files[0]);
+    // console.log("file: ", invoicePdf);
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -21,24 +28,25 @@ const PurchaseForm = () => {
     formData.append("invoice_pdf", invoicePdf);
 
     try {
+      console.log("formData", formData);
       const response = await fetch("http://127.0.0.1:8000/api/add_purchase/", {
         method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        body: JSON.stringify(formData),
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
+        body: formData,
       });
 
       if (response.ok) {
         console.log("Sanction form submitted successfully!");
         // Reset form fields if needed
-        setMaterial("");
-        setMaterialCode("");
-        setQuantityPurchased("");
-        setVendorDetails("");
-        setInvoicePdf(null);
+        // setMaterial("");
+        // setMaterialCode("");
+        // setQuantityPurchased("");
+        // setVendorDetails("");
+        // setInvoicePdf(null);
         toast.success("Purchase added successfully!");
-        Navigate("/purchase");
+        // Navigate("/purchase");
       } else {
         toast.error(`Failed to submit form ${response.status}`);
       }
@@ -106,7 +114,7 @@ const PurchaseForm = () => {
             type="file"
             id="invoicePdf"
             //value={invoicePdf}
-            onChange={(e) => setInvoicePdf(e.target.files[0])}
+            onChange={(e) => setPdf(e.target)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>

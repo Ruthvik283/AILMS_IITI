@@ -25,7 +25,7 @@ urlpatterns = [
     path('sanctions/', views.sanctionsData, name='sanction-data'),
     path('sanctions/<int:sanct_id>',
          views.sanctionsDataId, name='sanction-data-id'),
-    path('add_purchase/', views.PurchaseAPIView.as_view(), name='purchase-material'),
+    path('add_purchase/', views.purchase_material, name='purchase-material'),
     path('materials/', views.AllMaterials, name='all materials'),
     path('materials/<int:material_id>',
          views.MaterialbyID, name='material-by-id'),
@@ -38,4 +38,5 @@ urlpatterns = [
     path('create-material/', MaterialCreateView.as_view(), name='create-material'),
     path('modifysanction/', views.modify_sanction, name='modify-sanction'),
     path('create-department/', DepartmentCreateView.as_view(), name='create-department'),
+    path('api_test/',views.test,name='apitest'),
 ]

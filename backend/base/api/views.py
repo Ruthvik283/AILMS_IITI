@@ -17,6 +17,9 @@ from django.utils import timezone
 from django.db.models import F
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.files import File
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 User = get_user_model()
 
 
@@ -128,8 +131,8 @@ def SendMail(request):
     for material in materials:
         if material.quantity < material.critical_quantity:
             subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'The quantity of {
-                material.material_name} is below the critical level. Current quantity: {material.quantity}'
+            message = f'''The quantity of {
+                material.material_name} is below the critical level. Current quantity: {material.quantity}'''
             from_email = settings.EMAIL_HOST_USER
             # Specify the recipient email address
             to_email = ['ailmsiiti123@gmail.com']
@@ -244,50 +247,63 @@ def sanction_material(request):
         )
 
 
-# @api_view(['POST'])
-# def purchase_material(request):
-#     try:
-#         data = request.data
+@api_view(['POST'])
+def purchase_material(request):
+    print(request.data)
+    # return Response({
+    #     "success": True
+    # })
+    try:
+        data = request.data
 
-#         p = Purchase(
-#             material=Material.objects.filter(
-#                 material_id=data['material']).first(),
-#             quantity_purchased=data['quantity_purchased'],
-#             vendor_details=data['vendor_details']
-#         )
+        print(data['material_id'])
+        print(data['quantity_purchased'])
+        print(data['vendor_details'])
 
-#         """
-#         (To be added) add feature to automatically handle
-#         materials not yet present in models.Material
-#         """
+        p = Purchase(
+            material=Material.objects.filter(
+                material_id=int(data['material_id'])).first(),
+            quantity_purchased=int(data['quantity_purchased']),
+            vendor_details=data['vendor_details'],
+        )
 
-#         p.save()
+        """
+        (To be added) add feature to automatically handle
+        materials not yet present in models.Material
+        """
 
-#         return Response(
-#             {
-#                 "success": True
-#             }
-#         )
-#     except Exception as e:
-#         return Response(
-#             {
-#                 "success": False,
-#                 "message": str(e)
-#             }
-#         )
+        p.save()
+        p.pdf_file = request.FILES['invoice_pdf']
+        p.raw_save()
+        print(p.purchase_id)
 
-class PurchaseAPIView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+        return Response(
+            {
+                "success": True
+            }
+        )
+    except Exception as e:
+        print(e)
+        return Response(
+            {
+                "success": False,
+                "message": str(e)
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    def post(self, request, *args, **kwargs):
-        serializer = PurchaseSerializer(data=request.data)
-        if serializer.is_valid():
-            print("here")
-            serializer.save()
-        else:
-            print(serializer.errors)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# class PurchaseAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
+
+#     def post(self, request, *args, **kwargs):
+#         serializer = PurchaseSerializer(data=request.data)
+#         if serializer.is_valid():
+#             print("here")
+#             serializer.save()
+#         else:
+#             print(serializer.errors)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -350,3 +366,20 @@ def modify_sanction(request):
             "success": True
         }
     )
+
+
+@api_view(['GET', 'POST'])
+def test(request):
+    print("aa")
+    # print(request)
+    # print(request.body)
+    # print(request.FILES)
+    file = request.FILES['invoice_pdf']
+    extension = str(file).partition('.')[-1]
+    print(extension)
+    path = default_storage.save(
+        f"files/upload_file.{extension}", ContentFile(file.read()))
+
+    return Response({
+        "success": True
+    })
