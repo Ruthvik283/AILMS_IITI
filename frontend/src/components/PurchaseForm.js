@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 const PurchaseForm = () => {
   const Navigate = useNavigate();
+  const contextData = useContext(AuthContext);
   const [material, setMaterial] = useState("");
   const [materialCode, setMaterialCode] = useState("");
   const [quantityPurchased, setQuantityPurchased] = useState("");
@@ -56,21 +58,28 @@ const PurchaseForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8">
+    <div className="max-w-md min-h-screen mx-auto mt-8">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="material" className="block mb-1">
-            MATERIAL
+          <label htmlFor="materialCode" className="block mb-1">
+            Material
           </label>
-          <input
-            type="text"
-            id="material"
+          <select
+            id="materialCode"
             value={material}
             onChange={(e) => setMaterial(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
+          >
+            <option value="">Select a material</option>
+            {/* Assuming materials is an array of material names */}
+            {contextData.materialsData.map((material) => (
+              <option key={material.material_id} value={material.material_id}>
+                {material.material_name}
+              </option>
+            ))}
+          </select>
         </div>
-        <div>
+        {/* <div>
           <label htmlFor="materialCode" className="block mb-1">
             Material code
           </label>
@@ -81,7 +90,7 @@ const PurchaseForm = () => {
             onChange={(e) => setMaterialCode(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
-        </div>
+        </div> */}
         <div>
           <label htmlFor="quantityPurchased" className="block mb-1">
             QUANTITY PURCHASED
