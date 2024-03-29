@@ -24,9 +24,11 @@ const SanctionForm = () => {
     const formData = {
       ticket_id: ticketId,
       engineer_id: engineerId,
+      department: department,
       technician_id: technicianId,
       material_id: material,
       quantity_sanctioned: quantitySanctioned,
+      userData: contextData.userData,
     };
     console.log(formData);
 
@@ -73,6 +75,9 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>
+        {
+        (contextData.userData.role==="Manager")&&
+          (
         <div>
           <label htmlFor="department" className="block mb-1">
             DEPARTMENT
@@ -85,6 +90,9 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>
+          )
+
+        }
         <div>
           <label htmlFor="engineerId" className="block mb-1">
             ENGINEER ID

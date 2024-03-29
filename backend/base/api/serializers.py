@@ -62,6 +62,8 @@ class PurchaseSerializer(serializers.ModelSerializer):
 class SanctionSerializer(serializers.ModelSerializer):
 
     material_name = serializers.SerializerMethodField()
+    engineer_name = serializers.SerializerMethodField()
+    department_name = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
     log = serializers.SerializerMethodField()
 
@@ -71,7 +73,9 @@ class SanctionSerializer(serializers.ModelSerializer):
             "sanction_id",
             "ticket_id",
             "department",
+            "department_name",
             "engineer_id",
+            "engineer_name",
             "technician_id",
             "material",
             "date_time",
@@ -85,6 +89,12 @@ class SanctionSerializer(serializers.ModelSerializer):
     def get_material_name(self, obj):
         return obj.material.material_name if obj.material else None
 
+    def get_engineer_name(self, obj):
+        return User.objects.filter(id=obj.engineer_id)[0].get_username() if obj.engineer_id else None
+    
+    def get_department_name(self, obj):
+        return obj.department.department_name if obj.department else None
+    
     def get_price(self, obj):
         return obj.material.price if obj.material else None
 

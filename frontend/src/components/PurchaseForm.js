@@ -48,7 +48,7 @@ const PurchaseForm = () => {
         // setVendorDetails("");
         // setInvoicePdf(null);
         toast.success("Purchase added successfully!");
-        // Navigate("/purchase");
+        Navigate("/purchase");
       } else {
         toast.error(`Failed to submit form ${response.status}`);
       }
