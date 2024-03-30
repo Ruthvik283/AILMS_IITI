@@ -30,6 +30,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['id'] = user.id
         return token
 
+    # def validate(self, attrs):
+    #     data = super().validate(attrs)
+    #     email = attrs.get("email", None)
+    #     if email:
+    #         data["email"] = email
+    #     return data
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -218,7 +225,8 @@ def sanction_material(request):
             ticket_id=data['ticket_id'],
             department=Department.objects.filter(id=int(department1))[0],
             engineer_id=data['engineer_id'],
-            technician_id=data['technician_id'],
+            technician=Technician.objects.filter(
+                id=data['technician_id']).first(),
             material=Material.objects.filter(
                 material_id=data['material_id'])[0],
             quantity_sanctioned=int(data['quantity_sanctioned']),
@@ -332,6 +340,12 @@ def sanctionsDataId(request, sanct_id):
 class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+@api_view(['GET', 'POST'])
+def techniciansData(request):
+    techs = Technician.objects.all()
+    return Response(TechnicianSerializer(techs, many=True).data)
 
 
 class MaterialCreateView(generics.CreateAPIView):

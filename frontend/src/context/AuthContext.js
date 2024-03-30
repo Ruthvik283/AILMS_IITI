@@ -3,7 +3,6 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -34,8 +33,7 @@ export const AuthProvider = ({ children }) => {
     role: "",
   });
 
-  
-//Data fetched here to reduce redundancy
+ //Data fetched here to reduce redundancy
   const [materialsData, setMaterialsData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -61,6 +59,31 @@ export const AuthProvider = ({ children }) => {
     fetchData();
   }, []);
 
+  const [techniciansData, setTechniciansData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/technicians", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTechniciansData(data);
+        console.log("technicians", data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const Navigate = useNavigate();
 
   // let set_username = (x) => {
@@ -77,7 +100,7 @@ export const AuthProvider = ({ children }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: e.target.username.value,
+        email: e.target.email.value,
         password: e.target.password.value,
       }),
     });
@@ -109,7 +132,8 @@ export const AuthProvider = ({ children }) => {
 
       toast.success(`Hi, ${total_user_data.username}!`);
     } else {
-      toast.error("Something went wrong!");
+      toast.error("Incorrect email-id or password!");
+      //toast.error(response.message);
     }
   };
 
@@ -296,6 +320,7 @@ export const AuthProvider = ({ children }) => {
     setUser: setUser,
     setAuthTokens: setAuthTokens,
     materialsData: materialsData,
+    techniciansData: techniciansData,
     userData: userData,
   };
 

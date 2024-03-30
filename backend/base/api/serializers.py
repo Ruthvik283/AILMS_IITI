@@ -20,6 +20,12 @@ class UserSerializer(serializers.ModelSerializer):
     def get_role_name(self, obj):
         return obj.role.role_name if obj.role else None
 
+    def validate_email(self, value):
+        if not value.endswith('@iiti.ac.in'):
+            raise serializers.ValidationError(
+                "Email must end with @iiti.ac.in")
+        return value
+
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
@@ -43,6 +49,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TechnicianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Technician
+        fields = '__all__'
+
+
 class PurchaseSerializer(serializers.ModelSerializer):
     material_name = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
@@ -62,6 +74,8 @@ class PurchaseSerializer(serializers.ModelSerializer):
 class SanctionSerializer(serializers.ModelSerializer):
 
     material_name = serializers.SerializerMethodField()
+    technician_name = serializers.SerializerMethodField()
+    technician_id = serializers.SerializerMethodField()
     engineer_name = serializers.SerializerMethodField()
     department_name = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
@@ -77,6 +91,8 @@ class SanctionSerializer(serializers.ModelSerializer):
             "engineer_id",
             "engineer_name",
             "technician_id",
+            "technician",
+            "technician_name",
             "material",
             "date_time",
             "quantity_sanctioned",
@@ -90,11 +106,17 @@ class SanctionSerializer(serializers.ModelSerializer):
         return obj.material.material_name if obj.material else None
 
     def get_engineer_name(self, obj):
-        return User.objects.filter(id=obj.engineer_id)[0].get_username() if obj.engineer_id else None
+        return User.objects.filter(id=obj.engineer_id)[0].username if obj.engineer_id else None
+
+    def get_technician_name(self, obj):
+        return obj.technician.technician_name if obj.technician else None
     
+    def get_technician_id(self, obj):
+        return obj.technician.technician_id if obj.technician else None
+
     def get_department_name(self, obj):
         return obj.department.department_name if obj.department else None
-    
+
     def get_price(self, obj):
         return obj.material.price if obj.material else None
 

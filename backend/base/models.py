@@ -26,6 +26,13 @@ class User(AbstractUser):
     
     department = models.ForeignKey('materials.Department', on_delete=models.CASCADE, null=True, blank=True)
     role = models.ForeignKey('materials.Role', on_delete=models.CASCADE, null=True, blank=True)
+    email = models.EmailField(unique=True)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    def __str__(self):
+        return self.username
+
     # ROLE_CHOICES = (
     #     ('administrator', 'Administrator'),
     #     ('technician', 'Tecnician'),

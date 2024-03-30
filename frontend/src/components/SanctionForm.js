@@ -53,7 +53,7 @@ const SanctionForm = () => {
         toast.success("Successfully Sanctioned!");
         Navigate("/sanction");
       } else {
-        console.error("Failed to submit form");
+        toast.error("Failed to submit form");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -116,7 +116,7 @@ const SanctionForm = () => {
             />
           )}
         </div>
-        <div>
+        {/* <div>
           <label htmlFor="technicianId" className="block mb-1">
             TECHNICIAN ID
           </label>
@@ -127,6 +127,25 @@ const SanctionForm = () => {
             onChange={(e) => setTechnicianId(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
+        </div> */}
+        <div>
+          <label htmlFor="materialCode" className="block mb-1">
+            Technician
+          </label>
+          <select
+            id="Technician"
+            value={technicianId}
+            onChange={(e) => setTechnicianId(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select technician</option>
+            {/* Assuming materials is an array of material names */}
+            {contextData.techniciansData.map((technician) => (
+              <option key={technician.id} value={technician.id}>
+                {technician.technician_name}-{technician.technician_id}
+              </option>
+            ))}
+          </select>
         </div>
         {/* <div>
           <label htmlFor="material" className="block mb-1">
