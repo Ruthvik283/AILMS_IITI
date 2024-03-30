@@ -161,6 +161,7 @@ def departments_data(request):
         user_serializer = UserSerializer(users, many=True)
         department_data.append({
             "department_id": department.id,
+            "id": department.id,
             "department_name": department.department_name,
             "is_main": department.is_main,
             "sub_departments": DepartmentSerializer(Department.objects.filter(parentDepartment=department), many=True).data,

@@ -75,24 +75,20 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>
-        {
-        (contextData.userData.role==="Manager")&&
-          (
-        <div>
-          <label htmlFor="department" className="block mb-1">
-            DEPARTMENT
-          </label>
-          <input
-            type="text"
-            id="department"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-          )
-
-        }
+        {contextData.userData.role === "Manager" && (
+          <div>
+            <label htmlFor="department" className="block mb-1">
+              DEPARTMENT
+            </label>
+            <input
+              type="text"
+              id="department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        )}
         <div>
           <label htmlFor="engineerId" className="block mb-1">
             ENGINEER ID

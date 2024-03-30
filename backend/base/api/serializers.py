@@ -84,6 +84,7 @@ class SanctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sanction
         fields = [
+            
             "sanction_id",
             "ticket_id",
             "department",
