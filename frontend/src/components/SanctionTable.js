@@ -498,9 +498,9 @@ const SanctionTable = () => {
 
               <div className="container mx-auto px-4 sm:px-6 lg:px-4 py-4">
                 <div className="text-center">
-                  <h3 className="text-lg font-bold mb-2">Material Graph</h3>
-                  <MaterialGraph data={sanctionData} />
                   <SanctionGraph data={sanctionData} />
+                  <h3 className="text-lg font-bold mb-2">Materialwise Graphs</h3>
+                  <MaterialGraph data={sanctionData} />
                 </div>
                 <div className="text-center">
                   <MaterialPieChartSanction data={sanctionData} />
