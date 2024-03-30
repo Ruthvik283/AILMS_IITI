@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const PurchaseTable = () => {
   const [purchaseData, setPurchaseData] = useState([]);
@@ -69,7 +70,7 @@ const PurchaseTable = () => {
 
     return filteredByDate;
   };
-  
+
 
   useEffect(() => {
     // Apply filters directly to purchaseData
@@ -109,29 +110,29 @@ const PurchaseTable = () => {
   return (
 
     <div className="bg-[#c8d8d4]">
-        <div className="flex items-center">
-          <div className="flex items-left flex-col px-10 py-1 mr-5">
-            <div>Select Start Date</div>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              style={{ width: "150px" }}
-            />
-          </div>
+      <div className="flex items-center">
+        <div className="flex items-left flex-col px-10 py-1 mr-5">
+          <div>Select Start Date</div>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+            style={{ width: "150px" }}
+          />
+        </div>
 
-          <div className="flex items-left flex-col px-4 py-1">
-            <div>Select End Date</div>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              style={{ width: "150px" }}
-            />
-          </div>
-        
+        <div className="flex items-left flex-col px-4 py-1">
+          <div>Select End Date</div>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+            style={{ width: "150px" }}
+          />
+        </div>
+
       </div>
       <div className=" bg-[#c8d8d4] overflow-x-auto">
         <h1 className="text-2xl font-bold mb-4 p-2 ">Material List</h1>
@@ -175,6 +176,13 @@ const PurchaseTable = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {new Date(purchase.date_time).toLocaleString()}
+                      </td>
+                      <td>
+                        <Link to={`purchase_pdf`}>
+                          <button className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-medium py-2 px-4 rounded">
+                            VIEW PDF
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

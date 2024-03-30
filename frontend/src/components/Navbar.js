@@ -31,7 +31,9 @@ function Navbar() {
                   AILMS: {userData.username}
                 </h1> */}
                 <div className="flex flex-shrink-0 items-center">
-          <img className="h-8 w-auto" src={require("./AILMS.png")} alt="Your Company"/>
+          <a href="/">
+            <img className="h-8 w-auto" src={require("./AILMS.png")} alt="Your Company"/>
+          </a>
         </div>
               </div>
               <div className="hidden md:block">

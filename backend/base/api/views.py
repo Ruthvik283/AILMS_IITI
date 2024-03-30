@@ -17,9 +17,8 @@ from django.utils import timezone
 from django.db.models import F
 from django.core.mail import send_mail
 from django.conf import settings
-from django.core.files import File
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+from django.http import HttpResponse, FileResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
 User = get_user_model()
 
 
@@ -221,7 +220,6 @@ def sanction_material(request):
     try:
 
         sct = Sanction(
-
             ticket_id=data['ticket_id'],
             department=Department.objects.filter(id=int(department1))[0],
             engineer_id=data['engineer_id'],
@@ -262,9 +260,6 @@ def sanction_material(request):
 @api_view(['POST'])
 def purchase_material(request):
     print(request.data)
-    # return Response({
-    #     "success": True
-    # })
     try:
         data = request.data
 
@@ -386,18 +381,11 @@ def modify_sanction(request):
     )
 
 
+@xframe_options_exempt
 @api_view(['GET', 'POST'])
 def test(request):
-    print("aa")
-    # print(request)
-    # print(request.body)
-    # print(request.FILES)
-    file = request.FILES['invoice_pdf']
-    extension = str(file).partition('.')[-1]
-    print(extension)
-    path = default_storage.save(
-        f"files/upload_file.{extension}", ContentFile(file.read()))
-
-    return Response({
-        "success": True
-    })
+    pdf = open("files/bill.pdf", "rb")
+    response = FileResponse(
+        pdf, content_type='application/pdf', filename='bill.pdf')
+    response['Content-Disposition'] = 'inline; filename=bill.pdf'
+    return response
