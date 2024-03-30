@@ -24,7 +24,7 @@ export default function Home() {
 
       typeSpeed: 50,
       showCursor: false,
-      onComplete: function () {},
+      onComplete: function () { },
     });
 
     return () => {
@@ -46,9 +46,9 @@ export default function Home() {
       />
       <motion.div
         className="relative z-10"
-        // initial={{ opacity: 0 }}
-        // animate={{ opacity: 1 }}
-        // transition={{ duration: 1 }}
+      // initial={{ opacity: 0 }}
+      // animate={{ opacity: 1 }}
+      // transition={{ duration: 1 }}
       >
         <Navbar />
         <div className="content-container text-center pt-16">

@@ -7,6 +7,7 @@ import MaterialPieChartSanction from "./MaterialPieChartSanction";
 import AuthContext from "../context/AuthContext";
 import DataContext from "../context/DataContext";
 import SanctionGraph from "./SanctionGraph";
+import { useNavigate, Link } from "react-router-dom";
 
 const SanctionTable = () => {
   //fectching the data
@@ -446,11 +447,11 @@ const SanctionTable = () => {
                         {sanction.quantity_sanctioned}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <button className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-medium py-2 px-4 rounded">
-                          <a href={`modifysanction\\${sanction.sanction_id}`}>
+                        <Link to={`../modifysanction/${sanction.sanction_id}`}>
+                          <button className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-medium py-2 px-4 rounded">
                             MODIFY SANCTION
-                          </a>
-                        </button>
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

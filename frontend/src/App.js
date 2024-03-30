@@ -23,7 +23,7 @@ import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
-
+import PurchasePdf from "./components/PurchasePdf";
 
 export default function App() {
   //const contextData = useContext(AuthContext);
@@ -60,34 +60,35 @@ export default function App() {
   //     fetchData(); // Immediately invoke the async function
   //   }, []);
 
-
-  
-
   return (
     <>
       <Toaster />
       <Router scrollBehavior="auto">
         <AuthProvider>
-        <DataProvider>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            {/* <Route element={<PrivateWrapper />}> */}
-            <Route path="/" element={<Home />} />
-            <Route path="/engineer" element={<Engineer />} />
-            <Route path="/purchase" element={<Purchase />} />
-            <Route path="/sanction" element={<Sanction />} />
-            <Route path="/material" element={<Material />} />
-            <Route path="/materials" element={<Materials />} />
-            <Route path="/departments" element={<Departments />} />
-            <Route path="/purchaseform" element={<PurchaseFormPage />} />
-            <Route path="/sanctionform" element={<SanctionFormPage />} />
-            <Route path="/modifysanction/" element={<ModifySanctionForm />} />
-            <Route path="/modifysanction/:sanct_id" element={<ModifySanctionForm />} />
-            <Route path="/report" element={<ReportPage />} />
-            {/* </Route> */}
-          </Routes>
-        </DataProvider>
+          <DataProvider>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              {/* <Route element={<PrivateWrapper />}> */}
+              <Route path="/" element={<Home />} />
+              <Route path="/engineer" element={<Engineer />} />
+              <Route path="/purchase" element={<Purchase />} />
+              <Route path="/sanction" element={<Sanction />} />
+              <Route path="/material" element={<Material />} />
+              <Route path="/materials" element={<Materials />} />
+              <Route path="/departments" element={<Departments />} />
+              <Route path="/purchaseform" element={<PurchaseFormPage />} />
+              <Route path="/sanctionform" element={<SanctionFormPage />} />
+              <Route path="/modifysanction/" element={<ModifySanctionForm />} />
+              <Route
+                path="/modifysanction/:sanct_id"
+                element={<ModifySanctionForm />}
+              />
+              <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} />
+              <Route path="/report" element={<ReportPage />} />
+              {/* </Route> */}
+            </Routes>
+          </DataProvider>
         </AuthProvider>
       </Router>
     </>
