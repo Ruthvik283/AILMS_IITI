@@ -1,13 +1,17 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 from picklefield.fields import PickledObjectField
 from datetime import datetime
 User = get_user_model()
 
+
 def pdf_path(instance, filename):
     return f'files//purchase_{instance.purchase_id}.pdf'
 
 # Create your models here.
+
+
 class Category(models.Model):
     category_name = models.CharField(max_length=128)
     parent_category = models.ForeignKey(
@@ -44,7 +48,7 @@ class Purchase(models.Model):
     date_time = models.DateTimeField(auto_now=True)
     pdf_file = models.FileField(upload_to=pdf_path, blank=True, null=True)
 
-    def raw_save(self,*args,**kwargs):
+    def raw_save(self, *args, **kwargs):
         super().save()
 
     def save(self, *args, **kwargs):
@@ -68,22 +72,24 @@ class Department(models.Model):
 
     def __str__(self):
         return self.department_name
-    
+
+
 class Technician(models.Model):
     technician_name = models.CharField(max_length=255)
-    technician_id = models.IntegerField(null=True,blank=True)
+    technician_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.technician_name
 
-from django.utils import timezone
 
 class Sanction(models.Model):
     sanction_id = models.AutoField(primary_key=True)
-    ticket_id = models.IntegerField(null=False)
+    ticket_id = models.IntegerField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
     engineer_id = models.IntegerField(null=False)
-    technician = models.ForeignKey(Technician,on_delete=models.PROTECT,null=True,blank=True)
+    technician = models.ForeignKey(
+        Technician, on_delete=models.PROTECT, null=True, blank=True)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
     date_time = models.DateTimeField(default=timezone.now)
     quantity_sanctioned = models.IntegerField(null=False)

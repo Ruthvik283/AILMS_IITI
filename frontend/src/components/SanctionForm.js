@@ -7,6 +7,7 @@ const SanctionForm = () => {
   const contextData = useContext(AuthContext);
   const Navigate = useNavigate();
   const [ticketId, setTicketId] = useState("");
+  const [description, setDescription] = useState("");
   const [department, setDepartment] = useState("");
   const [engineerId, setEngineerId] = useState(contextData.userData.id);
   const [technicianId, setTechnicianId] = useState("");
@@ -20,9 +21,13 @@ const SanctionForm = () => {
   //   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if (ticketId == "" && description == "") {
+      toast.error("Either ticket-id or description must be present");
+      return;
+    }
     const formData = {
       ticket_id: ticketId,
+      description: description,
       engineer_id: engineerId,
       department: department,
       technician_id: technicianId,
@@ -68,10 +73,29 @@ const SanctionForm = () => {
             TICKET ID
           </label>
           <input
-            type="text"
+            type="number"
+            min="0"
+            style={{
+              "-moz-appearance": "textfield" /* Firefox */,
+              "-webkit-appearance": "none" /* WebKit */,
+              margin: 0 /* Optional: Adjust as needed */,
+              appearance: "textfield" /* Edge and other modern browsers */,
+            }}
             id="ticketId"
             value={ticketId}
             onChange={(e) => setTicketId(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="description" className="block mb-1">
+            DESCRIPTION
+          </label>
+          <input
+            type="text"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>
