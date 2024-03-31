@@ -10,6 +10,7 @@ export default function Materials() {
     related_categories: [],
     related_materials: [],
   });
+  const [editMaterialData, setEditMaterialData] = useState(null);
   const [path, setPath] = useState([{ id: 1, category_name: "All Materials" }]);
   const [x, setx] = useState(0);
   const [categoryId, setCategoryId] = useState(1);
@@ -58,6 +59,13 @@ export default function Materials() {
       [name]: value,
     });
   };
+  const handleEditMaterialChange = (e) => {
+    const { name, value } = e.target;
+    setEditMaterialData({
+      ...editMaterialData,
+      [name]: value,
+    });
+  };
 
   const handleCategoryChange = (e) => {
     const { name, value } = e.target;
@@ -91,7 +99,7 @@ export default function Materials() {
       })
       .catch((error) => {
         console.error("Error creating material:", error);
-        toast.error("Error creating material")
+        toast.error("Error creating material");
       });
   };
 
@@ -114,7 +122,29 @@ export default function Materials() {
       })
       .catch((error) => {
         console.error("Error creating category:", error);
-        toast.error("Error creating category")
+        toast.error("Error creating category");
+      });
+  };
+  const handleEditMaterial = (material) => {
+    setEditMaterialData(material);
+  };
+  const handleEditMaterialSubmit = (e) => {
+    e.preventDefault();
+    // const newx = editMaterialData;
+    // newx["category"] = 1;
+
+    // Send a request to update the material information
+    axios
+      .post(`http://127.0.0.1:8000/api/edit_material/`, editMaterialData)
+      .then((response) => {
+        console.log("Material updated successfully:", response.data);
+        toast.success("Material updated successfully");
+        setEditMaterialData(null);
+        setx((prev) => !prev); // Trigger re-fetching of related materials
+      })
+      .catch((error) => {
+        console.error(error, editMaterialData);
+        toast.error("Error updating material");
       });
   };
 
@@ -216,10 +246,114 @@ export default function Materials() {
                     <span className="font-semibold">Row Number:</span>{" "}
                     {material.row_number}
                   </div>
+                  {/* Add Edit button */}
+                  <button
+                    onClick={() => handleEditMaterial(material)}
+                    className="bg-blue-500 mt-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Edit
+                  </button>
                 </div>
               </li>
             ))}
           </ul>
+          {editMaterialData && (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center">
+              <div className="bg-white p-6 rounded-lg">
+                <h2 className="text-2xl font-bold mb-4">Edit Material</h2>
+                <form onSubmit={handleEditMaterialSubmit} className="space-y-4">
+                  {/* Material Name */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">
+                      Material Name:
+                    </label>
+                    <input
+                      type="text"
+                      name="material_name"
+                      value={editMaterialData.material_name}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  {/* Price */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">Price:</label>
+                    <input
+                      type="number"
+                      name="price"
+                      value={editMaterialData.price}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  {/* Quantity */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">
+                      Quantity:
+                    </label>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={editMaterialData.quantity}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  {/* Critical Quantity */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">
+                      Critical Quantity:
+                    </label>
+                    <input
+                      type="number"
+                      name="critical_quantity"
+                      value={editMaterialData.critical_quantity}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  {/* Rack Number */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">
+                      Rack Number:
+                    </label>
+                    <input
+                      type="text"
+                      name="rack_number"
+                      value={editMaterialData.rack_number}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  {/* Row Number */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">
+                      Row Number:
+                    </label>
+                    <input
+                      type="text"
+                      name="row_number"
+                      value={editMaterialData.row_number}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditMaterialData(null)}
+                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Cancel
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
 
           <button
             onClick={() => setShowAddMaterialsForm(!showAddMaterialsForm)}

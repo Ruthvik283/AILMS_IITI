@@ -805,38 +805,35 @@ const SanctionTable = () => {
   // Now you can use this 'options' array wherever you need it in your code.
 
   return (
-    <div className="overflow-x-auto bg-white">
-      <div className="container mx-auto px-4 sm:px-8">
+    <div className="overflow-x-auto">
+      <div className="container mx-auto px-4 bg-[#FFFEFA] sm:px-8 my-5">
         <div className="py-8">
           <div>
             <h2 className="text-2xl font-semibold leading-tight">Sanctions</h2>
           </div>
-          {/* Dropdowns and Search */}
-          {/* <div className="my-2 flex sm:flex-row flex-col"> */}
-          {/* Per Page Dropdown */}
-<div className="">
-
-
-          <div className="relative start-date">
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              style={{ width: "150px" }}
-            />
+          <div className="relative dates flex">
+            <div>
+              <label>Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 m-2"
+                style={{ width: "150px" }}
+              />
+            </div>
+            <div className="ml-4">
+              <label>End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 m-2"
+                style={{ width: "150px" }}
+              />
+            </div>
           </div>
-          <div className="relative end-date">
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              style={{ width: "150px" }}
-            />
-          </div>
-          </div>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap filters">
             <div className="relative selectMaterials mr-2 my-3">
               <SearchableDropdown
                 options={contextData.materialsData}
@@ -873,9 +870,8 @@ const SanctionTable = () => {
               />
             </div>
           </div>
-          {/* Search Input */}
-          {/* </div> */}
-          <div className="relative flex justify-between">
+          
+          <div className="relative flex justify-between tickets my-3">
             <div className="block relative ticketid">
               <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                 <svg
@@ -914,9 +910,9 @@ const SanctionTable = () => {
             </div>
           </div>
           {/* Table */}
-          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto ">
             <div className="inline-block min-w-full shadow overflow-hidden">
-              <table className="min-w-full leading-normal">
+              <table className="min-w-full leading-normal bg-white">
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">

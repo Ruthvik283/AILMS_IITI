@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export default function SanctionFormPage() {
   return (
     <>
-    <div className="bg-[#c8d8d4]">
+    <div className="bg-[#FAF9F6]">
       <Navbar></Navbar>
       <div className="min-h-screen">
         <SanctionTable />
