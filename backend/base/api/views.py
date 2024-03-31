@@ -29,6 +29,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['id'] = user.id
         return token
 
+    # def validate(self, attrs):
+    #     data = super().validate(attrs)
+    #     email = attrs.get("email", None)
+    #     if email:
+    #         data["email"] = email
+    #     return data
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -184,6 +191,7 @@ def departments_data(request):
         user_serializer = UserSerializer(users, many=True)
         department_data.append({
             "department_id": department.id,
+            "id": department.id,
             "department_name": department.department_name,
             "is_main": department.is_main,
             "sub_departments": DepartmentSerializer(Department.objects.filter(parentDepartment=department), many=True).data,
@@ -236,6 +244,10 @@ class PurchasesBetweenDates(APIView):
 @api_view(['POST'])
 def sanction_material(request):
     data = request.data
+    if data['ticket_id']=="":
+        ticket1=0
+    else:
+        ticket1=data['ticket_id']
     if data['userData']['role'] == "Manager":
         department1 = data['department']
     else:
@@ -243,10 +255,12 @@ def sanction_material(request):
     try:
 
         sct = Sanction(
-            ticket_id=data['ticket_id'],
+            ticket_id=ticket1,
+            description=data['description'],
             department=Department.objects.filter(id=int(department1))[0],
             engineer_id=data['engineer_id'],
-            technician_id=data['technician_id'],
+            technician=Technician.objects.filter(
+                id=data['technician_id']).first(),
             material=Material.objects.filter(
                 material_id=data['material_id'])[0],
             quantity_sanctioned=int(data['quantity_sanctioned']),
@@ -357,6 +371,12 @@ def sanctionsDataId(request, sanct_id):
 class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+@api_view(['GET', 'POST'])
+def techniciansData(request):
+    techs = Technician.objects.all()
+    return Response(TechnicianSerializer(techs, many=True).data)
 
 
 class MaterialCreateView(generics.CreateAPIView):

@@ -38,6 +38,7 @@ const SanctionTable = () => {
 
         const data = await response.json();
         setSanctionData(data);
+        console.log("sanctions", data);
         setmaterialWisePrice(
           data.reduce((acc, purchase) => {
             acc["Total Price"] = acc["Total Price"] || 0;
@@ -403,7 +404,7 @@ const SanctionTable = () => {
                       Engineer Name
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                      Technician ID
+                      Technician
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Material
@@ -435,7 +436,7 @@ const SanctionTable = () => {
                         {sanction.engineer_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {sanction.technician_id}
+                        {sanction.technician_name}-{sanction.technician_id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {sanction.material_name}
@@ -497,9 +498,9 @@ const SanctionTable = () => {
 
               <div className="container mx-auto px-4 sm:px-6 lg:px-4 py-4">
                 <div className="text-center">
-                  <h3 className="text-lg font-bold mb-2">Material Graph</h3>
-                  <MaterialGraph data={sanctionData} />
                   <SanctionGraph data={sanctionData} />
+                  <h3 className="text-lg font-bold mb-2">Materialwise Graphs</h3>
+                  <MaterialGraph data={sanctionData} />
                 </div>
                 <div className="text-center">
                   <MaterialPieChartSanction data={sanctionData} />

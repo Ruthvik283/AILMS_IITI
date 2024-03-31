@@ -6,6 +6,8 @@ import { Icon } from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
 
+import toast from "react-hot-toast";
+
 const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
@@ -45,8 +47,17 @@ const LoginPage = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    // To navigate to the page where an action was performed without logging in.
-    loginUser(e, location.state?.next_url);
+    const email = e.target.elements.email.value;
+
+    // Check if the email ends with "@iiti.ac.in"
+    if (!email.endsWith("@iiti.ac.in")) {
+      e.preventDefault();
+      toast.error("Please login with institute email-id");
+      return; // Stop further execution
+    } else {
+      // To navigate to the page where an action was performed without logging in.
+      loginUser(e, location.state?.next_url);
+    }
   };
 
   return (
@@ -79,9 +90,9 @@ const LoginPage = () => {
                       <div className="flex justify-center w-[100%] ">
                         <input
                           className="w-3/4 shadow appearance-none  rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          id="username"
-                          type="text"
-                          placeholder="Username"
+                          id="email"
+                          type="email"
+                          placeholder="Email-id"
                         />
                       </div>
 

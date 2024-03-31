@@ -1,13 +1,17 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 from picklefield.fields import PickledObjectField
 from datetime import datetime
 User = get_user_model()
 
+
 def pdf_path(instance, filename):
     return f'files//purchase_{instance.purchase_id}.pdf'
 
 # Create your models here.
+
+
 class Category(models.Model):
     category_name = models.CharField(max_length=128)
     parent_category = models.ForeignKey(
@@ -38,13 +42,13 @@ class Material(models.Model):
 
 class Purchase(models.Model):
     purchase_id = models.AutoField(primary_key=True)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.PROTECT)
     quantity_purchased = models.IntegerField(null=False)
     vendor_details = models.TextField(blank=True, null=True)
     date_time = models.DateTimeField(auto_now=True)
     pdf_file = models.FileField(upload_to=pdf_path, blank=True, null=True)
 
-    def raw_save(self,*args,**kwargs):
+    def raw_save(self, *args, **kwargs):
         super().save()
 
     def save(self, *args, **kwargs):
@@ -70,14 +74,24 @@ class Department(models.Model):
         return self.department_name
 
 
+class Technician(models.Model):
+    technician_name = models.CharField(max_length=255)
+    technician_id = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.technician_name
+
+
 class Sanction(models.Model):
     sanction_id = models.AutoField(primary_key=True)
-    ticket_id = models.IntegerField(null=False)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    ticket_id = models.IntegerField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT)
     engineer_id = models.IntegerField(null=False)
-    technician_id = models.IntegerField(null=False)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    date_time = models.DateTimeField(auto_now=True)
+    technician = models.ForeignKey(
+        Technician, on_delete=models.PROTECT, null=True, blank=True)
+    material = models.ForeignKey(Material, on_delete=models.PROTECT)
+    date_time = models.DateTimeField(default=timezone.now)
     quantity_sanctioned = models.IntegerField(null=False)
     log = PickledObjectField(default=list)
     closed = models.BooleanField(default=False)

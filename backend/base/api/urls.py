@@ -23,6 +23,7 @@ urlpatterns = [
          PurchasesBetweenDates.as_view(), name='purchases-between-dates'),
     path('sanction/', views.sanction_material, name='sanction-material'),
     path('sanctions/', views.sanctionsData, name='sanction-data'),
+    path('technicians/', views.techniciansData, name='technician-data'),
     path('sanctions/<int:sanct_id>',
          views.sanctionsDataId, name='sanction-data-id'),
     path('add_purchase/', views.purchase_material, name='purchase-material'),
