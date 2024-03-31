@@ -120,34 +120,45 @@ def MaterialbyID(request, material_id):
     return Response(materials.data)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def EditMaterial(request):
     try:
         data = request.data
-        # print(data['material_id'])
+        required_fields = ['material_id', 'material_name', 'price', 'quantity', 'critical_quantity']
+        for field in required_fields:
+            if field not in data:
+                return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
         mat_id = data['material_id']
-        obj = Material.objects.filter(material_id=mat_id)[0]
+        obj = Material.objects.filter(material_id=mat_id).first()
+        if obj is None:
+            return Response({"error": "Material not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        for field in dict(data).items():
-            if field[0] != 'material_id':
-                type_1 = type(getattr(obj, field[0]))
+        # Handling category field
+        category_id = data.get('category')  # Get category ID from request data
+        if category_id is not None:
+            # Check if the provided category ID exists
+            category = Category.objects.filter(id=category_id).first()
+            if category is None:
+                return Response({"error": "Invalid category ID."}, status=status.HTTP_400_BAD_REQUEST)
+            obj.category = category
+        else:
+            # If category field is not provided, set it to None
+            obj.category = None
 
-                setattr(obj, field[0], type_1(field[1][0]))
+        # Update other fields
+        for field, value in data.items():
+            if field not in ['material_id', 'category']:
+                setattr(obj, field, value)
 
         obj.save()
 
-        return Response(
-            {"success": True}
-        )
+        return Response({"success": True})
 
     except Exception as e:
         print(e)
-        return Response(
-            {
-                "success": False
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['GET', 'POST'])
@@ -244,10 +255,10 @@ class PurchasesBetweenDates(APIView):
 @api_view(['POST'])
 def sanction_material(request):
     data = request.data
-    if data['ticket_id']=="":
-        ticket1=0
+    if data['ticket_id'] == "":
+        ticket1 = 0
     else:
-        ticket1=data['ticket_id']
+        ticket1 = data['ticket_id']
     if data['userData']['role'] == "Manager":
         department1 = data['department']
     else:
