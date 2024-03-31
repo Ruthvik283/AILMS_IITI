@@ -807,7 +807,7 @@ const SanctionTable = () => {
   return (
     <div className="overflow-x-auto">
       <div className="container mx-auto px-4 bg-[#FFFEFA] sm:px-8 my-5">
-        <div className="py-8">
+        <div className="py-4">
           <div>
             <h2 className="text-2xl font-semibold leading-tight">Sanctions</h2>
           </div>
@@ -1020,7 +1020,7 @@ const SanctionTable = () => {
             </div>
           </div>
           {/* Pagination */}
-          <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+          <div className="px-5 bg-[#FFFEFA] border-t flex flex-col xs:flex-row items-center xs:justify-between">
             <span className="text-xs xs:text-sm text-gray-900">
               Showing 1 to {Math.min(filteredList.length, perPage)} of{" "}
               {filteredList.length} Entries

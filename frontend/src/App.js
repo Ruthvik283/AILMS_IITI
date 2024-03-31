@@ -24,6 +24,8 @@ import SignupPage from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
 import PurchasePdf from "./components/PurchasePdf";
+// import <PurchasePdfPage>from "./components/PurchasePdf";
+import PurchasePdfPage from "./pages/PurchasePdfPage";
 
 export default function App() {
   //const contextData = useContext(AuthContext);
@@ -84,7 +86,8 @@ export default function App() {
                 path="/modifysanction/:sanct_id"
                 element={<ModifySanctionForm />}
               />
-              <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} />
+              {/* <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} /> */}
+              <Route path="/purchase/purchase_pdf/" element={<PurchasePdfPage />} />
               <Route path="/report" element={<ReportPage />} />
               {/* </Route> */}
             </Routes>

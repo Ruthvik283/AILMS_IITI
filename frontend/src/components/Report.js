@@ -325,7 +325,7 @@ export default function Report() {
 
       {showReport && (
         <div className="REPORT_RESULTS justify-center items-center py-20 mx-10">
-          <div className="SANCTION_REPORT shadow-inner bg-[#ffffff] p-10 rounded mx-5 my-5">
+          <div className="SANCTION_REPORT shadow-inner bg-[#FFFEFA] p-10 rounded mx-5 my-5">
             <h1 className="text-3xl font-bold text-left pb-5">
               Sanction Report
             </h1>

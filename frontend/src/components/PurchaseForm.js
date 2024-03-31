@@ -59,10 +59,10 @@ const PurchaseForm = () => {
 
   return (
     <div className="max-w-md min-h-screen mx-auto mt-8">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 py-8">
         <div>
           <label htmlFor="materialCode" className="block mb-1">
-            Material
+           MATERIAL
           </label>
           <select
             id="materialCode"
@@ -117,7 +117,7 @@ const PurchaseForm = () => {
         </div>
         <div>
           <label htmlFor="invoicePdf" className="block mb-1">
-            invoice pdf
+            INVOICE PDF
           </label>
           <input
             type="file"
@@ -129,7 +129,7 @@ const PurchaseForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+          className="w-full bg-[#52ab98] text-white py-2 px-4 rounded hover:bg-[#2b6777] transition duration-200"
         >
           Submit
         </button>

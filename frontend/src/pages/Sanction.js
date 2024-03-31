@@ -7,11 +7,11 @@ import { Link } from "react-router-dom";
 export default function SanctionFormPage() {
   return (
     <>
-    <div className="bg-[#FAF9F6]">
+    <div className="bg-[#FFFEFA]">
       <Navbar></Navbar>
       <div className="min-h-screen">
         <SanctionTable />
-        <div className="pt-8 px-4 pb-4">
+        <div className="px-4 pb-4">
           <Link
             to="/sanctionform"
             className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-bold py-2 px-4 rounded"

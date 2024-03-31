@@ -66,7 +66,8 @@ const SanctionForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8">
+    
+    <div className="max-w-md mx-auto mt-8 ">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="ticketId" className="block mb-1">
@@ -212,7 +213,7 @@ const SanctionForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+          className="w-full bg-[#52ab98] text-white py-2 px-4 rounded hover:bg-[#2b6777] transition duration-200"
         >
           Submit
         </button>

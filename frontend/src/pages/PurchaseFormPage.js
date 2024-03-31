@@ -9,12 +9,12 @@ export default function PurchaseFormPage() {
 
     return (
         <>
-
+           <div className='bg-[#FFFEFA]'>
             <Navbar></Navbar>
             
             
             <PurchaseForm/>
-
+            </div>
             <Footer2></Footer2>
 
         </>
