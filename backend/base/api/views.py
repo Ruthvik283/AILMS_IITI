@@ -114,6 +114,36 @@ def MaterialbyID(request, material_id):
 
 
 @api_view(['GET', 'POST'])
+def EditMaterial(request):
+    try:
+        data = request.data
+        # print(data['material_id'])
+        mat_id = data['material_id']
+        obj = Material.objects.filter(material_id=mat_id)[0]
+
+        for field in dict(data).items():
+            if field[0] != 'material_id':
+                type_1 = type(getattr(obj, field[0]))
+
+                setattr(obj, field[0], type_1(field[1][0]))
+
+        obj.save()
+
+        return Response(
+            {"success": True}
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            {
+                "success": False
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(['GET', 'POST'])
 def BelowCriticalQuantity(request):
     # quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
     # F('critical_quantity'): This is a Django F() expression that references the critical_quantity field of the same model. F() expressions allow us to reference the values of model fields within queries.

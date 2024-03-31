@@ -37,6 +37,8 @@ urlpatterns = [
     path('create-category/', CategoryCreateView.as_view(), name='create-category'),
     path('create-material/', MaterialCreateView.as_view(), name='create-material'),
     path('modifysanction/', views.modify_sanction, name='modify-sanction'),
-    path('create-department/', DepartmentCreateView.as_view(), name='create-department'),
-    path('api_test/',views.test,name='apitest'),
+    path('create-department/', DepartmentCreateView.as_view(),
+         name='create-department'),
+    path('api_test/', views.test, name='apitest'),
+    path('edit_material/', views.EditMaterial, name='edit-material'),
 ]
