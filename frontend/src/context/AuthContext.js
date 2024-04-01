@@ -331,13 +331,7 @@ export const AuthProvider = ({ children }) => {
         let total_user_data = await response2.json();
         console.log("data: ");
         console.log(total_user_data);
-        setUserData({
-          id: total_user_data.id,
-          username: total_user_data.username,
-          email: total_user_data.email,
-          departmentName: total_user_data.department_name,
-          role: total_user_data.role_name,
-        });
+        setUserData(total_user_data);
         let user_data = jwtDecode(data.access);
         console.log("user_data", user_data);
         setUser(user_data);
