@@ -19,6 +19,7 @@ const SanctionTable = () => {
   const [engineerDisplayData, setEngineerDisplayData] = useState([]);
   let [materialWisePrice, setmaterialWisePrice] = useState([]);
   const [departmentUsers, setDepartmentUsers] = useState({});
+  const [isTicketIdZero, setIsTicketIdZero] = useState("All");
 
 
   useEffect(() => {
@@ -220,6 +221,19 @@ const SanctionTable = () => {
     return filteredByDate;
   };
 
+  const filterByTicketIdZero = (filteredData) => {
+    // Avoid filtering for "All" value
+    if (isTicketIdZero === "All") {
+      return filteredData;
+    }
+
+    const isZero = isTicketIdZero === "Zero";
+
+    const filteredTicketIdZero = filteredData.filter(
+      (sanc) => (isZero ? sanc.ticket_id === 0 : sanc.ticket_id !== 0)
+    );
+    return filteredTicketIdZero;
+  };
 
 
   // number of sanctions per page----------------------------------------------------------------------------
@@ -229,7 +243,7 @@ const SanctionTable = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  
+
   const indexOfLastEntry = currentPage * perPage;
   const indexOfFirstEntry = indexOfLastEntry - perPage;
   const currentEntries = filteredList.slice(
@@ -251,11 +265,12 @@ const SanctionTable = () => {
   useEffect(() => {
     let filteredData = sanctionData;
 
-    filteredData = filterByDepartmentName(filteredData,selectedDepartmentName,departmentData);
+    filteredData = filterByDepartmentName(filteredData, selectedDepartmentName, departmentData);
     filteredData = filterByMaterialName(filteredData, selectedMaterialName);
-    filteredData = filterByEngineerName(filteredData,selectedEngineerName,departmentData);
-    filteredData=filterByTechicianName(filteredData,selectedTechnicianName)
+    filteredData = filterByEngineerName(filteredData, selectedEngineerName, departmentData);
+    filteredData = filterByTechicianName(filteredData, selectedTechnicianName)
     filteredData = filterByDate(filteredData, startDate, endDate);
+    filteredData = filterByTicketIdZero(filteredData);
 
     const newData = filteredData.filter((user) => {
       if (status !== "All" && user.closed !== (status === "Closed")) {
@@ -264,7 +279,7 @@ const SanctionTable = () => {
       if (search && !user.ticket_id.toString().startsWith(search.toString())) {
         return false;
       }
-      
+
       // if (search && user.ticket_id.toString() !== search.toString()) {
       //   return false;
       // }
@@ -284,6 +299,7 @@ const SanctionTable = () => {
     search,
     status,
     selectedTechnicianName,
+    isTicketIdZero,
   ]);
 
   // Now you can use this 'options' array wherever you need it in your code.
@@ -363,7 +379,19 @@ const SanctionTable = () => {
                 allLabel="All Status"
               />
             </div>
+            <div className="relative dept mr-2 my-3">
+            <SearchableDropdown
+              options={[{ value: "All" }, { value: "Zero" }, { value: "Non-Zero" }]}
+              label="value"
+              id="id"
+              selectedVal={isTicketIdZero}
+              handleChange={(val) => setIsTicketIdZero(val)}
+              allLabel="All Ticket IDs"
+            />
           </div>
+          </div>
+
+          
 
           <div className="relative flex justify-between tickets my-3">
             <div className="block relative ticketid">
@@ -467,7 +495,7 @@ const SanctionTable = () => {
                         {sanction.material_name}
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
-                        view 
+                        view
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {new Date(sanction.date_time).toLocaleString()}
@@ -478,16 +506,14 @@ const SanctionTable = () => {
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         <span className="relative inline-block px-3 py-1 font-semibold leading-tight">
                           <span
-                            className={`absolute inset-0 ${
-                              sanction.closed ? "bg-red-200" : "bg-green-200"
-                            } opacity-50 rounded-full`}
+                            className={`absolute inset-0 ${sanction.closed ? "bg-red-200" : "bg-green-200"
+                              } opacity-50 rounded-full`}
                           ></span>
                           <span
-                            className={`relative ${
-                              sanction.closed
+                            className={`relative ${sanction.closed
                                 ? "text-red-900"
                                 : "text-green-900"
-                            }`}
+                              }`}
                           >
                             {sanction.closed ? "Closed" : "Open"}
                           </span>
@@ -524,8 +550,8 @@ const SanctionTable = () => {
             <span className="text-xs xs:text-sm text-gray-900">
               {/* Showing 1 to {Math.min(filteredList.length, perPage)} of{" "}
               {filteredList.length} Entries */}
-                  Showing {indexOfFirstEntry+1} to  {Math.min(filteredList.length, indexOfLastEntry)} of{" "}
-                  {filteredList.length} Entries
+              Showing {indexOfFirstEntry + 1} to  {Math.min(filteredList.length, indexOfLastEntry)} of{" "}
+              {filteredList.length} Entries
             </span>
             <div className="inline-flex mt-2 xs:mt-0">
               {/* <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
