@@ -212,6 +212,7 @@ const MaterialsTable = () => {
 
   // Handler for sending email for selected materials
   const handleSendEmail = async () => {
+    toast.success("Sending emails")
     const x = await fetch("http://127.0.0.1:8000/api/sendmail");
     if (x.ok) {
       toast.success("Emails sent successfully");
@@ -229,7 +230,7 @@ const MaterialsTable = () => {
             {/* Dropdown for selecting material type */}
             <div className="relative">
               <select
-                className="appearance-none rounded-l border block appearance-none bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="rounded-l border block appearance-none bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 onChange={(e) => {
                   // Handle logic for selecting material type
                   setShowAllMaterials(e.target.value === "All");
@@ -303,14 +304,14 @@ const MaterialsTable = () => {
                       material.material_id
                     ) : (
                       <div className="flex items-center">
-                        <input
+                        {/* <input
                           type="checkbox"
                           value={material.material_id}
                           onChange={() =>
                             handleCheckboxChange(material.material_id)
                           }
                           className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
+                        /> */}
                         <span className="ml-2">{material.material_id}</span>
                       </div>
                     )}

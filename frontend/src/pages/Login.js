@@ -66,7 +66,7 @@ const LoginPage = () => {
         <div className="flex justify-center main md:mt-0 mt-2">
           <div className="md:my-auto px-[5%] md:px-[10%] my-[4%]">
             <div className="bg-black m-auto  text-white rounded-lg md:flex  shadow-2xl">
-              <div className=" md:w-[100%]  h-full md:rounded-r-none bg-white rounded-lg p-10">
+              <div className=" md:w-[100%]  h-full  bg-white rounded-lg p-10">
                 <form onSubmit={handleSubmit}>
                   <div className="text-center">
                     <img
