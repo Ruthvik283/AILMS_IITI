@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const AuthContext = createContext();
@@ -9,16 +9,30 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
   // a call back func |()=>| is used so that ternary condition is run only once at a reload
-  let [authTokens, setAuthTokens] = useState(() =>
-    localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens"))
-      : null
-  );
-  let [user, setUser] = useState(() =>
-    localStorage.getItem("authTokens")
-      ? jwtDecode(localStorage.getItem("authTokens"))
-      : null
-  );
+  let [authTokens, setAuthTokens] = useState(() => {
+    try {
+      const storedToken = localStorage.getItem("authTokens");
+      return storedToken ? JSON.parse(storedToken) : null;
+    } catch (error) {
+      console.error("Error decoding authTokens:", error);
+      // Clear local storage if decoding error occurs
+      localStorage.removeItem("authTokens");
+      return null;
+    }
+  });
+
+  let [user, setUser] = useState(() => {
+    try {
+      const storedToken = localStorage.getItem("authTokens");
+      return storedToken ? jwtDecode(storedToken) : null;
+    } catch (error) {
+      console.error("Error decoding user:", error);
+      // Clear local storage if decoding error occurs
+      localStorage.removeItem("authTokens");
+      return null;
+    }
+  });
+
   let [user_name, setUsername] = useState(() =>
     localStorage.getItem("user_name") ? localStorage.getItem("user_name") : null
   );
@@ -33,7 +47,7 @@ export const AuthProvider = ({ children }) => {
     role: "",
   });
 
- //Data fetched here to reduce redundancy
+  //Data fetched here to reduce redundancy
   const [materialsData, setMaterialsData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -109,7 +123,7 @@ export const AuthProvider = ({ children }) => {
     };
     fetchData();
   }, []);
-  
+
   const [rolesData, setRolesData] = useState([]);
 
   useEffect(() => {
@@ -165,13 +179,7 @@ export const AuthProvider = ({ children }) => {
       );
       let total_user_data = await response2.json();
       //console.log("total_user_data", total_user_data);
-      setUserData({
-        id: total_user_data.id,
-        username: total_user_data.username,
-        email: total_user_data.email,
-        departmentName: total_user_data.department_name,
-        role: total_user_data.role_name,
-      });
+      setUserData(total_user_data);
       let user_data = jwtDecode(data.access);
       console.log("user_data", user_data);
       setAuthTokens(data);
@@ -228,8 +236,8 @@ export const AuthProvider = ({ children }) => {
       let data = await response.json();
 
       if (response.status === 200) {
-        toast.success("User registered successfully")
-        Navigate('/')
+        toast.success("User registered successfully");
+        Navigate("/");
         // let data2 = jwtDecode(data.access);
         // console.log("data: ", data2.id);
         // let response2 = await fetch(
@@ -363,6 +371,58 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
+  const location = useLocation();
+  // Define a list of valid routes
+  const validRoutes = [
+    "/",
+    "/login",
+    "/signup",
+    "/home",
+    "/purchase",
+    "/sanction",
+    "/material",
+    "/users",
+    "/materials",
+    "/departments",
+    "/purchaseform",
+    "/sanctionform",
+    "/modifysanction",
+    "/modifysanction/:sanct_id",
+    "/purchase/purchase_pdf/:purchase_id",
+    "/report",
+    "/Report",
+  ];
+
+  const nonManagerValidRoutes = [
+    "/",
+    "/login",
+    "/sanction",
+    "/sanctionform",
+    "/modifysanction",
+    "/modifysanction/:sanct_id",
+  ];
+  const nonUserValidRoutes = ["/login"];
+
+  const isValidRoute = validRoutes.includes(location.pathname);
+  const nonManagerIsValidRoute = nonManagerValidRoutes.includes(
+    location.pathname
+  );
+  const nonUserIsValidRoute = nonUserValidRoutes.includes(location.pathname);
+
+  useEffect(() => {
+    console.log("paths check");
+    if (!user) {
+      if (!nonUserIsValidRoute) {
+        toast.error("Access denied");
+        Navigate("/login");
+      }
+    } else if (!userData || userData.role !== "Manager") {
+      if (!nonManagerIsValidRoute && user) {
+        toast.error("Access denied");
+        Navigate("/");
+      }
+    }
+  }, [nonManagerIsValidRoute, user, Navigate]);
 
   let contextData = {
     user: user,

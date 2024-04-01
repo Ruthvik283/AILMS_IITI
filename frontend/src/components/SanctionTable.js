@@ -523,7 +523,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import MaterialGraph from "./Graph";
 import MaterialPieChartSanction from "./MaterialPieChartSanction";
 import AuthContext from "../context/AuthContext";
-import DataContext from "../context/DataContext";
 import SanctionGraph from "./SanctionGraph";
 import SearchableDropdown from "./SearchableDropdown";
 
@@ -533,7 +532,6 @@ const SanctionTable = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const contextData = useContext(AuthContext);
-  const contextData1 = useContext(DataContext);
   const [sanctionData, setSanctionData] = useState([]);
   const [engineerData, setEngineerData] = useState([]);
   const [engineerDisplayData, setEngineerDisplayData] = useState([]);

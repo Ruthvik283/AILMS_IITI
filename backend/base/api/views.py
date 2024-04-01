@@ -73,9 +73,20 @@ def testData(request):
 
 class getUsernameById(APIView):
     def get(self, request, id):
-
-        user = UserSerializer(User.objects.get(id=id))
+        x = User.objects.get(id=id)
+        user = UserSerializer(x)
         user_data = user.data
+        dept = x.department
+        res = {}
+        sub_departments = Department.objects.filter(parentDepartment=dept)
+        # sub_departments = dept.parentDepartment_set.all()
+        res["department_name"] = dept.department_name
+        res["sub_departments"] = DepartmentSerializer(
+            sub_departments, many=True).data
+        user_data['department'] = res
+        user_data['role']=user_data['role_name']
+        user_data.pop("password")
+        user_data.pop("role_name")
         # user_data['age']=30
 
         return Response(user_data)
@@ -136,7 +147,6 @@ def EditMaterial(request):
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
-
 
         mat_id = data['material_id']
         obj = Material.objects.filter(material_id=mat_id).first()
@@ -531,6 +541,8 @@ def PurchasePDF(request, purchase_id):
         return response
     except Exception as e:
         return Response({"success": False}, status=status.HTTP_404_NOT_FOUND)
+
+
 def test(request):
     pdf = open("files/bill.pdf", "rb")
     response = FileResponse(
@@ -590,8 +602,8 @@ def get_users(request):
     users = User.objects.all()
     return Response(UserSerializer(users, many=True).data)
 
+
 @api_view(['GET'])
 def get_roles(request):
     roles = Role.objects.all()
     return Response(RoleSerializer(roles, many=True).data)
-
