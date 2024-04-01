@@ -26,7 +26,6 @@ from django.core.mail import EmailMultiAlternatives
 User = get_user_model()
 
 
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -129,11 +128,12 @@ def MaterialbyID(request, material_id):
 def EditMaterial(request):
     try:
         data = request.data
-        required_fields = ['material_id', 'material_name', 'price', 'quantity', 'critical_quantity']
+        required_fields = ['material_id', 'material_name',
+                           'price', 'quantity', 'critical_quantity']
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         mat_id = data['material_id']
         obj = Material.objects.filter(material_id=mat_id).first()
         if obj is None:
@@ -165,7 +165,6 @@ def EditMaterial(request):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET', 'POST'])
 def BelowCriticalQuantity(request):
     # quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
@@ -180,7 +179,8 @@ def SendMail(request):
     materials = Material.objects.all()  # Retrieve all materials
 
     # Filter materials with critical quantity
-    critical_materials = [material for material in materials if material.quantity < material.critical_quantity]
+    critical_materials = [
+        material for material in materials if material.quantity < material.critical_quantity]
 
     if critical_materials:
         subject = "Critical Quantity Alert for Materials"
@@ -512,9 +512,16 @@ def modify_sanction(request):
 
 @xframe_options_exempt
 @api_view(['GET', 'POST'])
-def test(request):
-    pdf = open("files/bill.pdf", "rb")
-    response = FileResponse(
-        pdf, content_type='application/pdf', filename='bill.pdf')
-    response['Content-Disposition'] = 'inline; filename=bill.pdf'
-    return response
+def PurchasePDF(request, purchase_id):
+    try:
+        try:
+            filename = f"purchase_{purchase_id}"
+            pdf = open(f"files/{filename}.pdf", "rb")
+        except:
+            return HttpResponse("<h1>PDF not found</h1>", status=status.HTTP_404_NOT_FOUND)
+        response = FileResponse(
+            pdf, content_type='application/pdf', filename=f"{filename}.pdf")
+        response['Content-Disposition'] = f"inline; filename={filename}.pdf"
+        return response
+    except Exception as e:
+        return Response({"success": False}, status=status.HTTP_404_NOT_FOUND)

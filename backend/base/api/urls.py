@@ -40,6 +40,7 @@ urlpatterns = [
     path('modifysanction/', views.modify_sanction, name='modify-sanction'),
     path('create-department/', DepartmentCreateView.as_view(),
          name='create-department'),
-    path('api_test/', views.test, name='apitest'),
+    path('purchase-pdf/<int:purchase_id>',
+         views.PurchasePDF, name='purchase-pdf'),
     path('edit_material/', views.EditMaterial, name='edit-material'),
 ]

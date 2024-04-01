@@ -87,7 +87,7 @@ export default function App() {
                 element={<ModifySanctionForm />}
               />
               {/* <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} /> */}
-              <Route path="/purchase/purchase_pdf/" element={<PurchasePdfPage />} />
+              <Route path="/purchase/purchase_pdf/:purchase_id" element={<PurchasePdfPage />} />
               <Route path="/report" element={<ReportPage />} />
               {/* </Route> */}
             </Routes>

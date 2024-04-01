@@ -22,18 +22,19 @@
 // export default PurchasePdf;
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import styled from "styled-components";
 
 const PurchasePdf = () => {
+  const { purchase_id } = useParams()
   return (
     <Container>
       <Header>View PDF</Header>
       <IFrame
-        id="iFrameExample"
-        title="iFrame Example"
-        src="http://127.0.0.1:8000/api/api_test/"
+        id="purchase-pdf"
+        title="Purchase PDF"
+        src={`http://127.0.0.1:8000/api/purchase-pdf/${purchase_id}`}
       />
     </Container>
   );
