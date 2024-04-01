@@ -149,12 +149,16 @@ const PopupCard = ({ department, onClose, handleSubDepartmentClick }) => {
   const { department_name, is_main, sub_departments = [], users } = department;
 
   const handleClick = (subDepartment) => {
-    if (subDepartment.sub_departments && subDepartment.sub_departments.length > 0) {
+    if (
+      subDepartment.sub_departments &&
+      subDepartment.sub_departments.length > 0
+    ) {
       handleSubDepartmentClick(subDepartment);
     } else {
       onClose();
       handleSubDepartmentClick(subDepartment);
     }
+    //handleSubDepartmentClick(subDepartment);
   };
 
   return (
@@ -187,7 +191,7 @@ const PopupCard = ({ department, onClose, handleSubDepartmentClick }) => {
             Main Department
           </span>
         )}
-        {sub_departments.length > 0 ? (
+        {sub_departments && sub_departments.length > 0 ? (
           <div className="mt-4">
             <h3 className="text-[#52ab98] text-sm font-semibold">
               Sub-departments:
@@ -212,7 +216,7 @@ const PopupCard = ({ department, onClose, handleSubDepartmentClick }) => {
             <p>No Sub-department</p>
           </div>
         )}
-        {users.length > 0 && (
+        {users && users.length > 0 && (
           <div className="mt-4">
             <h3 className="text-[#52ab98] text-sm font-semibold">Users:</h3>
             <ul className="ml-4">

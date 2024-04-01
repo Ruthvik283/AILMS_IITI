@@ -188,7 +188,7 @@ export default function Materials() {
 
           <button
             onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
-            className="mb-4 mt-6 px-4 bg-[#2b6777] text-white py-2 px-4 rounded-md hover:bg-[#2b6777] focus:outline-none focus:bg-[#2b6777] transition-colors duration-300"
+            className="mb-4 mt-6 px-4 bg-[#2b6777] text-white py-2 rounded-md hover:bg-[#2b6777] focus:outline-none focus:bg-[#2b6777] transition-colors duration-300"
           >
             {showAddCategoryForm ? "Hide" : "Add Category"}
           </button>

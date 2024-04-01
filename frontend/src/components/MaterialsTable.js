@@ -10,7 +10,7 @@
 //       try {
 //         const materialsResponse = await fetch("http://127.0.0.1:8000/api/materials");
 //         const belowCriticalResponse = await fetch("http://127.0.0.1:8000/api/belowCritical/");
-        
+
 //         if (!materialsResponse.ok || !belowCriticalResponse.ok) {
 //           throw new Error(`HTTP error! Status: ${materialsResponse.status}`);
 //         }
@@ -154,6 +154,7 @@
 // export default MaterialsTable;
 
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const MaterialsTable = () => {
   const [materialsData, setMaterialsData] = useState([]);
@@ -163,9 +164,13 @@ const MaterialsTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const materialsResponse = await fetch("http://127.0.0.1:8000/api/materials");
-        const belowCriticalResponse = await fetch("http://127.0.0.1:8000/api/belowCritical/");
-        
+        const materialsResponse = await fetch(
+          "http://127.0.0.1:8000/api/materials"
+        );
+        const belowCriticalResponse = await fetch(
+          "http://127.0.0.1:8000/api/belowCritical/"
+        );
+
         if (!materialsResponse.ok || !belowCriticalResponse.ok) {
           throw new Error(`HTTP error! Status: ${materialsResponse.status}`);
         }
@@ -174,9 +179,11 @@ const MaterialsTable = () => {
         const belowCriticalData = await belowCriticalResponse.json();
 
         // Combine data from both responses
-        const mergedData = materialsData.map(material => ({
+        const mergedData = materialsData.map((material) => ({
           ...material,
-          belowCritical: belowCriticalData.some(item => item.material_id === material.material_id)
+          belowCritical: belowCriticalData.some(
+            (item) => item.material_id === material.material_id
+          ),
         }));
 
         setMaterialsData(mergedData);
@@ -190,13 +197,13 @@ const MaterialsTable = () => {
   // Filter materials based on the selected option
   const filteredMaterials = showAllMaterials
     ? materialsData
-    : materialsData.filter(material => material.belowCritical);
+    : materialsData.filter((material) => material.belowCritical);
 
   // Handler for checkbox change
   const handleCheckboxChange = (materialId) => {
-    setSelectedMaterials(prevSelected => {
+    setSelectedMaterials((prevSelected) => {
       if (prevSelected.includes(materialId)) {
-        return prevSelected.filter(id => id !== materialId);
+        return prevSelected.filter((id) => id !== materialId);
       } else {
         return [...prevSelected, materialId];
       }
@@ -204,7 +211,12 @@ const MaterialsTable = () => {
   };
 
   // Handler for sending email for selected materials
-  const handleSendEmail = () => {
+  const handleSendEmail = async () => {
+    const x = await fetch("http://127.0.0.1:8000/api/sendmail");
+    if (x.ok) {
+      toast.success("Emails sent successfully");
+    }
+
     console.log("Sending email for selected materials:", selectedMaterials);
   };
 
@@ -224,7 +236,9 @@ const MaterialsTable = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value="Below Critical Quantity">Below Critical Quantity</option>
+                <option value="Below Critical Quantity">
+                  Below Critical Quantity
+                </option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
                 <svg
@@ -239,7 +253,7 @@ const MaterialsTable = () => {
           </div>
           {showAllMaterials ? null : (
             <div>
-              {selectedMaterials.length > 0 && (
+              {selectedMaterials.length >= 0 && (
                 <button
                   onClick={handleSendEmail}
                   className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded m-4"
@@ -279,7 +293,11 @@ const MaterialsTable = () => {
             </thead>
             <tbody>
               {filteredMaterials.map((material) => (
-                <tr key={material.material_id} tabIndex="0" className="focus:outline-none h-16 border border-gray-100 rounded hover:bg-gray-50">
+                <tr
+                  key={material.material_id}
+                  tabIndex="0"
+                  className="focus:outline-none h-16 border border-gray-100 rounded hover:bg-gray-50"
+                >
                   <td className="px-5 py-4 border-b border-gray-200 text-sm">
                     {showAllMaterials ? (
                       material.material_id
@@ -288,7 +306,9 @@ const MaterialsTable = () => {
                         <input
                           type="checkbox"
                           value={material.material_id}
-                          onChange={() => handleCheckboxChange(material.material_id)}
+                          onChange={() =>
+                            handleCheckboxChange(material.material_id)
+                          }
                           className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <span className="ml-2">{material.material_id}</span>
@@ -303,7 +323,7 @@ const MaterialsTable = () => {
                   </td>
                   <td
                     className={`px-5 py-4 border-b border-gray-200 text-sm ${
-                      material.belowCritical ? 'text-red-500' : 'text-green-500'
+                      material.belowCritical ? "text-red-500" : "text-green-500"
                     }`}
                   >
                     {material.quantity}

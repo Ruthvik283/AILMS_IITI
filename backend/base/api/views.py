@@ -12,6 +12,7 @@ from django.db import models
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
+from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.db.models import F
@@ -19,7 +20,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.shortcuts import render
+from django.template import Context, Engine
+from django.core.mail import EmailMultiAlternatives
 User = get_user_model()
+
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -174,18 +179,95 @@ def BelowCriticalQuantity(request):
 def SendMail(request):
     materials = Material.objects.all()  # Retrieve all materials
 
-    # Iterate over materials and check if quantity is below critical level
-    for material in materials:
-        if material.quantity < material.critical_quantity:
-            subject = f' {material.material_name}\'s Critical Quantity Alert'
-            message = f'''The quantity of {
-                material.material_name} is below the critical level. Current quantity: {material.quantity}'''
-            from_email = settings.EMAIL_HOST_USER
-            # Specify the recipient email address
-            to_email = ['ailmsiiti123@gmail.com']
-            send_mail(subject, message, from_email, to_email)
+    # Filter materials with critical quantity
+    critical_materials = [material for material in materials if material.quantity < material.critical_quantity]
 
-    return Response({'message': 'Emails sent for materials with critical quantity.'}, status=status.HTTP_200_OK)
+    if critical_materials:
+        subject = "Critical Quantity Alert for Materials"
+        from_email = settings.EMAIL_HOST_USER
+        to_email = ['ailmsiiti123@gmail.com']
+
+        # Define the HTML content as a string
+        html_content = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Critical Quantity Alert for Materials</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Critical Quantity Alert for Materials</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Material Name</th>
+                    <th>Current Quantity</th>
+                    <th>Critical Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in critical_materials %}
+                <tr>
+                    <td>{{ material.material_name }}</td>
+                    <td>{{ material.quantity }}</td>
+                    <td>{{ material.critical_quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+"""
+
+        # Render the HTML content with the material data
+        engine = Engine.get_default()
+        context = Context({
+            'critical_materials': critical_materials,
+        })
+        rendered_html = engine.from_string(html_content).render(context)
+
+        # Create the email message with HTML content
+        email = EmailMultiAlternatives(
+            subject,
+            rendered_html,
+            from_email,
+            to_email,
+        )
+        email.attach_alternative(rendered_html, "text/html")
+        email.send()
+
+        return Response({'message': 'Email sent for materials with critical quantity.'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'No materials with critical quantity.'}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'POST'])
