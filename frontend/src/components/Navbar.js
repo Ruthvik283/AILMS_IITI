@@ -6,7 +6,7 @@ import AuthContext from "../context/AuthContext";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const contextData = useContext(AuthContext);
-  const userData = contextData.userData;
+//   const userData = contextData.userData;
   const { logoutUser } = useContext(AuthContext);
 
   const handleLogout = () => {
@@ -18,7 +18,8 @@ function Navbar() {
   };
 
   {
-    if (userData.role == "Manager") {
+    console.log("role Navbar",contextData.userData.role)
+    if (contextData.userData.role == "Manager") {
       //This is manager's Navbar
       //In the else you can find engineer's Navbar
       return (
@@ -216,7 +217,7 @@ function Navbar() {
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 <h1 className="text-white font-bold text-xl">
-                  AILMS: {userData.username}
+                  AILMS: {contextData.userData.username}
                 </h1>
               </div>
               <div className="hidden md:block">

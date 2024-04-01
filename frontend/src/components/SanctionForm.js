@@ -65,8 +65,22 @@ const SanctionForm = () => {
     }
   };
 
+  const userDepts = (depts) => {
+    const dict = [];
+    const dict2 = {
+      id: depts.id,
+      department_name: depts.department_name,
+    };
+    dict.push(dict2);
+
+    depts.sub_departments.forEach((subDept) => {
+      dict.push(subDept);
+    });
+    return dict;
+  };
+
+
   return (
-    
     <div className="max-w-md mx-auto mt-8 ">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -100,7 +114,7 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>
-        {contextData.userData.role === "Manager" && (
+        {/* {contextData.userData.role === "Manager" && (
           <div>
             <label htmlFor="department" className="block mb-1">
               DEPARTMENT
@@ -113,7 +127,26 @@ const SanctionForm = () => {
               className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
             />
           </div>
-        )}
+        )} */}
+        <div>
+          <label htmlFor="materialCode" className="block mb-1">
+            Department
+          </label>
+          <select
+            id="materialCode"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select Department</option>
+            {/* Assuming materials is an array of material names */}
+            {userDepts(contextData.userData.department).map((department) => (
+              <option key={department.id} value={department.id}>
+                {department.department_name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <label htmlFor="engineerId" className="block mb-1">
             ENGINEER ID
