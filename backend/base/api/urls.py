@@ -41,5 +41,7 @@ urlpatterns = [
     path('create-department/', DepartmentCreateView.as_view(),
          name='create-department'),
     path('api_test/', views.test, name='apitest'),
+    path('update_user/', views.update_user, name='update_user'),
+    path('get_users/', views.get_users, name='get_users'),
     path('edit_material/', views.EditMaterial, name='edit-material'),
 ]

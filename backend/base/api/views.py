@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from rest_framework import serializers, status
 from materials.models import *
@@ -24,7 +25,6 @@ from django.shortcuts import render
 from django.template import Context, Engine
 from django.core.mail import EmailMultiAlternatives
 User = get_user_model()
-
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -129,11 +129,12 @@ def MaterialbyID(request, material_id):
 def EditMaterial(request):
     try:
         data = request.data
-        required_fields = ['material_id', 'material_name', 'price', 'quantity', 'critical_quantity']
+        required_fields = ['material_id', 'material_name',
+                           'price', 'quantity', 'critical_quantity']
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         mat_id = data['material_id']
         obj = Material.objects.filter(material_id=mat_id).first()
         if obj is None:
@@ -165,7 +166,6 @@ def EditMaterial(request):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET', 'POST'])
 def BelowCriticalQuantity(request):
     # quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
@@ -180,7 +180,8 @@ def SendMail(request):
     materials = Material.objects.all()  # Retrieve all materials
 
     # Filter materials with critical quantity
-    critical_materials = [material for material in materials if material.quantity < material.critical_quantity]
+    critical_materials = [
+        material for material in materials if material.quantity < material.critical_quantity]
 
     if critical_materials:
         subject = "Critical Quantity Alert for Materials"
@@ -518,3 +519,55 @@ def test(request):
         pdf, content_type='application/pdf', filename='bill.pdf')
     response['Content-Disposition'] = 'inline; filename=bill.pdf'
     return response
+
+
+@api_view(['POST'])
+def update_user(request):
+    data = request.data
+    pk = data.get('id')
+    if pk is None:
+        return Response({"error": "User ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    user.username = data.get('username', user.username)
+    # user.email = data['email']
+    new_email = data.get('email')
+    if new_email is not None and new_email != user.email:
+        if User.objects.filter(email=new_email).exclude(pk=pk).exists():
+            print(UserSerializer(User.objects.filter(
+                email=new_email).exclude(pk=pk), many=True).data)
+            return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user.email = new_email
+    department_id = data.get('department')
+    if department_id is not None:
+        try:
+            user.department = Department.objects.get(id=department_id)
+        except Department.DoesNotExist:
+            return Response({"error": "Department not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+    role_id = data.get('role')
+    if role_id is not None:
+        try:
+            user.role = Role.objects.get(id=role_id)
+        except Role.DoesNotExist:
+            return Response({"error": "Role not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user.save()
+    except ValidationError as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({"success": True})
+
+
+@api_view(['GET'])
+def get_users(request):
+    users = User.objects.all()
+    return Response(UserSerializer(users, many=True).data)
