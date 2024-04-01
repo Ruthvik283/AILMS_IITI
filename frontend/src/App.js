@@ -21,6 +21,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { DataProvider } from "./context/DataContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
+import UserList from "./pages/UserList";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
 import PurchasePdf from "./components/PurchasePdf";
@@ -77,6 +78,7 @@ export default function App() {
               <Route path="/purchase" element={<Purchase />} />
               <Route path="/sanction" element={<Sanction />} />
               <Route path="/material" element={<Material />} />
+              <Route path="/users" element={<UserList />} />
               <Route path="/materials" element={<Materials />} />
               <Route path="/departments" element={<Departments />} />
               <Route path="/purchaseform" element={<PurchaseFormPage />} />
@@ -87,7 +89,7 @@ export default function App() {
                 element={<ModifySanctionForm />}
               />
               {/* <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} /> */}
-              <Route path="/purchase/purchase_pdf/" element={<PurchasePdfPage />} />
+              <Route path="/purchase/purchase_pdf/:purchase_id" element={<PurchasePdfPage />} />
               <Route path="/report" element={<ReportPage />} />
               {/* </Route> */}
             </Routes>

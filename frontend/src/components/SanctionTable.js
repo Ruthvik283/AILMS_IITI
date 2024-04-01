@@ -783,9 +783,13 @@ const SanctionTable = () => {
       if (status !== "All" && user.closed !== (status === "Closed")) {
         return false;
       }
-      if (search && !user.ticket_id.toString().includes(search.toString())) {
+      //   if (search && !user.ticket_id.toString().includes(search.toString())) {
+      //     return false;
+      //   }
+      if (search && user.ticket_id.toString() !== search.toString()) {
         return false;
       }
+
       return true;
     });
 
@@ -870,7 +874,7 @@ const SanctionTable = () => {
               />
             </div>
           </div>
-          
+
           <div className="relative flex justify-between tickets my-3">
             <div className="block relative ticketid">
               <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">

@@ -3,7 +3,6 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
-
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const contextData = useContext(AuthContext);
@@ -20,8 +19,8 @@ function Navbar() {
 
   {
     if (userData.role == "Manager") {
-        //This is manager's Navbar
-        //In the else you can find engineer's Navbar
+      //This is manager's Navbar
+      //In the else you can find engineer's Navbar
       return (
         <nav className="bg-[#2b6777]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,10 +30,15 @@ function Navbar() {
                   AILMS: {userData.username}
                 </h1> */}
                 <div className="flex flex-shrink-0 items-center">
-          <a href="/">
-            <img className="h-8 w-auto" src={require("./AILMS.png")} alt="Your Company"/>
-          </a>
-        </div>
+                  <Link to="/">
+                    <img
+                      className="h-8 w-auto"
+                      src={require("./AILMS.png")}
+                      alt="Your Company"
+                    />
+                </Link>
+                  
+                </div>
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
@@ -79,6 +83,13 @@ function Navbar() {
                     className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Departments
+                  </Link>
+                  <Link
+                    to="/users"
+                    activeClassName="text-white bg-gray-900 hover:bg-gray-700"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Users
                   </Link>
                   <Link
                     to="/Report"
@@ -166,6 +177,20 @@ function Navbar() {
                 className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
               >
                 Purchases
+              </Link>
+              <Link
+                to="/Departments"
+                activeClassName="bg-gray-900 text-white"
+                className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
+              >
+                Departments
+              </Link>
+              <Link
+                to="/users"
+                activeClassName="bg-gray-900 text-white"
+                className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
+              >
+                Users
               </Link>
               <Link
                 to="/Report"
@@ -339,123 +364,4 @@ function Navbar() {
   }
 }
 export default Navbar;
-//previous navbar code
-/*"use client";
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
 
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const contextData = useContext(AuthContext);
-  const userData = contextData.userData;
-  const { logoutUser } = useContext(AuthContext);
-
-  const handleLogout = () => {
-    logoutUser();
-  };
-
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
-  };
-  return (
-    <div className="container relative m-auto p-3 flex justify-between items-center bg-white max-w-screen-2xl">
-      <h1 className="font-xl font-bold text-white pl-5">
-        AILMS: {userData.username}
-      </h1>
-      <nav className={isOpen ? "flex" : "hidden md:flex space-x-4"}>
-        <div className="flex bg-white absolute md:relative flex-col md:flex-row w-full shadow md:shadow-none text-center top-12 left-0 md:top-0 md:flex">
-          <Link
-            to="/"
-            activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:underline text-white bg-inherit"
-          >
-            Home
-          </Link>
-          <Link
-            to="/material"
-            activeClassName="underline"
-            className="px-3 py-2 cursor-pointer rounded text-white hover:underline bg-inherit"
-            
-          >
-            MaterialsTable
-          </Link>
-          <Link
-            to="/materials"
-            activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:underline text-white bg-inherit"
-          >
-            Materials
-          </Link>
-          <Link
-            to="/sanction"
-            activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:underline text-white bg-inherit"
-          >
-            Sanctions
-          </Link>
-          <Link
-            to="/purchase"
-            activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:underline text-white bg-inherit"
-          >
-            Purchases
-          </Link>
-          <Link
-            to="/Report"
-            activeClassName="text-yellow-400"
-            className="px-3 py-2 cursor-pointer rounded hover:underline text-white bg-inherit"
-          >
-            Report
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="px-3 py-2 cursor-pointer rounded hover:underline text-white bg-inherit"
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
-
-      <div className="md:hidden bg-[#00203FFF]">
-        <button
-          className="flex justify-center items-center"
-          onClick={toggleNavbar}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-            stroke="white"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={isOpen ? "hidden" : "flex"}
-          >
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          <svg
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-            stroke="white"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={isOpen ? "flex" : "hidden"}
-          >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-    </div>
-  );
-}
-export default Navbar;
-
-*/

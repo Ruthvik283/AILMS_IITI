@@ -109,7 +109,32 @@ export const AuthProvider = ({ children }) => {
     };
     fetchData();
   }, []);
+  
+  const [rolesData, setRolesData] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/get_roles", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setRolesData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   const Navigate = useNavigate();
 
   // let set_username = (x) => {
@@ -348,6 +373,7 @@ export const AuthProvider = ({ children }) => {
     materialsData: materialsData,
     techniciansData: techniciansData,
     departmentData: departmentData,
+    rolesData: rolesData,
     userData: userData,
   };
 

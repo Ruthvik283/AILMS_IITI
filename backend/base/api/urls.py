@@ -40,8 +40,11 @@ urlpatterns = [
     path('modifysanction/', views.modify_sanction, name='modify-sanction'),
     path('create-department/', DepartmentCreateView.as_view(),
          name='create-department'),
+    path('purchase-pdf/<int:purchase_id>',
+         views.PurchasePDF, name='purchase-pdf'),
     path('api_test/', views.test, name='apitest'),
     path('update_user/', views.update_user, name='update_user'),
     path('get_users/', views.get_users, name='get_users'),
+    path('get_roles/', views.get_roles, name='get_roles'),
     path('edit_material/', views.EditMaterial, name='edit-material'),
 ]

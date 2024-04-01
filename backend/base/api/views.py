@@ -131,9 +131,12 @@ def EditMaterial(request):
         data = request.data
         required_fields = ['material_id', 'material_name',
                            'price', 'quantity', 'critical_quantity']
+        required_fields = ['material_id', 'material_name',
+                           'price', 'quantity', 'critical_quantity']
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
+
 
         mat_id = data['material_id']
         obj = Material.objects.filter(material_id=mat_id).first()
@@ -180,6 +183,8 @@ def SendMail(request):
     materials = Material.objects.all()  # Retrieve all materials
 
     # Filter materials with critical quantity
+    critical_materials = [
+        material for material in materials if material.quantity < material.critical_quantity]
     critical_materials = [
         material for material in materials if material.quantity < material.critical_quantity]
 
@@ -513,6 +518,19 @@ def modify_sanction(request):
 
 @xframe_options_exempt
 @api_view(['GET', 'POST'])
+def PurchasePDF(request, purchase_id):
+    try:
+        try:
+            filename = f"purchase_{purchase_id}"
+            pdf = open(f"files/{filename}.pdf", "rb")
+        except:
+            return HttpResponse("<h1>PDF not found</h1>", status=status.HTTP_404_NOT_FOUND)
+        response = FileResponse(
+            pdf, content_type='application/pdf', filename=f"{filename}.pdf")
+        response['Content-Disposition'] = f"inline; filename={filename}.pdf"
+        return response
+    except Exception as e:
+        return Response({"success": False}, status=status.HTTP_404_NOT_FOUND)
 def test(request):
     pdf = open("files/bill.pdf", "rb")
     response = FileResponse(
@@ -571,3 +589,9 @@ def update_user(request):
 def get_users(request):
     users = User.objects.all()
     return Response(UserSerializer(users, many=True).data)
+
+@api_view(['GET'])
+def get_roles(request):
+    roles = Role.objects.all()
+    return Response(RoleSerializer(roles, many=True).data)
+

@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email',
+        fields = ['id', 'username', 'email', 'department', 'role',
                   'department_name', 'role_name', 'password']
 
     def get_department_name(self, obj):
@@ -31,6 +31,10 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
@@ -84,7 +88,7 @@ class SanctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sanction
         fields = [
-            
+
             "sanction_id",
             "ticket_id",
             "department",
@@ -111,7 +115,7 @@ class SanctionSerializer(serializers.ModelSerializer):
 
     def get_technician_name(self, obj):
         return obj.technician.technician_name if obj.technician else None
-    
+
     def get_technician_id(self, obj):
         return obj.technician.technician_id if obj.technician else None
 

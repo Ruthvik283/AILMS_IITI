@@ -8,7 +8,7 @@ const PurchaseTable = () => {
   const [endDate, setEndDate] = useState();
   let [materialWisePrice, setmaterialWisePrice] = useState({});
   const [filteredList, setFilteredList] = useState([]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -171,7 +171,7 @@ const PurchaseTable = () => {
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">{purchase.vendor_details}</td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">{new Date(purchase.date_time).toLocaleString()}</td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
-                        <Link to={`purchase_pdf`}>
+                        <Link to={`purchase_pdf/${purchase.purchase_id}`}>
                           <button className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-medium py-2 px-4 rounded">
                             VIEW PDF
                           </button>
@@ -197,12 +197,12 @@ const PurchaseTable = () => {
               </thead>
               <tbody>
                 {Object.entries(materialWisePrice).map(([material, price]) => (
-                    material !== "Total Price" && (
-                      <tr key={material} className="border-b border-gray-300">
-                        <td className="px-5 py-4 border-b border-gray-200 text-sm">{material}</td>
-                        <td className="px-5 py-4 border-b border-gray-200 text-sm">{price}</td>
-                      </tr>
-                    )
+                  material !== "Total Price" && (
+                    <tr key={material} className="border-b border-gray-300">
+                      <td className="px-5 py-4 border-b border-gray-200 text-sm">{material}</td>
+                      <td className="px-5 py-4 border-b border-gray-200 text-sm">{price}</td>
+                    </tr>
+                  )
                 ))}
                 <tr className="border-b border-gray-300">
                   <td className="px-5 py-4 border-b border-gray-200 text-sm font-semibold">Total Price</td>
