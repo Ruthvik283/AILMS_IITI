@@ -5,11 +5,13 @@ import { Icon } from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(eyeOff);
+  const Navigate = useNavigate();
   const handleToggle = () => {
     if (type === "password" && password != "") {
       setIcon(eye);
@@ -34,6 +36,7 @@ const SignupPage = () => {
   }, [password]);
 
   let { signupUser } = useContext(AuthContext);
+  let contextData = useContext(AuthContext);
   const location = useLocation();
 
   const handleSubmit = (e) => {
@@ -49,6 +52,10 @@ const SignupPage = () => {
 
   useEffect(() => {
     document.title = "Sign Up - AILMS";
+    if (contextData.userData.role !== "Manager") {
+      toast.error("Only admin can permit user registration");
+      Navigate("/login");
+    }
     window.scrollTo(0, 0);
   }, []);
 

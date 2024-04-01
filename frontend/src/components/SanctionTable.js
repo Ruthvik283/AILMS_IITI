@@ -896,7 +896,7 @@ const SanctionTable = () => {
               <select
                 value={perPage}
                 onChange={(e) => setPerPage(parseInt(e.target.value))}
-                className="appearance-none h-full border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="appearance-none h-full border block w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
