@@ -12,7 +12,7 @@ export default function Footer2() {
     <>
       <Footer>
         <div className="w-full">
-          <div className="w-full bg-[#2b6777] px-[3%] py-4 sm:flex sm:items-center sm:justify-between">
+          <div className="w-full bg-[#1C2434] px-[3%] py-4 sm:flex sm:items-center sm:justify-between">
             <div className="text-center text-white md:text-left lg:text-lg sm:w-full">
               © 2021 SomeCompany, Inc. All rights reserved.
             </div>

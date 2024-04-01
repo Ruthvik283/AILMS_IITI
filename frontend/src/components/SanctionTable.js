@@ -133,13 +133,7 @@ const SanctionTable = () => {
 
   const [selectedEngineerName, setSelectedEngineerName] = useState("All");
 
-  const [inputValueDept, setInputValueDept] = useState("");
-  const [selectedDept, setSelectedDept] = useState("All");
-  const [openDept, setOpenDept] = useState(false);
 
-  const [inputValueEng, setInputValueEng] = useState("");
-  const [selectedEng, setSelectedEng] = useState("All");
-  const [openEng, setOpenEng] = useState(false);
 
   const filterByMaterialName = (filteredData) => {
     // Avoid filter for empty string
@@ -205,18 +199,7 @@ const SanctionTable = () => {
   //   return filteredDataWithEngineerNames;
   // };
 
-  const filterByTicketStatus = (filteredData) => {
-    // Avoid filtering for empty string
-    if (status === "All") {
-      return filteredData;
-    }
 
-    const filteredDataWithDepartmentNames = filteredData.filter(
-      (sanc) => sanc.department_name == selectedDepartmentName
-    );
-
-    return filteredDataWithDepartmentNames;
-  };
   const filterByDate = (filteredData) => {
     let filteredByDate = filteredData;
 
@@ -239,47 +222,7 @@ const SanctionTable = () => {
     return filteredByDate;
   };
 
-  const handleMaterialNameChange = (event) => {
-    const selectedValue = event.target.value;
 
-    // If the user selects "All", reset the selectedMaterialName to an empty string
-    if (selectedValue === "") {
-      setSelectedMaterialName("");
-      return;
-    }
-
-    // Otherwise, update the selectedMaterialName with the selected value
-    setSelectedMaterialName(selectedValue);
-  };
-  // const handleDepartmentNameChange = (departmentName) => {
-  //   if (departmentName === "") {
-  //     setSelectedDepartmentName("");
-  //     setSelectedEngineerName("");
-  //     return;
-  //   }
-  //   setSelectedDepartmentName(departmentName);
-  //   setSelectedEngineerName("");
-  // };
-
-  const handleDepartmentNameChange = (departmentName) => {
-    if (departmentName === "") {
-      setSelectedDepartmentName("");
-      setSelectedEngineerName("");
-      setInputValueEng("");
-    } else {
-      setSelectedDepartmentName(departmentName);
-      setSelectedEngineerName("");
-      setInputValueEng("");
-    }
-  };
-
-  const handleEngineerNameChange = (engineerName) => {
-    if (engineerName === "") {
-      setSelectedEngineerName("");
-      return;
-    }
-    setSelectedEngineerName(engineerName);
-  };
 
   // number of sanctions per page----------------------------------------------------------------------------
   const [perPage, setPerPage] = useState(5);
@@ -288,6 +231,7 @@ const SanctionTable = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  
   const indexOfLastEntry = currentPage * perPage;
   const indexOfFirstEntry = indexOfLastEntry - perPage;
   const currentEntries = filteredList.slice(
@@ -486,6 +430,9 @@ const SanctionTable = () => {
                       Material
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Date & Time
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -520,6 +467,9 @@ const SanctionTable = () => {
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {sanction.material_name}
+                      </td>
+                      <td className="px-5 py-4 border-b border-gray-200 text-sm">
+                        view 
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {new Date(sanction.date_time).toLocaleString()}

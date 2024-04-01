@@ -9,7 +9,7 @@ export default function Navbar2() {
   }
   return (
     <>
-      <div className="bg-blue-900 sticky top-0 z-10 flex justify-between px-[8%]">
+      <div className="bg-[#1C2434] sticky top-0 z-10 flex justify-between px-[8%]">
         <div className="border-0 my-auto md:ml-5 items-center">
           <Link to="/">
             <h1 className="text-white">AILMS</h1>

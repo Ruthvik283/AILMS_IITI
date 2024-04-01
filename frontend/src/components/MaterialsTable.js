@@ -257,7 +257,7 @@ const MaterialsTable = () => {
               {selectedMaterials.length >= 0 && (
                 <button
                   onClick={handleSendEmail}
-                  className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded m-4"
+                  className="bg-[#3c50e0] flex flex-row items-center justify-center w-full px-4 py-4 mb-4 text-sm font-bold leading-6 capitalize duration-100 transform rounded-sm shadow cursor-pointer focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 focus:outline-none sm:mb-0 sm:w-auto sm:mr-4 md:pl-8 md:pr-6 xl:pl-12 xl:pr-10   hover:shadow-lg hover:-translate-y-1"
                 >
                   Send Email
                 </button>

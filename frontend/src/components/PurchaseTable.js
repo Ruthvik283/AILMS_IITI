@@ -17,7 +17,6 @@ const PurchaseTable = () => {
 
 
   const [perPage, setPerPage] = useState(5);
-  const [status, setStatus] = useState("All");
   const [search, setSearch] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -243,7 +242,7 @@ const PurchaseTable = () => {
           </div>
           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
             <div className="inline-block min-w-full shadow overflow-hidden">
-            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto ">
+            <div className="bg-white -mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto ">
             <div className="inline-block min-w-full shadow overflow-hidden">
               <table className="min-w-full leading-normal bg-white">
                 <thead className="bg-gray-100">

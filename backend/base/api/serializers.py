@@ -93,6 +93,7 @@ class SanctionSerializer(serializers.ModelSerializer):
             "ticket_id",
             "department",
             "department_name",
+            "description",
             "engineer_id",
             "engineer_name",
             "technician_id",

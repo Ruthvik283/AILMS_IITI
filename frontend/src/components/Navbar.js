@@ -22,7 +22,7 @@ function Navbar() {
       //This is manager's Navbar
       //In the else you can find engineer's Navbar
       return (
-        <nav className="bg-[#2b6777]">
+        <nav className="bg-[#1c2434]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
