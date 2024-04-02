@@ -18,7 +18,7 @@ function Navbar() {
   };
 
   {
-    console.log("role Navbar",contextData.userData.role)
+    //console.log("role Navbar",contextData.userData.role)
     if (contextData.userData.role == "Manager") {
       //This is manager's Navbar
       //In the else you can find engineer's Navbar

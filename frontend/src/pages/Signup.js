@@ -65,14 +65,14 @@ const SignupPage = () => {
     if (p === c) {
       document.querySelector("#diff_passwords").classList.add("opacity-0");
       //document.querySelector("#confirmpassword").classList.add('mb3')
-      //console.log(document.querySelector("#confirmpassword").classList)
-      // console.log('matched')
+      ////console.log(document.querySelector("#confirmpassword").classList)
+      // //console.log('matched')
     } else {
       document.querySelector("#diff_passwords").classList.remove("opacity-0");
       //document.querySelector("#confirmpassword").classList.remove('mb3')
       // document.querySelector("#confirmpassword").classList.remove('mb3')
-      // console.log(document.querySelector("#confirmpassword").classList)
-      // console.log('different')
+      // //console.log(document.querySelector("#confirmpassword").classList)
+      // //console.log('different')
     }
   }, [p, c]);
   return (

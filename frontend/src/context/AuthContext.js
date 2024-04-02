@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       const storedToken = localStorage.getItem("authTokens");
       return storedToken ? JSON.parse(storedToken) : null;
     } catch (error) {
-      console.error("Error decoding authTokens:", error);
+      //console.error("Error decoding authTokens:", error);
       // Clear local storage if decoding error occurs
       localStorage.removeItem("authTokens");
       return null;
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       const storedToken = localStorage.getItem("authTokens");
       return storedToken ? jwtDecode(storedToken) : null;
     } catch (error) {
-      console.error("Error decoding user:", error);
+      //console.error("Error decoding user:", error);
       // Clear local storage if decoding error occurs
       localStorage.removeItem("authTokens");
       return null;
@@ -65,9 +65,9 @@ export const AuthProvider = ({ children }) => {
 
         const data = await response.json();
         setMaterialsData(data);
-        console.log(data);
+        //console.log(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
       }
     };
     fetchData();
@@ -90,9 +90,9 @@ export const AuthProvider = ({ children }) => {
 
         const data = await response.json();
         setTechniciansData(data);
-        console.log("technicians", data);
+        //console.log("technicians", data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
       }
     };
     fetchData();
@@ -116,9 +116,9 @@ export const AuthProvider = ({ children }) => {
 
         const data = await response.json();
         setDepartmentData(data);
-        console.log(data);
+        //console.log(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
       }
     };
     fetchData();
@@ -142,9 +142,9 @@ export const AuthProvider = ({ children }) => {
 
         const data = await response.json();
         setRolesData(data);
-        console.log(data);
+        //console.log(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
       }
     };
     fetchData();
@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }) => {
   // }
 
   let loginUser = async (e, next_url = "/") => {
-    console.log("loginUser");
+    //console.log("loginUser");
     // to prevent default reload
     e.preventDefault();
     let response = await fetch("http://127.0.0.1:8000/api/token/", {
@@ -173,19 +173,26 @@ export const AuthProvider = ({ children }) => {
 
     if (response.status === 200) {
       let data2 = jwtDecode(data.access);
-      console.log("data: ", data2.id);
+      //console.log("data: ", data2.id);
       let response2 = await fetch(
         `http://127.0.0.1:8000/api/get_username/${data2.id}`
       );
+      if (response2.status == 400) {
+        toast.error(
+          "Login failed. Please contact the administrator to assign your department."
+        );
+        logoutUser();
+        return;
+      }
       let total_user_data = await response2.json();
-      //console.log("total_user_data", total_user_data);
+      ////console.log("total_user_data", total_user_data);
       setUserData(total_user_data);
       let user_data = jwtDecode(data.access);
-      console.log("user_data", user_data);
+      //console.log("user_data", user_data);
       setAuthTokens(data);
       setUser(user_data);
       localStorage.setItem("authTokens", JSON.stringify(data));
-      //console.log(user_data.username)
+      ////console.log(user_data.username)
       localStorage.setItem("username", user_data.username);
       Navigate(next_url);
 
@@ -197,9 +204,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   let signupUser = async (e, next_url = "/") => {
-    console.log("SignupUser");
-    // console.log(e.target.password.value)
-    // console.log(e.target.confirmpassword.value)
+    //console.log("SignupUser");
+    // //console.log(e.target.password.value)
+    // //console.log(e.target.confirmpassword.value)
     e.preventDefault();
     if (e.target.password.value !== e.target.confirmpassword.value) {
       alert("Passwords don't match");
@@ -239,13 +246,13 @@ export const AuthProvider = ({ children }) => {
         toast.success("User registered successfully");
         Navigate("/");
         // let data2 = jwtDecode(data.access);
-        // console.log("data: ", data2.id);
+        // //console.log("data: ", data2.id);
         // let response2 = await fetch(
         //   `http://127.0.0.1:8000/api/get_username/${data2.id}`
         // );
         // let total_user_data = await response2.json();
-        // console.log("data: ");
-        // console.log(total_user_data);
+        // //console.log("data: ");
+        // //console.log(total_user_data);
         // setUserData({
         //   id: total_user_data.id,
         //   username: total_user_data.username,
@@ -254,11 +261,11 @@ export const AuthProvider = ({ children }) => {
         //   role: total_user_data.role_name,
         // });
         // let user_data = jwtDecode(data.access);
-        // console.log("user_data", user_data);
+        // //console.log("user_data", user_data);
         // setUser(user_data);
         // setAuthTokens(data);
         // localStorage.setItem("authTokens", JSON.stringify(data));
-        // //console.log(user_data.username)
+        // ////console.log(user_data.username)
         // localStorage.setItem("username", user_data.username);
         // Navigate(next_url);
 
@@ -267,7 +274,7 @@ export const AuthProvider = ({ children }) => {
         toast.error("Something went wrong!");
       }
     } else {
-      console.log("Failed to register user. Response code:", response.status);
+      //console.log("Failed to register user. Response code:", response.status);
       //return response.text();
       toast.error("An account with that username/email already exists.");
     }
@@ -279,7 +286,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   let logoutUser = () => {
-    console.log("logoutUser");
+    //console.log("logoutUser");
     if (user !== null) {
       toast.success("Logged out successfully!");
     }
@@ -299,9 +306,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   let updateToken = async () => {
-    console.log("updateToken");
-    //console.log(authTokens?.refresh)
-    //console.log(authTokens.refresh)
+    //console.log("updateToken");
+    ////console.log(authTokens?.refresh)
+    ////console.log(authTokens.refresh)
 
     if (authTokens?.refresh === undefined) {
       logoutUser();
@@ -309,7 +316,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     } else {
-      console.log("ruth", authTokens?.refresh);
+      //console.log("ruth", authTokens?.refresh);
       // const [a, setA] = useState(authTokens.refresh);
       let response = await fetch("/api/token/refresh/", {
         method: "POST",
@@ -329,24 +336,24 @@ export const AuthProvider = ({ children }) => {
           `http://127.0.0.1:8000/api/get_username/${data2.id}`
         );
         let total_user_data = await response2.json();
-        console.log("data: ");
-        console.log(total_user_data);
+        //console.log("data: ");
+        //console.log(total_user_data);
         setUserData(total_user_data);
         let user_data = jwtDecode(data.access);
-        console.log("user_data", user_data);
+        //console.log("user_data", user_data);
         setUser(user_data);
 
         //setUser(jwtDecode(data.access));
-        console.log("reload", jwtDecode(data.access));
+        //console.log("reload", jwtDecode(data.access));
         localStorage.setItem("authTokens", JSON.stringify(data));
 
         //JUST FOR EXTRA SECURITY , NOT REQUIRED!
         //     let data2 = jwtDecode(data.access)
-        // console.log("data: ",data2.id)
+        // //console.log("data: ",data2.id)
         // let response2 = await fetch(`http://127.0.0.1:8000/api/get_username/${data2.id}`)
         // let total_user_data = await response2.json()
-        // console.log("data: ")
-        // console.log(total_user_data)
+        // //console.log("data: ")
+        // //console.log(total_user_data)
         // setUserData(
         //     {
         //         id:total_user_data.id,
@@ -356,7 +363,7 @@ export const AuthProvider = ({ children }) => {
         //     }
         // )
       } else {
-        console.log("LOG-OUT");
+        //console.log("LOG-OUT");
         logoutUser();
       }
 
@@ -392,8 +399,7 @@ export const AuthProvider = ({ children }) => {
     "/login",
     "/sanction",
     "/sanctionform",
-    "/modifysanction",
-    "/modifysanction/:sanct_id",
+    "/modifysanction", //extra code is also wwritten below to handle /<int>
   ];
   const nonUserValidRoutes = ["/login"];
 
@@ -404,14 +410,17 @@ export const AuthProvider = ({ children }) => {
   const nonUserIsValidRoute = nonUserValidRoutes.includes(location.pathname);
 
   useEffect(() => {
-    console.log("paths check");
+    // //console.log("paths check");
     if (!user) {
       if (!nonUserIsValidRoute) {
         toast.error("Access denied");
         Navigate("/login");
       }
     } else if (!userData || userData.role !== "Manager") {
-      if (!nonManagerIsValidRoute && user) {
+      if (
+        !nonManagerIsValidRoute &&
+        !location.pathname.startsWith("/modifysanction")
+      ) {
         toast.error("Access denied");
         Navigate("/");
       }
@@ -436,7 +445,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (loading) {
-      //  console.log(user)
+      //  //console.log(user)
       updateToken();
     }
 

@@ -36,7 +36,7 @@ const SanctionTable = () => {
 
           body: JSON.stringify(contextData.userData),
         });
-        console.log("rrr", contextData.userData);
+        //console.log("rrr", contextData.userData);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -81,7 +81,7 @@ const SanctionTable = () => {
 
         const data = await response.json();
         setDepartmentData(data);
-        console.log(data);
+        //console.log(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -110,7 +110,7 @@ const SanctionTable = () => {
 
         const data = await response.json();
         setTechnicianData(data);
-        console.log(data);
+        //console.log(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -196,8 +196,8 @@ const SanctionTable = () => {
   //   const filteredDataWithEngineerNames = filteredData.filter(
   //     (sanc) => sanc.engineer_name == selectedEngineerName
   //   );
-  //   // console.log(departmentIdToNameMap);
-  //   // console.log(filteredData);
+  //   // //console.log(departmentIdToNameMap);
+  //   // //console.log(filteredData);
   //   return filteredDataWithEngineerNames;
   // };
 
@@ -213,7 +213,7 @@ const SanctionTable = () => {
     const nextDayDate = endDateFilter;
     nextDayDate.setDate(nextDayDate.getDate() + 1);
     //endDate.setendDate(endDate.getDate() + 1);
-    //console.log(startDateFilter, endDateFilter);
+    ////console.log(startDateFilter, endDateFilter);
 
     filteredByDate = filteredData.filter(
       (purchase) =>

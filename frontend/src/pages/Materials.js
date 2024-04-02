@@ -84,7 +84,7 @@ export default function Materials() {
         category: categoryId,
       })
       .then((response) => {
-        console.log("Material created successfully:", response.data);
+        //console.log("Material created successfully:", response.data);
         toast.success("Material created successfully");
         setx(!x);
         setShowAddMaterialsForm(!showAddMaterialsForm);
@@ -112,7 +112,7 @@ export default function Materials() {
         parent_category: categoryId,
       })
       .then((response) => {
-        console.log("Category created successfully:", response.data);
+        //console.log("Category created successfully:", response.data);
         toast.success("Category created successfully");
         setx(!x);
         setShowAddCategoryForm(!showAddCategoryForm);
@@ -137,7 +137,7 @@ export default function Materials() {
     axios
       .post(`http://127.0.0.1:8000/api/edit_material/`, editMaterialData)
       .then((response) => {
-        console.log("Material updated successfully:", response.data);
+        //console.log("Material updated successfully:", response.data);
         toast.success("Material updated successfully");
         setEditMaterialData(null);
         setx((prev) => !prev); // Trigger re-fetching of related materials

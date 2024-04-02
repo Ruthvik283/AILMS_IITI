@@ -71,25 +71,33 @@ def testData(request):
     return Response(serializer.data)
 
 
+from rest_framework.exceptions import NotFound
+
 class getUsernameById(APIView):
     def get(self, request, id):
-        x = User.objects.get(id=id)
+        try:
+            x = User.objects.get(id=id)
+        except User.DoesNotExist:
+            raise NotFound("User not found")
+
         user = UserSerializer(x)
         user_data = user.data
         dept = x.department
+
+        if dept is None:
+            return Response({"detail": "User does not have a department"}, status=status.HTTP_400_BAD_REQUEST)
+
         res = {}
         sub_departments = Department.objects.filter(parentDepartment=dept)
-        # sub_departments = dept.parentDepartment_set.all()
         res["department_name"] = dept.department_name
-        res["sub_departments"] = DepartmentSerializer(
-            sub_departments, many=True).data
+        res["sub_departments"] = DepartmentSerializer(sub_departments, many=True).data
         user_data['department'] = res
-        user_data['role']=user_data['role_name']
+        user_data['role'] = user_data['role_name']
         user_data.pop("password")
         user_data.pop("role_name")
-        # user_data['age']=30
 
         return Response(user_data)
+
 
 
 @api_view(['GET', 'POST'])

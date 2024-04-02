@@ -39,6 +39,12 @@ const UserList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.email.endsWith("@iiti.ac.in")) {
+      toast.error(
+        "Invalid email format. Please assign an email ending with @iiti.ac.in."
+      );
+      return;
+    }
     axios
       .post("http://127.0.0.1:8000/api/update_user/", formData)
       .then((response) => {

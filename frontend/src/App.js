@@ -12,7 +12,6 @@ import Sanction from "./pages/Sanction";
 import Material from "./pages/Material";
 import Materials from "./pages/Materials";
 import Departments from "./pages/Departments";
-import Engineer from "./pages/Engineer";
 import SanctionFormPage from "./pages/SanctionFormPage";
 import PurchaseFormPage from "./pages/PurchaseFormPage";
 import LoginPage from "./pages/Login";
@@ -72,7 +71,6 @@ export default function App() {
             <Route path="/signup" element={<SignupPage />} />
             {/* <Route element={<PrivateWrapper />}> */}
             <Route path="/" element={<Home />} />
-            <Route path="/engineer" element={<Engineer />} />
             <Route path="/purchase" element={<Purchase />} />
             <Route path="/sanction" element={<Sanction />} />
             <Route path="/material" element={<Material />} />

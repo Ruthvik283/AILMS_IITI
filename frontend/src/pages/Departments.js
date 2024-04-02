@@ -111,7 +111,7 @@
 //         }
 //         const data = await response.json();
 //         setDepartmentData(data);
-//         console.log("fetched_department_data", data);
+//         //console.log("fetched_department_data", data);
 //       } catch (error) {
 //         console.error("Error fetching data:", error);
 //       }
@@ -282,7 +282,7 @@ export default function Departments() {
         }
         const data = await response.json();
         setDepartmentData(data.filter((dept) => dept.is_main));
-        console.log("fetched_department_data", data);
+        //console.log("fetched_department_data", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

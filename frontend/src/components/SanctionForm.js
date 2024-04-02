@@ -16,7 +16,7 @@ const SanctionForm = () => {
   //const toaster = useToaster();
 
   //   const rrr = () => {
-  //     console.log('here')
+  //     //console.log('here')
   //     toast.success('Successfully navigated to sanctions page!');
   //   };
   const handleSubmit = async (event) => {
@@ -35,7 +35,7 @@ const SanctionForm = () => {
       quantity_sanctioned: quantitySanctioned,
       userData: contextData.userData,
     };
-    console.log(formData);
+    //console.log(formData);
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/sanction/", {
@@ -47,7 +47,7 @@ const SanctionForm = () => {
       });
 
       if (response.ok) {
-        console.log("Sanction form submitted successfully!");
+        //console.log("Sanction form submitted successfully!");
         // Reset form fields if needed
         setTicketId("");
         setDepartment("");
@@ -61,7 +61,7 @@ const SanctionForm = () => {
         toast.error("Failed to submit form");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      toast.error("Error submitting form:", error);
     }
   };
 
