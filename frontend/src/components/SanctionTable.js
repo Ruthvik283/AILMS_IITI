@@ -7,6 +7,7 @@ import MaterialPieChartSanction from "./MaterialPieChartSanction";
 import AuthContext from "../context/AuthContext";
 import SanctionGraph from "./SanctionGraph";
 import SearchableDropdown from "./SearchableDropdown";
+import DescriptionCard from "./DecriptionCard";
 
 const SanctionTable = () => {
   //fectching the data
@@ -20,6 +21,8 @@ const SanctionTable = () => {
   let [materialWisePrice, setmaterialWisePrice] = useState([]);
   const [departmentUsers, setDepartmentUsers] = useState({});
   const [isTicketIdZero, setIsTicketIdZero] = useState("All");
+  const [isOpen, setIsOpen] = useState(false);
+  const [DescriptionContent, setDescriptionContent] = useState("");
 
 
   useEffect(() => {
@@ -235,6 +238,24 @@ const SanctionTable = () => {
     return filteredTicketIdZero;
   };
 
+  const fetchDescriptionContent = async (sanctionId) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/sanctions/${sanctionId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDescriptionContent(data.description);
+      setIsOpen(true);
+    } catch (error) {
+      console.error("Error fetching Description content:", error);
+    }
+  };
+
+  const handleCloseDescriptionPopup = () => {
+    setIsOpen(false);
+    setDescriptionContent("");
+  };
 
   // number of sanctions per page----------------------------------------------------------------------------
   const [perPage, setPerPage] = useState(5);
@@ -380,19 +401,16 @@ const SanctionTable = () => {
               />
             </div>
             <div className="relative dept mr-2 my-3">
-            <SearchableDropdown
-              options={[{ value: "All" }, { value: "Zero" }, { value: "Non-Zero" }]}
-              label="value"
-              id="id"
-              selectedVal={isTicketIdZero}
-              handleChange={(val) => setIsTicketIdZero(val)}
-              allLabel="All Ticket IDs"
-            />
+              <SearchableDropdown
+                options={[{ value: "All" }, { value: "Zero" }, { value: "Non-Zero" }]}
+                label="value"
+                id="id"
+                selectedVal={isTicketIdZero}
+                handleChange={(val) => setIsTicketIdZero(val)}
+                allLabel="All Ticket IDs"
+              />
+            </div>
           </div>
-          </div>
-
-          
-
           <div className="relative flex justify-between tickets my-3">
             <div className="block relative ticketid">
               <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
@@ -495,7 +513,12 @@ const SanctionTable = () => {
                         {sanction.material_name}
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
-                        view
+                        <button
+                          onClick={() => fetchDescriptionContent(sanction.sanction_id)}
+                          className="text-blue-500 hover:underline"
+                        >
+                          View
+                        </button>                        
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {new Date(sanction.date_time).toLocaleString()}
@@ -511,8 +534,8 @@ const SanctionTable = () => {
                           ></span>
                           <span
                             className={`relative ${sanction.closed
-                                ? "text-red-900"
-                                : "text-green-900"
+                              ? "text-red-900"
+                              : "text-green-900"
                               }`}
                           >
                             {sanction.closed ? "Closed" : "Open"}
@@ -578,6 +601,12 @@ const SanctionTable = () => {
           </div>
         </div>
       </div>
+      {isOpen && (
+        <DescriptionCard
+          matterContent={DescriptionContent}
+          onClose={handleCloseDescriptionPopup}
+        />
+      )}
     </div>
   );
 };
