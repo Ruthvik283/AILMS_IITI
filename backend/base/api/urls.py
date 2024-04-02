@@ -47,4 +47,12 @@ urlpatterns = [
     path('get_users/', views.get_users, name='get_users'),
     path('get_roles/', views.get_roles, name='get_roles'),
     path('edit_material/', views.EditMaterial, name='edit-material'),
+    path('register_requests/', views.get_registerRequests,
+         name='get_registerRequests'),
+    path('add_register_request/', views.add_register_request,
+         name='add_register_request'),
+    path('edit_register_request/', views.edit_register_request,
+         name='edit_register_request'),
+    path('delete_register_request/<int:pk>',
+         views.delete_register_request, name='delete_register_request'),
 ]

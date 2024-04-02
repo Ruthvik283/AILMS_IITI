@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
+import {Link} from "react-router-dom"
 
 const UserList = () => {
   const contextData = useContext(AuthContext);
@@ -77,6 +78,7 @@ const UserList = () => {
     <>
       <Navbar />
       <div className="container mx-auto py-8">
+        <Link to="/register_requests">Register Requests</Link>
         <h1 className="text-3xl font-bold mb-6 text-center">Users</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {users.map((user) => (

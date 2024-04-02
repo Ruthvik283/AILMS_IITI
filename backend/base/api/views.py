@@ -615,3 +615,43 @@ def get_users(request):
 def get_roles(request):
     roles = Role.objects.all()
     return Response(RoleSerializer(roles, many=True).data)
+
+@api_view(['GET'])
+def get_registerRequests(request):
+    reqs= RegisterRequest.objects.all()
+    return Response(RegisterRequestSerializer(reqs,many=True).data)
+
+@api_view(['POST'])
+def add_register_request(request):
+    if request.method == 'POST':
+        serializer = RegisterRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def edit_register_request(request):
+    try:
+        pk = request.data.get('id')
+        register_request = RegisterRequest.objects.get(pk=pk)
+    except RegisterRequest.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'POST':
+        serializer = RegisterRequestSerializer(register_request, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def delete_register_request(request, pk):
+    try:
+        register_request = RegisterRequest.objects.get(pk=pk)
+    except RegisterRequest.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'POST':
+        register_request.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

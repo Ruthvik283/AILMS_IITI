@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import axios from "axios";
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -203,76 +203,83 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  let signupUser = async (e, next_url = "/") => {
+  let signupUser = async (e) => {
     //console.log("SignupUser");
     // //console.log(e.target.password.value)
     // //console.log(e.target.confirmpassword.value)
-    e.preventDefault();
-    if (e.target.password.value !== e.target.confirmpassword.value) {
-      alert("Passwords don't match");
-      return;
-    }
+    //e.preventDefault();
+    // if (e.target.password.value !== e.target.confirmpassword.value) {
+    //   alert("Passwords don't match");
+    //   return;
+    // }
     let response = await fetch("http://127.0.0.1:8000/api/register/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: e.target.username.value,
-        password: e.target.password.value,
-        email: e.target.email.value,
+        username: e.username,
+        password: e.password,
+        email: e.email,
+        role: e.role,
+        department: e.department,
       }),
     });
 
     if (response.status === 201) {
+      toast.success("User registered successfully");
+      try {
+        await axios.post(`/api/delete_register_request/${e.id}`);
+      } catch (error) {
+        console.error("Error deleting register request:", error);
+      }
       // setAuthTokens(data)
       // setUser(jwtDecode(data.access))
       // localStorage.setItem('authTokens', JSON.stringify(data))
 
-      let response = await fetch("http://127.0.0.1:8000/api/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: e.target.username.value,
-          email: e.target.email.value,
-          password: e.target.password.value,
-        }),
-      });
-      let data = await response.json();
+      //   let response = await fetch("http://127.0.0.1:8000/api/token/", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       username: e.target.username.value,
+      //       email: e.target.email.value,
+      //       password: e.target.password.value,
+      //     }),
+      //   });
+      //   let data = await response.json();
 
-      if (response.status === 200) {
-        toast.success("User registered successfully");
-        Navigate("/");
-        // let data2 = jwtDecode(data.access);
-        // //console.log("data: ", data2.id);
-        // let response2 = await fetch(
-        //   `http://127.0.0.1:8000/api/get_username/${data2.id}`
-        // );
-        // let total_user_data = await response2.json();
-        // //console.log("data: ");
-        // //console.log(total_user_data);
-        // setUserData({
-        //   id: total_user_data.id,
-        //   username: total_user_data.username,
-        //   email: total_user_data.email,
-        //   departmentName: total_user_data.department_name,
-        //   role: total_user_data.role_name,
-        // });
-        // let user_data = jwtDecode(data.access);
-        // //console.log("user_data", user_data);
-        // setUser(user_data);
-        // setAuthTokens(data);
-        // localStorage.setItem("authTokens", JSON.stringify(data));
-        // ////console.log(user_data.username)
-        // localStorage.setItem("username", user_data.username);
-        // Navigate(next_url);
+      //   if (response.status === 200) {
+      //     Navigate("/");
+      //     // let data2 = jwtDecode(data.access);
+      //     // //console.log("data: ", data2.id);
+      //     // let response2 = await fetch(
+      //     //   `http://127.0.0.1:8000/api/get_username/${data2.id}`
+      //     // );
+      //     // let total_user_data = await response2.json();
+      //     // //console.log("data: ");
+      //     // //console.log(total_user_data);
+      //     // setUserData({
+      //     //   id: total_user_data.id,
+      //     //   username: total_user_data.username,
+      //     //   email: total_user_data.email,
+      //     //   departmentName: total_user_data.department_name,
+      //     //   role: total_user_data.role_name,
+      //     // });
+      //     // let user_data = jwtDecode(data.access);
+      //     // //console.log("user_data", user_data);
+      //     // setUser(user_data);
+      //     // setAuthTokens(data);
+      //     // localStorage.setItem("authTokens", JSON.stringify(data));
+      //     // ////console.log(user_data.username)
+      //     // localStorage.setItem("username", user_data.username);
+      //     // Navigate(next_url);
 
-        // toast.success(`Hi, ${localStorage.getItem("username")}!`);
-      } else {
-        toast.error("Something went wrong!");
-      }
+      //     // toast.success(`Hi, ${localStorage.getItem("username")}!`);
+      //   } else {
+      //     toast.error("Something went wrong!");
+      //   }
     } else {
       //console.log("Failed to register user. Response code:", response.status);
       //return response.text();
@@ -397,6 +404,7 @@ export const AuthProvider = ({ children }) => {
   const nonManagerValidRoutes = [
     "/",
     "/login",
+    "/signup",
     "/sanction",
     "/sanctionform",
     "/modifysanction", //extra code is also wwritten below to handle /<int>
@@ -410,21 +418,47 @@ export const AuthProvider = ({ children }) => {
   const nonUserIsValidRoute = nonUserValidRoutes.includes(location.pathname);
 
   useEffect(() => {
-    // //console.log("paths check");
-    if (!user) {
-      if (!nonUserIsValidRoute) {
-        toast.error("Access denied");
-        Navigate("/login");
+    const fetchData = async () => {
+      const storedToken = localStorage.getItem("authTokens");
+      let role = null;
+      if (!userData.id) {
+        if (storedToken) {
+          try {
+            let data2 = jwtDecode(storedToken);
+            let response2 = await fetch(
+              `http://127.0.0.1:8000/api/get_username/${data2.id}`
+            );
+            if (response2.ok) {
+              let total_user_data = await response2.json();
+              role = total_user_data.role;
+              //console.log("here");
+            }
+          } catch (error) {
+            console.error("Error occurred while fetching data:", error);
+          }
+        }
+      } else {
+        role = userData.role;
       }
-    } else if (!userData || userData.role !== "Manager") {
-      if (
-        !nonManagerIsValidRoute &&
-        !location.pathname.startsWith("/modifysanction")
-      ) {
-        toast.error("Access denied");
-        Navigate("/");
+      // console.log(role);
+      if (role == null) {
+        if (!nonUserIsValidRoute) {
+          toast.error("Access denied");
+          Navigate("/login");
+        }
+      } else if (role !== "Manager") {
+        if (
+          !nonManagerIsValidRoute &&
+          !location.pathname.startsWith("/modifysanction")
+        ) {
+          console.log(role);
+          toast.error(role);
+          Navigate("/");
+        }
       }
-    }
+    };
+
+    fetchData();
   }, [nonManagerIsValidRoute, user, Navigate]);
 
   let contextData = {

@@ -6,6 +6,7 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignupPage = () => {
   const [password, setPassword] = useState("");
@@ -35,19 +36,44 @@ const SignupPage = () => {
     }
   }, [password]);
 
-  let { signupUser } = useContext(AuthContext);
   let contextData = useContext(AuthContext);
   const location = useLocation();
 
-  const handleSubmit = (e) => {
-    // To navigate to the page where an action was performed without signing up.
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const username = e.target.elements.username.value;
     const email = e.target.elements.email.value;
-    if (!email.endsWith("@iiti.ac.in")) {
-      e.preventDefault();
-      toast.error("Please signup with institute email-id");
-      return; // Stop further execution
+    const department = e.target.elements.department.value;
+    const confirmPassword = e.target.elements.confirmpassword.value;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
     }
-    signupUser(e, location.state?.next_url);
+
+    // Make a POST request to the add_register_request endpoint
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/add_register_request/",
+        {
+          username: username,
+          email: email,
+          password: password,
+          department: department,
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success("Register request has been sent");
+        Navigate("/"); // Redirect to homepage or any desired route
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while registering user");
+    }
   };
 
   useEffect(() => {
@@ -102,7 +128,7 @@ const SignupPage = () => {
                     </h4>
 
                     <h4 className="mb-[6%] mt-1 pb-1 text-xl font-semibold text-black">
-                      Register
+                      Register-Request
                     </h4>
 
                     <h2 className="text-base md:text-xl text-black">
@@ -127,6 +153,23 @@ const SignupPage = () => {
                           type="email"
                           placeholder="Email-id"
                         />
+                      </div>
+                      <div className="text-gray-400  w-[100%]">
+                        <select
+                          id="department"
+                          name="department"
+                          className="w-3/4 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                        >
+                          <option value="">Select department</option>
+                          {contextData.departmentData.map((department) => (
+                            <option
+                              key={department.department_id}
+                              value={department.department_id}
+                            >
+                              {department.department_name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
 
                       <div className="flex justify-center w-[100%]">
@@ -173,7 +216,9 @@ const SignupPage = () => {
                     </div>
                   </div>
                   <div className="text-center pt-1 pb-5 ">
-                    <button className="rounded h-10 w-3/4 btn1">Sign Up</button>
+                    <button className="rounded h-10 w-3/4 btn1">
+                      Send Request
+                    </button>
 
                     <p className=" text-center text-sm my-[2%] pb-2 text-black">
                       Already have an account?

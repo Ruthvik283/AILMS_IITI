@@ -22,6 +22,7 @@ import SignupPage from "./pages/Signup";
 import UserList from "./pages/UserList";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
+import RegisterRequestList from "./pages/RegisterRequestList";
 import PurchasePdf from "./components/PurchasePdf";
 // import <PurchasePdfPage>from "./components/PurchasePdf";
 import PurchasePdfPage from "./pages/PurchasePdfPage";
@@ -80,6 +81,7 @@ export default function App() {
             <Route path="/purchaseform" element={<PurchaseFormPage />} />
             <Route path="/sanctionform" element={<SanctionFormPage />} />
             <Route path="/modifysanction/" element={<ModifySanctionForm />} />
+            <Route path="/register_requests" element={<RegisterRequestList />} />
             <Route
               path="/modifysanction/:sanct_id"
               element={<ModifySanctionForm />}

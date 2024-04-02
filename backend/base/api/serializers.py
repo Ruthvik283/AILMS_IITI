@@ -35,6 +35,13 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = '__all__'
+        
+class RegisterRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegisterRequest
+        fields = '__all__'
+        
+        
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
