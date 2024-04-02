@@ -14,7 +14,7 @@ export default function SanctionFormPage() {
         <div className="px-4 pb-4">
           <Link
             to="/sanctionform"
-            className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-bold py-2 px-4 rounded"
+            className="bg-[#3c50e0] hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
           >
             Add Sanction
           </Link>

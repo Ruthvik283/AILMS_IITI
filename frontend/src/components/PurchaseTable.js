@@ -287,7 +287,7 @@ const PurchaseTable = () => {
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         <Link to={`purchase_pdf/${purchase.purchase_id}`}>
-                          <button className="bg-[#52ab98] hover:bg-[#2b6777] text-white font-medium py-2 px-4 rounded">
+                          <button className="bg-[#3c50e0] hover:bg-[#6272e6] text-white font-medium py-2 px-4 rounded">
                             VIEW PDF
                           </button>
                         </Link>
