@@ -485,20 +485,32 @@ class DepartmentCreateView(generics.CreateAPIView):
 @api_view(['POST'])
 def modify_sanction(request):
     try:
+        data = request.data
+        # print(data)
+        # return Response(
+        #     {
+        #         "success": True
+        #     }
+        # )
+        quantity = data['quantity']
+        sanction_id = data['sanct_id']
+        type = data['type']
 
-    sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
+        sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
 
-    if type == 'add':
-        sanct.sanction_add(quantity)
-    elif type == 'return':
-        sanct.sanction_return(quantity)
-    elif type == 'close':
-        sanct.sanction_close()
-    return Response(
-        {
-            "success": True
-        }
-    )
+        if type == 'add':
+            sanct.sanction_add(quantity)
+        elif type == 'return':
+            sanct.sanction_return(quantity)
+        elif type == 'close':
+            sanct.sanction_close()
+        return Response(
+            {
+                "success": True
+            }
+        )
+    except:
+        return Response({"success": False, "message": "invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @xframe_options_exempt
