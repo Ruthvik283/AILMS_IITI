@@ -22,7 +22,7 @@ import SignupPage from "./pages/Signup";
 import UserList from "./pages/UserList";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
-import RegisterRequestList from "./pages/RegisterRequestList";
+import RegisterRequestList from "./pages/RegisterRequestPage";
 import PurchasePdf from "./components/PurchasePdf";
 // import <PurchasePdfPage>from "./components/PurchasePdf";
 import PurchasePdfPage from "./pages/PurchasePdfPage";
