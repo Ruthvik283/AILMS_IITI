@@ -484,16 +484,7 @@ class DepartmentCreateView(generics.CreateAPIView):
 
 @api_view(['POST'])
 def modify_sanction(request):
-    data = request.data
-    print(data)
-    # return Response(
-    #     {
-    #         "success": True
-    #     }
-    # )
-    quantity = data['quantity']
-    sanction_id = data['sanct_id']
-    type = data['type']
+    try:
 
     sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
 
