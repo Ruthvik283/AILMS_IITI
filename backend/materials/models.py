@@ -152,3 +152,11 @@ class Role(models.Model):
     def __str__(self):
         # print(self.material.quantity)
         return self.role_name
+
+
+class RegisterRequest(models.Model):
+    username = models.CharField(max_length=255)
+    email = models.EmailField(max_length=254)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT)
+    role = models.ForeignKey(Role, on_delete=models.PROTECT,null=True,blank=True)
+    password =models.CharField(max_length=255)

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from rest_framework import serializers, status
 from materials.models import *
@@ -70,14 +71,33 @@ def testData(request):
     return Response(serializer.data)
 
 
+from rest_framework.exceptions import NotFound
+
 class getUsernameById(APIView):
     def get(self, request, id):
+        try:
+            x = User.objects.get(id=id)
+        except User.DoesNotExist:
+            raise NotFound("User not found")
 
-        user = UserSerializer(User.objects.get(id=id))
+        user = UserSerializer(x)
         user_data = user.data
-        # user_data['age']=30
+        dept = x.department
+
+        if dept is None:
+            return Response({"detail": "User does not have a department"}, status=status.HTTP_400_BAD_REQUEST)
+
+        res = {}
+        sub_departments = Department.objects.filter(parentDepartment=dept)
+        res["department_name"] = dept.department_name
+        res["sub_departments"] = DepartmentSerializer(sub_departments, many=True).data
+        user_data['department'] = res
+        user_data['role'] = user_data['role_name']
+        user_data.pop("password")
+        user_data.pop("role_name")
 
         return Response(user_data)
+
 
 
 @api_view(['GET', 'POST'])
@@ -130,6 +150,8 @@ def EditMaterial(request):
         data = request.data
         required_fields = ['material_id', 'material_name',
                            'price', 'quantity', 'critical_quantity']
+        required_fields = ['material_id', 'material_name',
+                           'price', 'quantity', 'critical_quantity']
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -179,6 +201,8 @@ def SendMail(request):
     materials = Material.objects.all()  # Retrieve all materials
 
     # Filter materials with critical quantity
+    critical_materials = [
+        material for material in materials if material.quantity < material.critical_quantity]
     critical_materials = [
         material for material in materials if material.quantity < material.critical_quantity]
 
@@ -528,3 +552,109 @@ def PurchasePDF(request, purchase_id):
         return response
     except Exception as e:
         return Response({"success": False}, status=status.HTTP_404_NOT_FOUND)
+
+
+def test(request):
+    pdf = open("files/bill.pdf", "rb")
+    response = FileResponse(
+        pdf, content_type='application/pdf', filename='bill.pdf')
+    response['Content-Disposition'] = 'inline; filename=bill.pdf'
+    return response
+
+
+@api_view(['POST'])
+def update_user(request):
+    data = request.data
+    pk = data.get('id')
+    if pk is None:
+        return Response({"error": "User ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    user.username = data.get('username', user.username)
+    # user.email = data['email']
+    new_email = data.get('email')
+    if new_email is not None and new_email != user.email:
+        if User.objects.filter(email=new_email).exclude(pk=pk).exists():
+            print(UserSerializer(User.objects.filter(
+                email=new_email).exclude(pk=pk), many=True).data)
+            return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user.email = new_email
+    department_id = data.get('department')
+    if department_id is not None:
+        try:
+            user.department = Department.objects.get(id=department_id)
+        except Department.DoesNotExist:
+            return Response({"error": "Department not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+    role_id = data.get('role')
+    if role_id is not None:
+        try:
+            user.role = Role.objects.get(id=role_id)
+        except Role.DoesNotExist:
+            return Response({"error": "Role not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user.save()
+    except ValidationError as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({"success": True})
+
+
+@api_view(['GET'])
+def get_users(request):
+    users = User.objects.all()
+    return Response(UserSerializer(users, many=True).data)
+
+
+@api_view(['GET'])
+def get_roles(request):
+    roles = Role.objects.all()
+    return Response(RoleSerializer(roles, many=True).data)
+
+@api_view(['GET'])
+def get_registerRequests(request):
+    reqs= RegisterRequest.objects.all()
+    return Response(RegisterRequestSerializer(reqs,many=True).data)
+
+@api_view(['POST'])
+def add_register_request(request):
+    if request.method == 'POST':
+        serializer = RegisterRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def edit_register_request(request):
+    try:
+        pk = request.data.get('id')
+        register_request = RegisterRequest.objects.get(pk=pk)
+    except RegisterRequest.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'POST':
+        serializer = RegisterRequestSerializer(register_request, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def delete_register_request(request, pk):
+    try:
+        register_request = RegisterRequest.objects.get(pk=pk)
+    except RegisterRequest.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'POST':
+        register_request.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

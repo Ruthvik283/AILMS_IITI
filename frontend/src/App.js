@@ -12,17 +12,17 @@ import Sanction from "./pages/Sanction";
 import Material from "./pages/Material";
 import Materials from "./pages/Materials";
 import Departments from "./pages/Departments";
-import Engineer from "./pages/Engineer";
 import SanctionFormPage from "./pages/SanctionFormPage";
 import PurchaseFormPage from "./pages/PurchaseFormPage";
 import LoginPage from "./pages/Login";
 import ReportPage from "./pages/ReportPage";
 import { AuthProvider } from "./context/AuthContext";
-import { DataProvider } from "./context/DataContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
+import UserList from "./pages/UserList";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
+import RegisterRequestList from "./pages/RegisterRequestList";
 import PurchasePdf from "./components/PurchasePdf";
 // import <PurchasePdfPage>from "./components/PurchasePdf";
 import PurchasePdfPage from "./pages/PurchasePdfPage";
@@ -67,31 +67,33 @@ export default function App() {
       <Toaster />
       <Router scrollBehavior="auto">
         <AuthProvider>
-          <DataProvider>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              {/* <Route element={<PrivateWrapper />}> */}
-              <Route path="/" element={<Home />} />
-              <Route path="/engineer" element={<Engineer />} />
-              <Route path="/purchase" element={<Purchase />} />
-              <Route path="/sanction" element={<Sanction />} />
-              <Route path="/material" element={<Material />} />
-              <Route path="/materials" element={<Materials />} />
-              <Route path="/departments" element={<Departments />} />
-              <Route path="/purchaseform" element={<PurchaseFormPage />} />
-              <Route path="/sanctionform" element={<SanctionFormPage />} />
-              <Route path="/modifysanction/" element={<ModifySanctionForm />} />
-              <Route
-                path="/modifysanction/:sanct_id"
-                element={<ModifySanctionForm />}
-              />
-              {/* <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} /> */}
-              <Route path="/purchase/purchase_pdf/:purchase_id" element={<PurchasePdfPage />} />
-              <Route path="/report" element={<ReportPage />} />
-              {/* </Route> */}
-            </Routes>
-          </DataProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            {/* <Route element={<PrivateWrapper />}> */}
+            <Route path="/" element={<Home />} />
+            <Route path="/purchase" element={<Purchase />} />
+            <Route path="/sanction" element={<Sanction />} />
+            <Route path="/material" element={<Material />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/materials" element={<Materials />} />
+            <Route path="/departments" element={<Departments />} />
+            <Route path="/purchaseform" element={<PurchaseFormPage />} />
+            <Route path="/sanctionform" element={<SanctionFormPage />} />
+            <Route path="/modifysanction/" element={<ModifySanctionForm />} />
+            <Route path="/register_requests" element={<RegisterRequestList />} />
+            <Route
+              path="/modifysanction/:sanct_id"
+              element={<ModifySanctionForm />}
+            />
+            {/* <Route path="/purchase/purchase_pdf/" element={<PurchasePdf />} /> */}
+            <Route
+              path="/purchase/purchase_pdf/:purchase_id"
+              element={<PurchasePdfPage />}
+            />
+            <Route path="/report" element={<ReportPage />} />
+            {/* </Route> */}
+          </Routes>
         </AuthProvider>
       </Router>
     </>

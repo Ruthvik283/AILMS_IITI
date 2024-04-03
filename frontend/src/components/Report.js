@@ -33,7 +33,7 @@ export default function Report() {
         }
 
         const data = await response.json();
-        //console.log("report-sanctions", data);
+        ////console.log("report-sanctions", data);
         setSanctionData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -60,7 +60,7 @@ export default function Report() {
 
         const data = await response.json();
         setDepartmentData(data);
-        console.log("fetched_department_data", data);
+        //console.log("fetched_department_data", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -109,7 +109,7 @@ export default function Report() {
     const nextDayDate = endDateFilter;
     nextDayDate.setDate(nextDayDate.getDate() + 1);
     //endDate.setendDate(endDate.getDate() + 1);
-    //console.log(startDateFilter, endDateFilter);
+    ////console.log(startDateFilter, endDateFilter);
 
     filteredByDate = filteredData.filter(
       (purchase) =>
@@ -120,7 +120,7 @@ export default function Report() {
     return filteredByDate;
   };
   //   useEffect(() => {
-  //     console.log("new", filterByDate(purchaseData));
+  //     //console.log("new", filterByDate(purchaseData));
   //     setPurchaseData(filterByDate(purchaseData));
   //   }, [startDate, endDate]);
 
@@ -228,7 +228,7 @@ export default function Report() {
     setSelectedDepartments(e.value);
     setSelectedSubDepartments([]); // Resetting selected sub-departments
   };
-  console.log(selectedDepartments);
+  //console.log(selectedDepartments);
 
   const [showReport, setShowReport] = useState(false);
 

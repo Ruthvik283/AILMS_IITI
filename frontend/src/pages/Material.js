@@ -12,7 +12,7 @@ export default function Material() {
 
             <Navbar></Navbar>
             
-            <div className='bg-[#FFFEFA]'>
+            <div className='bg-[#f1f5f9]'>
             <MaterialsTable/>
             </div>
 

@@ -37,7 +37,7 @@ const materialData = data.reduce(
   // Calculate total quantity
   const totalQuantity = Object.values(materialData).reduce((total, qty) => total + qty, 0);
 
-  console.log("Total Quantity:", totalQuantity);
+  //console.log("Total Quantity:", totalQuantity);
 
   // Prepare data for pie chart
   const pieChartData = Object.entries(materialData).map(([materialName, quantity]) => materialName !== "Total Price" && ({

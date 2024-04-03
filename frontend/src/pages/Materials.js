@@ -84,7 +84,7 @@ export default function Materials() {
         category: categoryId,
       })
       .then((response) => {
-        console.log("Material created successfully:", response.data);
+        //console.log("Material created successfully:", response.data);
         toast.success("Material created successfully");
         setx(!x);
         setShowAddMaterialsForm(!showAddMaterialsForm);
@@ -112,7 +112,7 @@ export default function Materials() {
         parent_category: categoryId,
       })
       .then((response) => {
-        console.log("Category created successfully:", response.data);
+        //console.log("Category created successfully:", response.data);
         toast.success("Category created successfully");
         setx(!x);
         setShowAddCategoryForm(!showAddCategoryForm);
@@ -137,7 +137,7 @@ export default function Materials() {
     axios
       .post(`http://127.0.0.1:8000/api/edit_material/`, editMaterialData)
       .then((response) => {
-        console.log("Material updated successfully:", response.data);
+        //console.log("Material updated successfully:", response.data);
         toast.success("Material updated successfully");
         setEditMaterialData(null);
         setx((prev) => !prev); // Trigger re-fetching of related materials
@@ -159,7 +159,7 @@ export default function Materials() {
               {path.map((x) => (
                 <button
                   key={x.id}
-                  className="text-[#52ab98] hover:text-[#2b6777] mx-1 focus:outline-none transition-colors duration-300"
+                  className="text-[#52ab98] hover:text-[#6272e6] mx-1 focus:outline-none transition-colors duration-300"
                   onClick={() => handleCategoryClick(x.id, x.category_name)}
                 >
                   -&gt; {x.category_name}
@@ -188,7 +188,7 @@ export default function Materials() {
 
           <button
             onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
-            className="mb-4 mt-6 px-4 bg-[#2b6777] text-white py-2 rounded-md hover:bg-[#2b6777] focus:outline-none focus:bg-[#2b6777] transition-colors duration-300"
+            className="mb-4 mt-6 px-4 bg-[#3c50e0] text-white py-2 rounded-md hover:bg-[#6272e6] focus:outline-none focus:bg-[#3c50e0] transition-colors duration-300"
           >
             {showAddCategoryForm ? "Hide" : "Add Category"}
           </button>
@@ -213,7 +213,7 @@ export default function Materials() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-[#52ab98] text-white py-2 px-4 rounded-md hover:bg-[#2b6777] focus:outline-none focus:bg-indigo-700 transition-colors duration-300"
+                  className="w-full bg-[#3c50e0] text-white py-2 px-4 rounded-md hover:bg-[#6272e6] focus:outline-none focus:bg-indigo-700 transition-colors duration-300"
                 >
                   Submit
                 </button>
@@ -249,7 +249,7 @@ export default function Materials() {
                   {/* Add Edit button */}
                   <button
                     onClick={() => handleEditMaterial(material)}
-                    className="bg-[#52ab98] mt-2 hover:bg-[#2b6777] text-white font-bold py-2 px-4 rounded"
+                    className="bg-[#3c50e0] mt-2 hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
                   >
                     Edit
                   </button>
@@ -341,7 +341,7 @@ export default function Materials() {
                   <div>
                   <button
                     type="submit"
-                    className=" mr-2 bg-[#52ab98] hover:bg-[#2b6777] text-white font-bold py-2 px-4 rounded"
+                    className=" mr-2 bg-[#3c50e0] hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
                   >
                     Save
                   </button>
@@ -359,7 +359,7 @@ export default function Materials() {
 
           <button
             onClick={() => setShowAddMaterialsForm(!showAddMaterialsForm)}
-            className="mb-4 mt-6 bg-[#2b6777] text-white py-2 px-4 rounded-md hover:bg-[#2b6777] focus:outline-none focus:bg-[#2b6777] transition-colors duration-300"
+            className="mb-4 mt-6 bg-[#3c50e0] text-white py-2 px-4 rounded-md hover:bg-[#6272e6] focus:outline-none focus:bg-[#3c50e0] transition-colors duration-300"
           >
             {showAddMaterialsForm ? "Hide" : "Add Material"}
           </button>
@@ -445,7 +445,7 @@ export default function Materials() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-[#52ab98] text-white py-2 px-4 rounded-md hover:bg-[#2b6777] focus:outline-none focus:bg-indigo-700 transition-colors duration-300"
+                  className="w-full bg-[#3c50e0] text-white py-2 px-4 rounded-md hover:bg-[#4f61e3] focus:outline-none focus:bg-indigo-700 transition-colors duration-300"
                 >
                   Submit
                 </button>

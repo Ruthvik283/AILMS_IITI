@@ -49,7 +49,7 @@ const ModifySanctionForm = () => {
               }
             }
 
-            console.log("sanc_req", data1);
+            //console.log("sanc_req", data1);
 
             const response2 = await fetch(
               `http://127.0.0.1:8000/api/materials/${data1.material}`,
@@ -75,16 +75,16 @@ const ModifySanctionForm = () => {
         fetchData();
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
   const { sanct_id } = useParams();
   useEffect(() => {
-    console.log("called again");
+    //console.log("called again");
     if (sanct_id !== undefined) {
       sancData(sanct_id);
-      console.log("sanc_id  ", sanct_id);
+      //console.log("sanc_id  ", sanct_id);
     }
   }, [sanct_id, X]);
 
