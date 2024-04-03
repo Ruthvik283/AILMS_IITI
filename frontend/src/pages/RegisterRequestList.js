@@ -31,6 +31,11 @@ const RegisterRequestList = () => {
 
   const handleUpdateRequest = async () => {
     try {
+      // const req=editedRequest;
+      // if(req.department==="")req.department=null;
+      // if(req.role==="")req.role=null;
+
+      //   console.log("rr", req);
       await axios.post("/api/edit_register_request/", editedRequest);
       setEditingRequestId(null);
       toast.success("Register-request updated successfully!");
@@ -56,8 +61,20 @@ const RegisterRequestList = () => {
       toast.error("Please select a role for the user");
       return;
     }
-    signupUser(request);
-    fetchRegisterRequests();
+    if (!request.department) {
+      toast.error("Please select a role for the user");
+      return;
+    }
+    try {
+      // Wait until signupUser function is completed
+      await signupUser(request);
+
+      // Once signupUser function is completed, fetch register requests
+      fetchRegisterRequests();
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while signing up the user");
+    }
   };
 
   const handleInputChange = (event) => {
@@ -69,8 +86,8 @@ const RegisterRequestList = () => {
     const department = contextData.departmentData.find(
       (department) => department.id === id
     );
-    console.log(contextData.rolesData);
-    return department ? department.department_name : "Unknown";
+    // console.log(contextData.rolesData);
+    return department ? department.department_name : "NULL";
   };
   const getRoleNameById = (id) => {
     const role = contextData.rolesData.find((role) => role.id === id);

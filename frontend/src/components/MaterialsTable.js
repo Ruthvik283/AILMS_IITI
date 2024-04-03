@@ -213,14 +213,15 @@ const MaterialsTable = () => {
     );
   });
   const handleCheckboxChange = (materialId) => {
-        setSelectedMaterials((prevSelected) => {
-          if (prevSelected.includes(materialId)) {
-            return prevSelected.filter((id) => id !== materialId);
-          } else {
-            return [...prevSelected, materialId];
-          }
-        });
+    console.log(selectedMaterials);
+    setSelectedMaterials((prevSelected) => {
+      if (prevSelected.includes(materialId)) {
+        return prevSelected.filter((id) => id !== materialId);
+      } else {
+        return [...prevSelected, materialId];
       }
+    });
+  };
   const indexOfLastEntry = currentPage * perPage;
   const indexOfFirstEntry = indexOfLastEntry - perPage;
   const currentEntries = filteredMaterials.slice(
@@ -228,15 +229,15 @@ const MaterialsTable = () => {
     indexOfLastEntry
   );
   const handleSendEmail = async () => {
-        toast.success("Sending emails")
-        const x = await fetch("http://127.0.0.1:8000/api/sendmail");
-        if (x.ok) {
-          toast.success("Emails sent successfully");
-        }
-    
-        console.log("Sending email for selected materials:", selectedMaterials);
-      };
-      
+    toast.success("Sending emails");
+    console.log(selectedMaterials);
+    const x = await fetch("http://127.0.0.1:8000/api/sendmail");
+    if (x.ok) {
+      toast.success("Emails sent successfully");
+    }
+
+    console.log("Sending email for selected materials:", selectedMaterials);
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -324,7 +325,7 @@ const MaterialsTable = () => {
                       Send Email
                     </button>
                   )}
-                </div>  
+                </div>
               )}
             </div>
           </div>
@@ -366,17 +367,15 @@ const MaterialsTable = () => {
                           material.material_id
                         ) : (
                           <div className="flex items-center">
-                            {/* <input
+                            <input
                               type="checkbox"
                               value={material.material_id}
                               onChange={() =>
                                 handleCheckboxChange(material.material_id)
                               }
                               className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                            /> */}
-                            <span className="ml-2">
-                              {material.material_id}
-                            </span>
+                            />
+                            <span className="ml-2">{material.material_id}</span>
                           </div>
                         )}
                       </td>

@@ -157,6 +157,6 @@ class Role(models.Model):
 class RegisterRequest(models.Model):
     username = models.CharField(max_length=255)
     email = models.EmailField(max_length=254)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT,null=True,blank=True)
     role = models.ForeignKey(Role, on_delete=models.PROTECT,null=True,blank=True)
     password =models.CharField(max_length=255)

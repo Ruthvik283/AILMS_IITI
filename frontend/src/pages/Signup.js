@@ -66,7 +66,8 @@ const SignupPage = () => {
 
       if (response.status === 201) {
         toast.success("Register request has been sent");
-        Navigate("/"); // Redirect to homepage or any desired route
+        e.target.reset();
+        //Navigate("/"); // Redirect to homepage or any desired route
       } else {
         toast.error("Something went wrong");
       }
@@ -78,10 +79,10 @@ const SignupPage = () => {
 
   useEffect(() => {
     document.title = "Sign Up - AILMS";
-    if (contextData.userData.role !== "Manager") {
-      toast.error("Only admin can permit user registration");
-      Navigate("/login");
-    }
+    // if (contextData.userData.role !== "Manager") {
+    //   toast.error("Only admin can permit user registration");
+    //   Navigate("/login");
+    // }
     window.scrollTo(0, 0);
   }, []);
 
