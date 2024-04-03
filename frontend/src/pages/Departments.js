@@ -1,342 +1,261 @@
-// import React, { useContext, useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import Footer2 from "../components/Footer";
-// import Navbar from "../components/Navbar";
-// import AuthContext from "../context/AuthContext";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-// const DepartmentCard = ({ department }) => {
-//   const { department_name, is_main, sub_departments, users } = department;
-//   const [openDropdown, setOpenDropdown] = useState(false);
-
-//   const toggleDropdown = () => {
-//     setOpenDropdown(!openDropdown);
-//   };
-
-//   const handleOutsideClick = (e) => {
-//     if (e.target.closest(".department-card") === null) {
-//       setOpenDropdown(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     document.addEventListener("click", handleOutsideClick);
-//     return () => {
-//       document.removeEventListener("click", handleOutsideClick);
-//     };
-//   }, []);
-
-//   return (
-//     <div className="border border-gray-200 rounded-lg p-4 m-4 department-card">
-//       <div className="flex items-center justify-between">
-//         <h2 className="text-lg font-semibold">{department_name}</h2>
-//         {is_main && (
-//           <span className="text-[#52ab98] font-semibold">Main Department</span>
-//         )}
-//         <span
-//           className={`${
-//             openDropdown ? "rotate-180" : ""
-//           } transition-transform cursor-pointer`}
-//           onClick={toggleDropdown}
-//         >
-//           <svg
-//             xmlns="http://www.w3.org/2000/svg"
-//             className="h-6 w-6"
-//             fill="none"
-//             viewBox="0 0 24 24"
-//             stroke="currentColor"
-//           >
-//             <path
-//               strokeLinecap="round"
-//               strokeLinejoin="round"
-//               strokeWidth={2}
-//               d="M19 9l-7 7-7-7"
-//             />
-//           </svg>
-//         </span>
-//       </div>
-//       {openDropdown && (
-//         <div className="mt-4">
-//           {sub_departments.length > 0 ? (
-//             <div>
-//               <h3 className="text-gray-600 text-sm font-semibold">
-//                 Sub-departments:
-//               </h3>
-//               <ul className="list-disc ml-6">
-//                 {sub_departments.map((subDept) => (
-//                   <li key={subDept.id}>{subDept.department_name}</li>
-//                 ))}
-//               </ul>
-//             </div>
-//           ) : (
-//             <h4 className="text-gray-500">No Sub-departments</h4>
-//           )}
-
-//           {users.length > 0 && (
-//             <div className="mt-4">
-//               <h3 className="text-gray-600 text-sm font-semibold">Users:</h3>
-//               <ul className="ml-4">
-//                 {users.map((user) => (
-//                   <li key={user.id}>
-//                     <h1>{user.role_name}</h1>
-//                     <span className="font-semibold">
-//                       {user.username}
-//                     </span> - {user.email}
-//                   </li>
-//                 ))}
-//               </ul>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default function Departments() {
-//   const navigate = useNavigate();
-//   const contextData = useContext(AuthContext);
-//   const [departmentData, setDepartmentData] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await fetch("http://127.0.0.1:8000/api/departments", {
-//           method: "GET",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         });
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         setDepartmentData(data);
-//         //console.log("fetched_department_data", data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     };
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <>
-//       <div className="min-h-screen">
-//         <Navbar />
-//         <div className="container mx-auto px-4 py-8">
-//           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-//             {departmentData.map((department) => (
-//               <DepartmentCard
-//                 key={department.department_id}
-//                 department={department}
-//               />
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//       <Footer2 />
-//     </>
-//   );
-// }
-
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Footer2 from "../components/Footer";
-import Navbar from "../components/Navbar";
-import AuthContext from "../context/AuthContext";
-
-const PopupCard = ({ department, onClose, handleSubDepartmentClick }) => {
-  const { department_name, is_main, sub_departments = [], users } = department;
-
-  const handleClick = (subDepartment) => {
-    if (
-      subDepartment.sub_departments &&
-      subDepartment.sub_departments.length > 0
-    ) {
-      handleSubDepartmentClick(subDepartment);
-    } else {
-      onClose();
-      handleSubDepartmentClick(subDepartment);
-    }
-    //handleSubDepartmentClick(subDepartment);
-  };
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className=" bg-white rounded-lg p-6 shadow-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">{department_name}</h2>
-          <button
-            className="text-gray-500 hover:text-gray-700"
-            onClick={onClose}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        {is_main && (
-          <span className="text-[#52ab98] font-semibold mt-2">
-            Main Department
-          </span>
-        )}
-        {sub_departments && sub_departments.length > 0 ? (
-          <div className="mt-4">
-            <h3 className="text-[#52ab98] text-sm font-semibold">
-              Sub-departments:
-            </h3>
-            <ul className="list-disc ml-6">
-              {sub_departments.map((subDept) => (
-                <li
-                  key={subDept.id}
-                  onClick={() => handleClick(subDept)}
-                  className="cursor-pointer hover:text-[#52ab98]"
-                >
-                  {subDept.department_name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <div className="mt-4">
-            <h3 className="text-[#52ab98] text-sm font-semibold">
-              Sub-departments:
-            </h3>
-            <p>No Sub-department</p>
-          </div>
-        )}
-        {users && users.length > 0 && (
-          <div className="mt-4">
-            <h3 className="text-[#52ab98] text-sm font-semibold">Users:</h3>
-            <ul className="ml-4">
-              {users.map((user) => (
-                <li key={user.id}>
-                  <h1>{user.role_name}</h1>
-                  <span className="font-semibold">{user.username}</span> -{" "}
-                  {user.email}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const DepartmentCard = ({ department, onClick }) => {
-  const { department_name, is_main } = department;
-
-  return (
-    <div
-      className="border border-gray-200 rounded-lg p-8 m-4 department-card shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
-      onClick={onClick}
-    >
-      <div className="flex flex-col items-start justify-between h-full">
-        <h2 className="text-lg font-semibold">{department_name}</h2>
-        {is_main && (
-          <span className="text-[#52ab98] font-semibold mt-2">
-            Main Department
-          </span>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default function Departments() {
-  const navigate = useNavigate();
-  const contextData = useContext(AuthContext);
-  const [departmentData, setDepartmentData] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const [selectedSubDepartment, setSelectedSubDepartment] = useState(null);
-
-  const backgroundImages = {
-    CSE: "https://example.com/cse.jpg",
-    MEMS: "https://example.com/mems.jpg",
-    CIVIL: "https://example.com/civil.jpg",
-  };
+const DepartmentsPage = () => {
+  const [departments, setDepartments] = useState([]);
+  const [newDepartment, setNewDepartment] = useState({
+    department_name: "",
+    is_main: false,
+    parent_department: null,
+  });
+  const [editDepartment, setEditDepartment] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/departments", {
-          method: "GET",
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/departments");
+      setDepartments(response.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
+
+  const handleAddDepartment = async () => {
+    try {
+      if (newDepartment.department_name === "") {
+        toast.error("Name cant be empty");
+        return;
+      }
+      if (newDepartment.is_main === false && !newDepartment.parent_department) {
+        toast.error("Parent department for non-main department cant be empty!");
+        return;
+      }
+      //   console.log(newDepartment);
+      //   return;
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/add_department/",
+        newDepartment
+      );
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Department added successfully");
+        fetchDepartments();
+      } else {
+        toast.error("error adding department");
+      }
+    } catch (error) {
+      console.error("Error adding department:", error);
+      toast.error("error adding department");
+    }
+  };
+
+  const handleEditDepartment = async () => {
+    try {
+      if (editDepartment.department_name === "") {
+        toast.error("Name cant be empty");
+        return;
+      }
+      if (
+        editDepartment.is_main === false &&
+        !editDepartment.parent_department
+      ) {
+        toast.error("Parent department for non-main department cant be empty!");
+        return;
+      }
+      console.log(JSON.stringify(editDepartment));
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/edit_department/",
+        JSON.stringify(editDepartment),
+        {
           headers: {
             "Content-Type": "application/json",
           },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
-        setDepartmentData(data.filter((dept) => dept.is_main));
-        //console.log("fetched_department_data", data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      );
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Department edited successfully");
+        fetchDepartments();
+      } else {
+        toast.error("error updating department");
       }
-    };
-    fetchData();
-  }, []);
 
-  const handleCardClick = (department) => {
-    setSelectedDepartment(department);
+      //   const updatedDepartments = departments.map((dept) =>
+      //     dept.id === response.data.data.id ? response.data.data : dept
+      //   );
+      //   setDepartments(updatedDepartments);
+      setEditDepartment(null);
+    } catch (error) {
+      console.error("Error editing department:", error);
+    }
   };
-
-  const handleClosePopup = () => {
-    setSelectedDepartment(null);
-    setSelectedSubDepartment(null);
-  };
-
-  const handleSubDepartmentClick = (subDepartment) => {
-    setSelectedSubDepartment(subDepartment);
+  const handleCancelEditDepartment = async () => {
+    setEditDepartment(null);
   };
 
   return (
-    <>
-      <div className="min-h-screen bg-[#FFFEFA]">
-        <Navbar />
-        <div className="container mx-auto px-4 py-8 flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {departmentData.map((department) =>
-              department.is_main ? (
-                <DepartmentCard
-                  key={department.department_id}
-                  department={department}
-                  onClick={() => handleCardClick(department)}
-                  backgroundImage={backgroundImages[department.department_name]}
-                />
-              ) : null
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-6">Departments</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {departments.map((department) => (
+          <div
+            key={department.id}
+            className="bg-white rounded-lg shadow-md p-6"
+          >
+            <h3 className="text-xl font-semibold mb-2">
+              {department.department_name}
+            </h3>
+            <p className="text-gray-600 mb-2">
+              Main Department: {department.is_main ? "Yes" : "No"}
+            </p>
+            {department.parent_department && (
+              <p className="text-gray-600 mb-4">
+                Parent Department: {department.parent_department_name}
+              </p>
+            )}
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => setEditDepartment(department)}
+            >
+              Edit
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Add Department</h2>
+        <div className="flex flex-col md:flex-row md:items-center mb-4">
+          <input
+            type="text"
+            placeholder="Department Name"
+            value={newDepartment.department_name}
+            onChange={(e) =>
+              setNewDepartment({
+                ...newDepartment,
+                department_name: e.target.value,
+              })
+            }
+            className="mb-2 md:mb-0 md:mr-4 px-4 py-2 border border-gray-300 rounded w-full md:w-auto"
+          />
+          <label className="inline-flex items-center mr-4">
+            <input
+              type="checkbox"
+              checked={newDepartment.is_main}
+              onChange={(e) =>
+                setNewDepartment({
+                  ...newDepartment,
+                  is_main: e.target.checked,
+                })
+              }
+              className="form-checkbox text-blue-500"
+            />
+            <span className="ml-2 text-gray-700">Main Department</span>
+          </label>
+          {!newDepartment.is_main && (
+            <select
+              value={newDepartment.parent_department || ""}
+              onChange={(e) =>
+                setNewDepartment({
+                  ...newDepartment,
+                  parent_department: e.target.value || null,
+                })
+              }
+              className="px-4 py-2 border border-gray-300 rounded w-full md:w-auto"
+            >
+              <option value="">Select Parent Department</option>
+              {departments
+                .filter((dept) => dept.is_main)
+                .map((dept) => (
+                  <option key={dept.id} value={dept.id}>
+                    {dept.department_name}
+                  </option>
+                ))}
+            </select>
+          )}
+        </div>
+        <button
+          onClick={handleAddDepartment}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Add Department
+        </button>
+      </div>
+
+      {editDepartment && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Edit Department</h2>
+          <div className="flex flex-col md:flex-row md:items-center mb-4">
+            <input
+              type="text"
+              placeholder="Department Name"
+              value={editDepartment.department_name}
+              onChange={(e) =>
+                setEditDepartment({
+                  ...editDepartment,
+                  department_name: e.target.value,
+                })
+              }
+              className="mb-2 md:mb-0 md:mr-4 px-4 py-2 border border-gray-300 rounded w-full md:w-auto"
+            />
+            <label className="inline-flex items-center mr-4">
+              <input
+                type="checkbox"
+                checked={editDepartment.is_main}
+                onChange={(e) =>
+                  setEditDepartment({
+                    ...editDepartment,
+                    is_main: e.target.checked,
+                  })
+                }
+                className="form-checkbox text-blue-500"
+              />
+              <span className="ml-2 text-gray-700">Main Department</span>
+            </label>
+            {!editDepartment.is_main && (
+              <select
+                value={
+                  editDepartment.parent_department
+                    ? editDepartment.parent_department
+                    : ""
+                }
+                onChange={(e) =>
+                  setEditDepartment({
+                    ...editDepartment,
+                    parent_department: e.target.value,
+                  })
+                }
+                className="px-4 py-2 border border-gray-300 rounded w-full md:w-auto"
+              >
+                <option value="">Select Parent Department</option>
+                {departments
+                  .filter((dept) => dept.is_main)
+                  .map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.department_name}
+                    </option>
+                  ))}
+              </select>
             )}
           </div>
+          <button
+            onClick={handleEditDepartment}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Save Changes
+          </button>
+          <button
+            onClick={handleCancelEditDepartment}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Cancel
+          </button>
         </div>
-      </div>
-      {selectedDepartment && (
-        <PopupCard
-          department={selectedDepartment}
-          onClose={handleClosePopup}
-          handleSubDepartmentClick={handleSubDepartmentClick}
-        />
       )}
-      {selectedSubDepartment && (
-        <PopupCard
-          department={selectedSubDepartment}
-          onClose={handleClosePopup}
-          handleSubDepartmentClick={handleSubDepartmentClick}
-        />
-      )}
-      <Footer2 />
-    </>
+    </div>
   );
-}
+};
+
+export default DepartmentsPage;

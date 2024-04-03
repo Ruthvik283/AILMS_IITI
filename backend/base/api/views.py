@@ -71,8 +71,6 @@ def testData(request):
     return Response(serializer.data)
 
 
-from rest_framework.exceptions import NotFound
-
 class getUsernameById(APIView):
     def get(self, request, id):
         try:
@@ -90,14 +88,14 @@ class getUsernameById(APIView):
         res = {}
         sub_departments = Department.objects.filter(parentDepartment=dept)
         res["department_name"] = dept.department_name
-        res["sub_departments"] = DepartmentSerializer(sub_departments, many=True).data
+        res["sub_departments"] = DepartmentSerializer(
+            sub_departments, many=True).data
         user_data['department'] = res
         user_data['role'] = user_data['role_name']
         user_data.pop("password")
         user_data.pop("role_name")
 
         return Response(user_data)
-
 
 
 @api_view(['GET', 'POST'])
@@ -306,9 +304,18 @@ def departments_data(request):
     for department in departments:
         users = department.user_set.all()
         user_serializer = UserSerializer(users, many=True)
+        parent_department = None
+        parent_department_name = None
+
+        if department.is_main == False:
+            parent_department = department.parentDepartment.id
+            parent_department_name = department.parentDepartment.department_name
+
         department_data.append({
             "department_id": department.id,
             "id": department.id,
+            "parent_department": parent_department,
+            "parent_department_name": parent_department_name,
             "department_name": department.department_name,
             "is_main": department.is_main,
             "sub_departments": DepartmentSerializer(Department.objects.filter(parentDepartment=department), many=True).data,
@@ -501,9 +508,9 @@ class MaterialCreateView(generics.CreateAPIView):
     serializer_class = MaterialSerializer
 
 
-class DepartmentCreateView(generics.CreateAPIView):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
+# class DepartmentCreateView(generics.CreateAPIView):
+#     queryset = Department.objects.all()
+#     serializer_class = DepartmentSerializer
 
 
 @api_view(['POST'])
@@ -619,10 +626,12 @@ def get_roles(request):
     roles = Role.objects.all()
     return Response(RoleSerializer(roles, many=True).data)
 
+
 @api_view(['GET'])
 def get_registerRequests(request):
-    reqs= RegisterRequest.objects.all()
-    return Response(RegisterRequestSerializer(reqs,many=True).data)
+    reqs = RegisterRequest.objects.all()
+    return Response(RegisterRequestSerializer(reqs, many=True).data)
+
 
 @api_view(['POST'])
 def add_register_request(request):
@@ -632,7 +641,8 @@ def add_register_request(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['POST'])
 def edit_register_request(request):
     try:
@@ -640,21 +650,88 @@ def edit_register_request(request):
         register_request = RegisterRequest.objects.get(pk=pk)
     except RegisterRequest.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     if request.method == 'POST':
-        serializer = RegisterRequestSerializer(register_request, data=request.data)
+        serializer = RegisterRequestSerializer(
+            register_request, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['POST'])
 def delete_register_request(request, pk):
     try:
         register_request = RegisterRequest.objects.get(pk=pk)
     except RegisterRequest.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     if request.method == 'POST':
         register_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+def add_department(request):
+    department_name = request.data.get('department_name')
+    is_main = request.data.get('is_main')
+    parent_department_id = None
+    if not is_main:
+        parent_department_id = request.data.get('parent_department')
+    if is_main is False and parent_department_id is None:
+        return Response({"error": "non main depts parent id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if department_name is None and is_main is False:
+        return Response({"error": "Department name is required for non-main departments"}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        parent_department = Department.objects.get(pk=parent_department_id)
+    except Department.DoesNotExist:
+        parent_department = None
+
+    new_department = Department(
+        department_name=department_name,
+        is_main=is_main,
+        parentDepartment=parent_department
+    )
+    new_department.save()
+
+    return Response({"message": "Department added successfully", "data": DepartmentSerializer(new_department).data}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def edit_department(request):
+    # department_id = request.data.get('department_id')
+    department_id = request.data.get('id')
+    department_name = request.data.get('department_name')
+    is_main = request.data.get('is_main')
+    parent_department_id = None
+    if not is_main:
+        parent_department_id = int(request.data.get('parent_department'))
+    
+    if is_main is False and parent_department_id is None:
+        return Response({"error": "non main depts parent id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    if department_id is None:
+        return Response({"error": "Department ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        department = Department.objects.get(pk=department_id)
+    except Department.DoesNotExist:
+        return Response({"error": "Department not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if department_name is not None:
+        department.department_name = department_name
+    if is_main is not None:
+        department.is_main = is_main
+    if not department.is_main:
+        try:
+            parent_department = Department.objects.get(pk=parent_department_id)
+            department.parentDepartment = parent_department
+        except Department.DoesNotExist:
+            return Response({"error": "Parent department not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    department.save()
+
+    return Response({"message": "Department updated successfully", "data": DepartmentSerializer(department).data}, status=status.HTTP_200_OK)
