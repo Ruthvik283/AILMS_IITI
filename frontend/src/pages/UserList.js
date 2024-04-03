@@ -78,8 +78,11 @@ const UserList = () => {
     <>
       <Navbar />
       <div className="container mx-auto py-8">
-        <Link to="/register_requests">Register Requests</Link>
-        <h1 className="text-3xl font-bold mb-6 text-center">Users</h1>
+       
+        <h1 className="text-2xl font-semibold leading-tight px-4">Users</h1>
+      <div class="flex justify-end">
+  <a href="/register_requests" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-2 mt-1 rounded">Register Requests</a>
+</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {users.map((user) => (
             <div
