@@ -354,6 +354,7 @@ class PurchasesBetweenDates(APIView):
         purchases = Purchase.objects.filter(
             date_time__range=[start_date, end_date + timedelta(days=1)])
         serializer = PurchaseSerializer(purchases, many=True)
+        print(serializer)
         # adding price to PurchaseData
         x = serializer.data
         z = 0
@@ -426,12 +427,14 @@ def purchase_material(request):
         print(data['material_id'])
         print(data['quantity_purchased'])
         print(data['vendor_details'])
+        print(data['purchase_type'])
 
         p = Purchase(
             material=Material.objects.filter(
-                material_id=int(data['material_id'])).first(),
+            material_id=int(data['material_id'])).first(),
             quantity_purchased=int(data['quantity_purchased']),
             vendor_details=data['vendor_details'],
+            purchase_type=data['purchase_type'],
         )
 
         """

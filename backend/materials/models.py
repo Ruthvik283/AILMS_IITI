@@ -43,6 +43,7 @@ class Material(models.Model):
 class Purchase(models.Model):
     purchase_id = models.AutoField(primary_key=True)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
+    purchase_type = models.TextField(blank=True, null=True)
     quantity_purchased = models.IntegerField(null=False)
     vendor_details = models.TextField(blank=True, null=True)
     date_time = models.DateTimeField(auto_now=True)
