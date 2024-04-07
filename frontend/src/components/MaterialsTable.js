@@ -86,6 +86,12 @@ const MaterialsTable = () => {
         toast.error("No materials selected to send email");
         return;
       }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValid = emailRegex.test(email);
+      if(!isValid){
+        toast.error("Entered email isn't in valid format");
+        return;
+      }
 
       toast.success("Sending emails");
     //   const dict={ selected_materials: globalSelectedMaterials,email: email }
