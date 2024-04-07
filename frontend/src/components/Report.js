@@ -245,36 +245,12 @@ export default function Report() {
     {}
   );
 
-  // useEffect(() => {
-
-  //   //for display of sub-departments whenever department is changed
-  //   setSelectedShowSubDepartments(null);
-  //   const subDepartments = departmentData
-  //     .filter((department) => selectedDepartments.includes(department))
-  //     .map((department) => department.sub_departments)
-  //     .flat();
-  //   setSelectedShowSubDepartments(subDepartments);
-  // }, [selectedDepartments]);
 
   const handleDepartmentChange = (e) => {
     setSelectedDepartments(e.value);
     setSelectedSubDepartments([]); // Resetting selected sub-departments
   };
 
-
-
-  // useEffect(()=>{
-  //   let filteredSanction=[...sanctionData];
-  //   filteredSanction=filterByDate(filteredSanction)
-  //   filteredSanction=filterSanctionDataByDepartment(filteredSanction)
-  //   filteredSanction=filterSanctionDataByMaterials(filteredSanction)
-    
-    
-  //   let filteredPurchase=[...purchaseData];
-  //   filteredPurchase=filterByDate(filteredPurchase)
-  //   filteredPurchase=filterPurchaseDataByMaterials(filteredPurchase)
-  // },[selectedDepartments,selectedMaterials,endDate,startDate])
-  
 
   const filterAll=(selectedDepartments, selectedMaterials, endDate, startDate)=>{
     let filteredSanction = [...sanctionData];
@@ -293,8 +269,19 @@ export default function Report() {
     setFilteredSanctionList(filteredSanction);
     setFilteredPurchaseList(filteredPurchase);
   }
-
-
+  
+  useEffect(() => {  
+    setSelectedShowSubDepartments([]);
+    
+    const subDepartments = departmentData.filter((department) => {
+      // Check if the department is a sub-department and matches any selected department name
+      return !department.is_main && selectedDepartments.some(
+        (mat) => mat.department_name== department.parent_department_name)
+    });
+  
+    setSelectedShowSubDepartments(subDepartments);
+  }, [selectedDepartments]);
+  
   
   const [showReport, setShowReport] = useState(false);
 
