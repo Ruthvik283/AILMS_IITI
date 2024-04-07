@@ -140,6 +140,6 @@ class SanctionSerializer(serializers.ModelSerializer):
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
-        fields = ['purchase_id', 'material', 'quantity_purchased','purchase_type',
+        fields = ['purchase_id', 'material','purchase_type', 'quantity_purchased',
                   'vendor_details', 'pdf_file', 'date_time']
         read_only_fields = ['purchase_id', 'date_time']

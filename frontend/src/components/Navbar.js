@@ -6,7 +6,7 @@ import AuthContext from "../context/AuthContext";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const contextData = useContext(AuthContext);
-//   const userData = contextData.userData;
+  //   const userData = contextData.userData;
   const { logoutUser } = useContext(AuthContext);
 
   const handleLogout = () => {
@@ -24,21 +24,23 @@ function Navbar() {
       //In the else you can find engineer's Navbar
       return (
         <nav className="bg-[#1c2434]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 {/* <h1 className="text-white font-bold text-xl">
                   AILMS: {userData.username}
                 </h1> */}
-                <div className="flex flex-shrink-0 items-center">
-                  <Link to="/">
-                    <img
-                      className="h-8 w-auto"
-                      src={require("./AILMS.png")}
-                      alt="Your Company"
-                    />
-                </Link>
-                  
+                <div className="">
+                  <div className="container flex flex-shrink-0 items-center">
+                    <Link to="/">
+                      <img
+                        className="w-auto max-w-full h-auto"
+                        src={require("./Logo1-removebg.png")}
+                        alt="Your Company"
+                        style={{ maxWidth: "150px" }} // Set the maximum width here
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
               <div className="hidden md:block">
@@ -365,4 +367,3 @@ function Navbar() {
   }
 }
 export default Navbar;
-
