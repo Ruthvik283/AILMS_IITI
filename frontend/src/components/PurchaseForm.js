@@ -8,6 +8,7 @@ const PurchaseForm = () => {
   const contextData = useContext(AuthContext);
   const [material, setMaterial] = useState("");
   const [materialCode, setMaterialCode] = useState("");
+  const [purchase_type, setPurchase_type] = useState("");
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [vendorDetails, setVendorDetails] = useState("");
   const [invoicePdf, setInvoicePdf] = useState(null);
@@ -25,6 +26,7 @@ const PurchaseForm = () => {
     const formData = new FormData();
     formData.append("material_id", material);
     formData.append("materialCode", materialCode);
+    formData.append("purchase_type", purchase_type);
     formData.append("quantity_purchased", quantityPurchased);
     formData.append("vendor_details", vendorDetails);
     formData.append("invoice_pdf", invoicePdf);
@@ -100,6 +102,18 @@ const PurchaseForm = () => {
             id="quantityPurchased"
             value={quantityPurchased}
             onChange={(e) => setQuantityPurchased(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="purchase_type" className="block mb-1">
+            Purchase type
+          </label>
+          <input
+            type="text"
+            id="purchase_type"
+            value={purchase_type}
+            onChange={(e) => setPurchase_type(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>

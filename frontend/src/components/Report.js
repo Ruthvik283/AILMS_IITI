@@ -119,15 +119,19 @@ export default function Report() {
 
     return filteredByDate;
   };
-  //   useEffect(() => {
-  //     //console.log("new", filterByDate(purchaseData));
-  //     setPurchaseData(filterByDate(purchaseData));
-  //   }, [startDate, endDate]);
+
 
   const fields = [
-    { name: "Purchase", code: "NY" },
-    { name: "Sanction", code: "RM" },
+    { name: "Purchase" },
+    { name: "Sanction"},
   ];
+
+  const purchaseType = [
+    { name: "Type A" },
+    { name: "Type B"},
+    {name:"Type C"}
+  ];
+
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
@@ -141,6 +145,7 @@ export default function Report() {
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [selectedFields, setSelectedFields] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [selectedPurchaseType, setSelectedPurchaseType] = useState([]);
 
   const [selectedShowSubDepartments, setSelectedShowSubDepartments] = useState(
     []
@@ -184,6 +189,11 @@ export default function Report() {
     setFilteredPurchaseList(filteredData);
   };
 
+
+  const filterData=()=>{
+
+  };
+
   const [showSanctionTable, setShowSanctionTable] = useState(false);
   const [showPurchaseTable, setShowPurchaseTable] = useState(false);
 
@@ -216,6 +226,8 @@ export default function Report() {
   );
 
   useEffect(() => {
+
+    //for display of sub-departments whenever department is changed
     setSelectedShowSubDepartments(null);
     const subDepartments = departmentData
       .filter((department) => selectedDepartments.includes(department))
@@ -239,9 +251,10 @@ export default function Report() {
           Please select the fields you wish to include in the report.
         </div>
         <hr class="border-t border-gray-300 mx-10" />
-
+{/* filters */}
         <div className="ml-20 mr-10 my-5">
-          <div className="card flex justify-content-center my-5">
+          <div className="card flex flex-col justify-content-center my-5">
+            <label className="text-gray-700 my-2	">Department:</label>
             <MultiSelect
               value={selectedDepartments}
               onChange={handleDepartmentChange}
@@ -254,7 +267,9 @@ export default function Report() {
               className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div className="card flex justify-content-center my-5">
+          <div className="card flex flex-col justify-content-center my-5">
+          <label className="text-gray-700 my-2	">Sub-Departments:</label>
+
             <MultiSelect
               value={selectedSubDepartments}
               onChange={(e) => setSelectedSubDepartments(e.value)}
@@ -265,7 +280,9 @@ export default function Report() {
               className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div className="card flex justify-content-center my-5">
+          <div className="card flex flex-col justify-content-center my-5">
+          <label className="text-gray-700 my-2	">Materials:</label>
+
             <MultiSelect
               value={selectedMaterials}
               onChange={(e) => setSelectedMaterials(e.value)}
@@ -276,13 +293,28 @@ export default function Report() {
               className="w-full md:w-20rem border border-gray-100"
             />
           </div>
-          <div className="card flex justify-content-center my-5">
+          <div className="card flex flex-col justify-content-center my-5">
+          <label className="text-gray-700 my-2	">Fields:</label>
+
             <MultiSelect
               value={selectedFields}
               onChange={(e) => setSelectedFields(e.value)}
               options={fields}
               optionLabel="name"
               placeholder="Select Fields"
+              maxSelectedLabels={10}
+              className="w-full md:w-20rem border border-gray-100"
+            />
+          </div>
+          <div className="card flex flex-col justify-content-center my-5">
+          <label className="text-gray-700 my-2	">Type of Purchase:</label>
+
+            <MultiSelect
+              value={selectedPurchaseType}
+              onChange={(e) => setSelectedPurchaseType(e.value)}
+              options={purchaseType}
+              optionLabel="name"
+              placeholder="Select Purchase Type"
               maxSelectedLabels={10}
               className="w-full md:w-20rem border border-gray-100"
             />
@@ -312,6 +344,7 @@ export default function Report() {
                 setShowReport(true);
                 filterSanctionData();
                 filterPurchaseData();
+                filterData();
               }}
               className="flex-1 font-bold text-xl bg-white px-6 py-3 rounded-xl w-full button-48"
             >
@@ -320,8 +353,11 @@ export default function Report() {
             {/* </div> */}
           </div>
         </div>
-        {/* <hr class="border-t border-gray-300 w-full" /> */}
       </div>
+
+      
+
+
 
       {showReport && (
         <div className="REPORT_RESULTS justify-center items-center py-20 mx-10">
