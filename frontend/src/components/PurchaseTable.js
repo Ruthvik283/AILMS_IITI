@@ -257,6 +257,9 @@ const PurchaseTable = () => {
                       Quantity Purchased
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Purchase Type
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Vendor Details
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -278,6 +281,9 @@ const PurchaseTable = () => {
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {purchase.quantity_purchased}
+                      </td>
+                      <td className="px-5 py-4 border-b border-gray-200 text-sm">
+                        {purchase.purchase_type}
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {purchase.vendor_details}

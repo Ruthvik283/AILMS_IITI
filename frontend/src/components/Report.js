@@ -98,27 +98,7 @@ export default function Report() {
     fetchData();
   }, []);
 
-  const filterByDate = (filteredData) => {
-    let filteredByDate = filteredData;
 
-    // If start date is null, set it to the earliest possible date
-    const startDateFilter = startDate ? new Date(startDate) : new Date(0);
-
-    // If end date is null, set it to the current date
-    const endDateFilter = endDate ? new Date(endDate) : new Date();
-    const nextDayDate = endDateFilter;
-    nextDayDate.setDate(nextDayDate.getDate() + 1);
-    //endDate.setendDate(endDate.getDate() + 1);
-    ////console.log(startDateFilter, endDateFilter);
-
-    filteredByDate = filteredData.filter(
-      (purchase) =>
-        new Date(purchase.date_time) >= startDateFilter &&
-        new Date(purchase.date_time) < nextDayDate
-    );
-
-    return filteredByDate;
-  };
 
 
   const fields = [
@@ -146,56 +126,96 @@ export default function Report() {
   const [selectedFields, setSelectedFields] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedPurchaseType, setSelectedPurchaseType] = useState([]);
-
-  const [selectedShowSubDepartments, setSelectedShowSubDepartments] = useState(
-    []
-  );
+  const [selectedShowSubDepartments, setSelectedShowSubDepartments] = useState([]);
   const [selectedSubDepartments, setSelectedSubDepartments] = useState([]);
 
   const [filteredSanctionList, setFilteredSanctionList] = useState([]);
   const [filteredPurchaseList, setFilteredPurchaseList] = useState([]);
 
-  const filterSanctionData = () => {
+
+
+  const filterSanctionDataByMaterials = (filteredSanctionData) => {
+    if (!selectedMaterials) {
+      return filteredSanctionData; // Return the original data if selectedMaterials is falsy
+    }
+  
+    // Filter the data based on selected materials
+    const filteredData = filteredSanctionData.filter((sanction) => {
+      // Check if any selected material matches the material_name of the sanction
+      return selectedMaterials.some((mat) => mat.material_name === sanction.material_name);
+    });
+  
+    return filteredData;
+  };
+  
+  const filterSanctionDataByDepartment = (filteredSanctionData) => {
+    if (!selectedDepartments) {
+      return;
+    }
+
+    // let filteredData = [...sanctionData]; // Create a copy of the original data
+
+    const filteredData = filteredSanctionData.filter((sanction) => {
+      return selectedDepartments.some(
+        (mat) => mat.department_name === sanction.department_name
+      );
+    });
+    // filteredData = filterByDate(filteredData);
+    return filteredData;
+  };
+  const filterPurchaseDataByMaterials = (filteredPurchaseData) => {
     if (!selectedMaterials) {
       return;
     }
 
-    let filteredData = [...sanctionData]; // Create a copy of the original data
+    // let filteredData = [...purchaseData]; // Create a copy of the original data
 
-    filteredData = filteredData.filter((sanction) => {
+    const filteredData = filteredPurchaseData.filter((sanction) => {
       return selectedMaterials.some(
         (mat) => mat.material_name === sanction.material_name
       );
     });
-    filteredData = filterByDate(filteredData);
-    setFilteredSanctionList(filteredData);
+    return filteredData;
   };
-
-  const filterPurchaseData = () => {
-    if (!selectedMaterials) {
+  const filterPurchaseDataByPurchaseType= (filteredPurchaseData) => {
+    if (!selectedPurchaseType) {
       return;
     }
 
-    let filteredData = [...purchaseData]; // Create a copy of the original data
-
-    filteredData = filteredData.filter((sanction) => {
-      return selectedMaterials.some(
-        (mat) => mat.material_name === sanction.material_name
+    const filteredData = filteredPurchaseData.filter((purchase) => {
+      return selectedPurchaseType.some(
+        (mat) => mat.name === purchase.purchase_type
       );
     });
+    return filteredData;
+  };
+  const filterByDate = (filteredData) => {
+    let filteredByDate = filteredData;
 
-    filteredData = filterByDate(filteredData);
+    // If start date is null, set it to the earliest possible date
+    const startDateFilter = startDate ? new Date(startDate) : new Date(0);
 
-    setFilteredPurchaseList(filteredData);
+    // If end date is null, set it to the current date
+    const endDateFilter = endDate ? new Date(endDate) : new Date();
+    const nextDayDate = endDateFilter;
+    nextDayDate.setDate(nextDayDate.getDate() + 1);
+    //endDate.setendDate(endDate.getDate() + 1);
+    ////console.log(startDateFilter, endDateFilter);
+
+    filteredByDate = filteredData.filter(
+      (purchase) =>
+        new Date(purchase.date_time) >= startDateFilter &&
+        new Date(purchase.date_time) < nextDayDate
+    );
+
+    return filteredByDate;
   };
 
+ 
 
-  const filterData=()=>{
 
-  };
-
-  const [showSanctionTable, setShowSanctionTable] = useState(false);
-  const [showPurchaseTable, setShowPurchaseTable] = useState(false);
+  // const [showSanctionTable, setShowSanctionTable] = useState(false);
+  // const [showPurchaseTable, setShowPurchaseTable] = useState(false);
 
   //analysis calculationss
 
@@ -225,23 +245,57 @@ export default function Report() {
     {}
   );
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    //for display of sub-departments whenever department is changed
-    setSelectedShowSubDepartments(null);
-    const subDepartments = departmentData
-      .filter((department) => selectedDepartments.includes(department))
-      .map((department) => department.sub_departments)
-      .flat();
-    setSelectedShowSubDepartments(subDepartments);
-  }, [selectedDepartments]);
+  //   //for display of sub-departments whenever department is changed
+  //   setSelectedShowSubDepartments(null);
+  //   const subDepartments = departmentData
+  //     .filter((department) => selectedDepartments.includes(department))
+  //     .map((department) => department.sub_departments)
+  //     .flat();
+  //   setSelectedShowSubDepartments(subDepartments);
+  // }, [selectedDepartments]);
 
   const handleDepartmentChange = (e) => {
     setSelectedDepartments(e.value);
     setSelectedSubDepartments([]); // Resetting selected sub-departments
   };
-  //console.log(selectedDepartments);
 
+
+
+  // useEffect(()=>{
+  //   let filteredSanction=[...sanctionData];
+  //   filteredSanction=filterByDate(filteredSanction)
+  //   filteredSanction=filterSanctionDataByDepartment(filteredSanction)
+  //   filteredSanction=filterSanctionDataByMaterials(filteredSanction)
+    
+    
+  //   let filteredPurchase=[...purchaseData];
+  //   filteredPurchase=filterByDate(filteredPurchase)
+  //   filteredPurchase=filterPurchaseDataByMaterials(filteredPurchase)
+  // },[selectedDepartments,selectedMaterials,endDate,startDate])
+  
+
+  const filterAll=(selectedDepartments, selectedMaterials, endDate, startDate)=>{
+    let filteredSanction = [...sanctionData];
+    let filteredPurchase = [...purchaseData];
+  
+    // Apply filters
+    filteredSanction = filterByDate(filteredSanction);
+    filteredSanction = filterSanctionDataByDepartment(filteredSanction);
+    filteredSanction = filterSanctionDataByMaterials(filteredSanction);
+  
+    filteredPurchase = filterByDate(filteredPurchase);
+    filteredPurchase = filterPurchaseDataByMaterials(filteredPurchase);
+    filteredPurchase = filterPurchaseDataByPurchaseType(filteredPurchase);
+  
+    // Set filtered lists
+    setFilteredSanctionList(filteredSanction);
+    setFilteredPurchaseList(filteredPurchase);
+  }
+
+
+  
   const [showReport, setShowReport] = useState(false);
 
   return (
@@ -341,10 +395,11 @@ export default function Report() {
             <button
               type="button"
               onClick={() => {
+                filterAll();
                 setShowReport(true);
-                filterSanctionData();
-                filterPurchaseData();
-                filterData();
+                // filterSanctionData();
+                // filterPurchaseData();
+                // filterData();
               }}
               className="flex-1 font-bold text-xl bg-white px-6 py-3 rounded-xl w-full button-48"
             >
@@ -370,20 +425,30 @@ export default function Report() {
             <div className="Stats w-full flex flex-wrap">
               <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">Number of Sanctions</header>
-                <p className="text-lg">234</p>
+                <p className="text-lg">{filteredSanctionList.length}</p>
               </div>
               <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">
                   Prize worth of Sanctions
                 </header>
-                <p className="text-lg">$10 million</p>
+                <p className="text-lg"> {Object.entries(materialSanctionWisePrice).map(
+                    ([material, price]) =>
+                      material === "Total Price" && (
+                        <tr key={material} className="hover:bg-gray-50">
+                      
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            Rs. {price}
+                          </td>
+                        </tr>
+                      )
+                  )}</p>
               </div>
-              <div className="bg-gray-200 p-4 m-2 flex-1">
+              {/* <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">
                   Prize worth of Sanctions
                 </header>
                 <p className="text-lg">$10 million</p>
-              </div>
+              </div> */}
             </div>
             <div className="Graphical Stats my-10">
               <div class="flex flex-row flex-wrap justify-around">
@@ -500,19 +565,23 @@ export default function Report() {
             <div className="Stats w-full flex flex-wrap">
               <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">Number of Purchases</header>
-                <p className="text-lg">234</p>
-              </div>
-              <div className="bg-gray-200 p-4 m-2 flex-1">
-                <header className="font-bold mb-2">
-                  Prize worth of Purchases
-                </header>
-                <p className="text-lg">$10 million</p>
+                <p className="text-lg">{filteredPurchaseList.length}</p>
               </div>
               <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">
                   Prize worth of Sanctions
                 </header>
-                <p className="text-lg">$10 million</p>
+                <p className="text-lg">{Object.entries(materialPurchaseWisePrice).map(
+                    ([material, price]) =>
+                      material === "Total Price" && (
+                        <tr key={material} className="border-b border-gray-300">
+                          
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            Rs. {price}
+                          </td>
+                        </tr>
+                      )
+                  )}</p>
               </div>
             </div>
             <div className="Graphical Stats my-10">

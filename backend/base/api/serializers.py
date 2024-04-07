@@ -69,7 +69,6 @@ class TechnicianSerializer(serializers.ModelSerializer):
 class PurchaseSerializer(serializers.ModelSerializer):
     material_name = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-    purchase_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Purchase
@@ -141,6 +140,6 @@ class SanctionSerializer(serializers.ModelSerializer):
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
-        fields = ['purchase_id', 'material', 'quantity_purchased',
+        fields = ['purchase_id', 'material', 'quantity_purchased','purchase_type',
                   'vendor_details', 'pdf_file', 'date_time']
         read_only_fields = ['purchase_id', 'date_time']

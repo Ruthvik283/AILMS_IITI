@@ -436,6 +436,7 @@ def purchase_material(request):
             vendor_details=data['vendor_details'],
             purchase_type=data['purchase_type'],
         )
+        # print(p.purchase_type)
 
         """
         (To be added) add feature to automatically handle

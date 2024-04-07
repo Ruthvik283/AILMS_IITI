@@ -59,6 +59,13 @@ const PurchaseForm = () => {
     }
   };
 
+  const purchaseType = [
+    { name: "Type A" },
+    { name: "Type B"},
+    {name:"Type C"}
+  ];
+
+
   return (
     <div className="max-w-md min-h-screen mx-auto mt-8">
       <form onSubmit={handleSubmit} className="space-y-4 py-8">
@@ -93,6 +100,7 @@ const PurchaseForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div> */}
+        
         <div>
           <label htmlFor="quantityPurchased" className="block mb-1">
             QUANTITY PURCHASED
@@ -107,6 +115,25 @@ const PurchaseForm = () => {
         </div>
         <div>
           <label htmlFor="purchase_type" className="block mb-1">
+           Purchase Type
+          </label>
+          <select
+            id="purchase_type"
+            value={purchase_type}
+            onChange={(e) => setPurchase_type(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select a Purchase</option>
+            {/* Assuming materials is an array of material names */}
+            {purchaseType.map((unit) => (
+              <option key={unit.name} value={unit.name}>
+                {unit.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* <div>
+          <label htmlFor="purchase_type" className="block mb-1">
             Purchase type
           </label>
           <input
@@ -116,7 +143,7 @@ const PurchaseForm = () => {
             onChange={(e) => setPurchase_type(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
-        </div>
+        </div> */}
         <div>
           <label htmlFor="vendorDetails" className="block mb-1">
             VENDOR DETAILS
