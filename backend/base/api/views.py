@@ -196,18 +196,30 @@ def BelowCriticalQuantity(request):
 
 @api_view(['GET', 'POST'])
 def SendMail(request):
-    materials = Material.objects.all()  # Retrieve all materials
+    # materials = Material.objects.all()  # Retrieve all materials
+    data=request.data
+    # Check if 'selected_materials' and 'email' keys exist in the data
+    if 'selected_materials' not in data or 'email' not in data:
+        return Response({'message': 'Missing required fields.'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Filter materials with critical quantity
-    critical_materials = [
-        material for material in materials if material.quantity < material.critical_quantity]
-    critical_materials = [
-        material for material in materials if material.quantity < material.critical_quantity]
+    critical_materials = []
+    # for x in data["selected_materials"]:
+    #     material=Material.objects.get(material_id=x)
+    #     if material.quantity<=material.critical_quantity:
+    #         critical_materials.append(material)
+    try:
+        for material_id in data["selected_materials"]:
+            material = Material.objects.get(material_id=material_id)
+            if material.quantity <= material.critical_quantity:
+                critical_materials.append(material)
+    except Material.DoesNotExist:
+        return Response({'message': 'One or more materials not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     if critical_materials:
         subject = "Critical Quantity Alert for Materials"
         from_email = settings.EMAIL_HOST_USER
-        to_email = ['ailmsiiti123@gmail.com']
+        to_email = [data["email"]]
 
         # Define the HTML content as a string
         html_content = """
