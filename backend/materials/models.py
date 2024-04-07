@@ -35,6 +35,8 @@ class Material(models.Model):
     critical_quantity = models.IntegerField(null=False, default=5)
     rack_number = models.CharField(max_length=255, null=True, blank=True)
     row_number = models.CharField(max_length=255, null=True, blank=True)
+    quantity_A = models.IntegerField(null=False, default=0)
+    quantity_B = models.IntegerField(null=False, default=0)
 
     def __str__(self):
         return self.material_name
@@ -92,25 +94,32 @@ class Sanction(models.Model):
         Technician, on_delete=models.PROTECT, null=True, blank=True)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
     date_time = models.DateTimeField(default=timezone.now)
-    quantity_sanctioned = models.IntegerField(null=False)
+    quantity_sanctioned_A = models.IntegerField(null=False, default=False)
+    quantity_sanctioned_B = models.IntegerField(null=False, default=False)
     log = PickledObjectField(default=list)
     closed = models.BooleanField(default=False)
 
-    def sanction_return(self, quantity: int):
-        if quantity > self.quantity_sanctioned or quantity <= 0 or self.closed:
+    def sanction_return(self, quantity_A: int, quantity_B: int):
+        if quantity_A > self.quantity_sanctioned_A or quantity_A <= 0 or quantity_B > self.quantity_sanctioned_B or quantity_B <= 0 or self.closed:
             return False
-        self.log = self.log + [[str(datetime.now()), -quantity]]
-        self.quantity_sanctioned -= quantity
-        self.material.quantity += quantity
+        self.log = self.log + [[str(datetime.now()), 'A', -quantity_A]]
+        self.quantity_sanctioned_A -= quantity_A
+        self.material.quantity += quantity_A
+        self.log = self.log + [[str(datetime.now()), 'B', -quantity_B]]
+        self.quantity_sanctioned_A -= quantity_B
+        self.material.quantity += quantity_B
         super().save()
         self.material.save()
 
-    def sanction_add(self, quantity: int):
-        if quantity > self.material.quantity or quantity <= 0 or self.closed:
+    def sanction_add(self, quantity_A: int, quantity_B: int):
+        if quantity_A > self.material.quantity_A or quantity_A <= 0 or quantity_B > self.material.quantity_B or quantity_B <= 0 or self.closed:
             return False
-        self.log = self.log + [[str(datetime.now()), quantity]]
-        self.quantity_sanctioned += quantity
-        self.material.quantity -= quantity
+        self.log = self.log + [[str(datetime.now()), 'A', quantity_A]]
+        self.quantity_sanctioned_A += quantity_A
+        self.material.quantity_A -= quantity_A
+        self.log = self.log + [[str(datetime.now()), 'B', quantity_B]]
+        self.quantity_sanctioned_B += quantity_B
+        self.material.quantity_B -= quantity_B
         super().save()
         self.material.save()
 
@@ -122,9 +131,9 @@ class Sanction(models.Model):
         super().save()
 
     def is_valid(self):
-        if (self.quantity_sanctioned <= self.material.quantity):
+        if (self.quantity_sanctioned_A <= self.material.quantity_A and self.quantity_sanctioned_B <= self.material.quantity_B):
             return [True]
-        return [False, self.material.quantity, self.quantity_sanctioned]
+        return [False, self.material.quantity_A, self.quantity_sanctioned_A, self.material.quantity_B, self.quantity_sanctioned_B]
 
     def raw_save(self, *args, **kwargs):
         super().save()
@@ -158,5 +167,6 @@ class RegisterRequest(models.Model):
     username = models.CharField(max_length=255)
     email = models.EmailField(max_length=254)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
-    role = models.ForeignKey(Role, on_delete=models.PROTECT,null=True,blank=True)
-    password =models.CharField(max_length=255)
+    role = models.ForeignKey(
+        Role, on_delete=models.PROTECT, null=True, blank=True)
+    password = models.CharField(max_length=255)

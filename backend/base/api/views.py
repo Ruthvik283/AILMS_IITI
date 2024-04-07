@@ -71,8 +71,6 @@ def testData(request):
     return Response(serializer.data)
 
 
-from rest_framework.exceptions import NotFound
-
 class getUsernameById(APIView):
     def get(self, request, id):
         try:
@@ -90,14 +88,14 @@ class getUsernameById(APIView):
         res = {}
         sub_departments = Department.objects.filter(parentDepartment=dept)
         res["department_name"] = dept.department_name
-        res["sub_departments"] = DepartmentSerializer(sub_departments, many=True).data
+        res["sub_departments"] = DepartmentSerializer(
+            sub_departments, many=True).data
         user_data['department'] = res
         user_data['role'] = user_data['role_name']
         user_data.pop("password")
         user_data.pop("role_name")
 
         return Response(user_data)
-
 
 
 @api_view(['GET', 'POST'])
@@ -150,8 +148,7 @@ def EditMaterial(request):
         data = request.data
         required_fields = ['material_id', 'material_name',
                            'price', 'quantity', 'critical_quantity']
-        required_fields = ['material_id', 'material_name',
-                           'price', 'quantity', 'critical_quantity']
+
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -380,7 +377,8 @@ def sanction_material(request):
                 id=data['technician_id']).first(),
             material=Material.objects.filter(
                 material_id=data['material_id'])[0],
-            quantity_sanctioned=int(data['quantity_sanctioned']),
+            quantity_sanctioned_A=int(data['quantity_sanctioned_A']),
+            quantity_sanctioned_B=int(data['quantity_sanctioned_B']),
         )
 
         is_valid = sct.is_valid()
@@ -516,16 +514,17 @@ def modify_sanction(request):
         #         "success": True
         #     }
         # )
-        quantity = data['quantity']
+        quantity_A = data['quantity_A']
+        quantity_B = data['quantity_B']
         sanction_id = data['sanct_id']
         type = data['type']
 
         sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
 
         if type == 'add':
-            sanct.sanction_add(quantity)
+            sanct.sanction_add(quantity_A, quantity_B)
         elif type == 'return':
-            sanct.sanction_return(quantity)
+            sanct.sanction_return(quantity_A, quantity_B)
         elif type == 'close':
             sanct.sanction_close()
         return Response(
@@ -619,10 +618,12 @@ def get_roles(request):
     roles = Role.objects.all()
     return Response(RoleSerializer(roles, many=True).data)
 
+
 @api_view(['GET'])
 def get_registerRequests(request):
-    reqs= RegisterRequest.objects.all()
-    return Response(RegisterRequestSerializer(reqs,many=True).data)
+    reqs = RegisterRequest.objects.all()
+    return Response(RegisterRequestSerializer(reqs, many=True).data)
+
 
 @api_view(['POST'])
 def add_register_request(request):
@@ -632,7 +633,8 @@ def add_register_request(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['POST'])
 def edit_register_request(request):
     try:
@@ -640,21 +642,23 @@ def edit_register_request(request):
         register_request = RegisterRequest.objects.get(pk=pk)
     except RegisterRequest.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     if request.method == 'POST':
-        serializer = RegisterRequestSerializer(register_request, data=request.data)
+        serializer = RegisterRequestSerializer(
+            register_request, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['POST'])
 def delete_register_request(request, pk):
     try:
         register_request = RegisterRequest.objects.get(pk=pk)
     except RegisterRequest.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     if request.method == 'POST':
         register_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
