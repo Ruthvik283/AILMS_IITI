@@ -31,14 +31,21 @@ class Material(models.Model):
     material_id = models.AutoField(primary_key=True)
     material_name = models.CharField(max_length=255, default="Un-named")
     price = models.IntegerField(null=False)
-    quantity = models.IntegerField(null=False)
     critical_quantity = models.IntegerField(null=False, default=5)
     rack_number = models.CharField(max_length=255, null=True, blank=True)
     row_number = models.CharField(max_length=255, null=True, blank=True)
+    quantity_A = models.IntegerField(null=False, default=0)
+    quantity_B = models.IntegerField(null=False, default=0)
 
-    def __str__(self):
+    def _str_(self):
         return self.material_name
 
+    def belowcriticalquantity(self):
+        return self.quantity_A + self.quantity_B < self.critical_quantity
+
+    @property
+    def quantity(self):
+        return self.quantity_A + self.quantity_B
 
 class Purchase(models.Model):
     purchase_id = models.AutoField(primary_key=True)
@@ -94,7 +101,11 @@ class Sanction(models.Model):
         Technician, on_delete=models.PROTECT, null=True, blank=True)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
     date_time = models.DateTimeField(default=timezone.now)
-    quantity_sanctioned = models.IntegerField(null=False)
+    quantity_sanctioned = models.IntegerField(null=False, default=0)
+    sanct_type = models.CharField(null=False, choices=(
+        ('A', 'A'),
+        ('A', 'B')
+    ), default='A', max_length=1)
     log = PickledObjectField(default=list)
     closed = models.BooleanField(default=False)
 
@@ -103,16 +114,27 @@ class Sanction(models.Model):
             return False
         self.log = self.log + [[str(datetime.now()), -quantity]]
         self.quantity_sanctioned -= quantity
-        self.material.quantity += quantity
+        if self.sanct_type == 'A':
+            self.material.quantity_A += quantity
+        else:
+            self.material.quantity_B += quantity
         super().save()
         self.material.save()
 
     def sanction_add(self, quantity: int):
-        if quantity > self.material.quantity or quantity <= 0 or self.closed:
-            return False
+        if self.sanct_type == 'A':
+            if quantity > self.material.quantity_A:
+                return False
+        else:
+            if quantity > self.material.quantity_B:
+                return False
         self.log = self.log + [[str(datetime.now()), quantity]]
-        self.quantity_sanctioned += quantity
-        self.material.quantity -= quantity
+        if self.sanct_type == 'A':
+            self.material.quantity_A -= quantity
+            self.quantity_sanctioned += quantity
+        else:
+            self.material.quantity_B += quantity
+            self.quantity_sanctioned += quantity
         super().save()
         self.material.save()
 
@@ -124,9 +146,16 @@ class Sanction(models.Model):
         super().save()
 
     def is_valid(self):
-        if (self.quantity_sanctioned <= self.material.quantity):
-            return [True]
-        return [False, self.material.quantity, self.quantity_sanctioned]
+        if self.sanct_type == 'A':
+            if self.quantity_sanctioned <= self.material.quantity_A:
+                return [True]
+            else:
+                return [False, self.quantity_sanctioned, self.material.quantity_A]
+        else:
+            if self.quantity_sanctioned <= self.material.quantity_B:
+                return [True]
+            else:
+                return [False, self.quantity_sanctioned, self.material.quantity_B]
 
     def raw_save(self, *args, **kwargs):
         super().save()

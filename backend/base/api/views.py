@@ -105,8 +105,8 @@ def get_related_categories(request, category_id):
     related_categories = Category.objects.filter(
         parent_category=current_category)
     related_categories_data = list(related_categories.values())
-    related_materials = Material.objects.filter(category=current_category)
-    related_materials_data = list(related_materials.values())
+    # related_materials = Material.objects.filter(category=current_category)
+    related_materials_data = MaterialSerializer(Material.objects.filter(category=current_category),many=True).data
     return Response({'related_categories': related_categories_data, 'related_materials': related_materials_data})
 
 
@@ -147,9 +147,7 @@ def EditMaterial(request):
     try:
         data = request.data
         required_fields = ['material_id', 'material_name',
-                           'price', 'quantity', 'critical_quantity']
-        required_fields = ['material_id', 'material_name',
-                           'price', 'quantity', 'critical_quantity']
+                           'price', 'quantity_A','quantity_B', 'critical_quantity']
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -400,7 +398,8 @@ def sanction_material(request):
                 id=data['technician_id']).first(),
             material=Material.objects.filter(
                 material_id=data['material_id'])[0],
-            quantity_sanctioned=int(data['quantity_sanctioned']),
+            quantity_sanctioned_A=int(data['quantity_sanctioned']),
+            sanct_type=data['sanct_type']
         )
 
         is_valid = sct.is_valid()
@@ -416,7 +415,7 @@ def sanction_material(request):
         return Response(
             {
                 "success": False,
-                "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[2]}, available {is_valid[1]})"
+                "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
             }
         )
 
@@ -428,6 +427,7 @@ def sanction_material(request):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
 
 
 @api_view(['POST'])
@@ -533,12 +533,6 @@ class MaterialCreateView(generics.CreateAPIView):
 def modify_sanction(request):
     try:
         data = request.data
-        # print(data)
-        # return Response(
-        #     {
-        #         "success": True
-        #     }
-        # )
         quantity = data['quantity']
         sanction_id = data['sanct_id']
         type = data['type']
@@ -558,6 +552,7 @@ def modify_sanction(request):
         )
     except:
         return Response({"success": False, "message": "invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @xframe_options_exempt

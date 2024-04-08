@@ -18,6 +18,8 @@ export default function Materials() {
     material_name: "",
     price: "",
     quantity: "",
+    quantity_A:"",
+    quantity_B:"",
     critical_quantity: "",
     rack_number: "",
     row_number: "",
@@ -77,10 +79,10 @@ export default function Materials() {
 
   const handleMaterialSubmit = (e) => {
     e.preventDefault();
-
+    const { quantity, ...editedMaterialsData } = MaterialFormData;
     axios
       .post("http://127.0.0.1:8000/api/create-material/", {
-        ...MaterialFormData,
+        ...editedMaterialsData,
         category: categoryId,
       })
       .then((response) => {
@@ -92,6 +94,8 @@ export default function Materials() {
           material_name: "",
           price: "",
           quantity: "",
+          quantity_A: "",
+          quantity_B: "",
           critical_quantity: "",
           rack_number: "",
           row_number: "",
@@ -132,10 +136,10 @@ export default function Materials() {
     e.preventDefault();
     // const newx = editMaterialData;
     // newx["category"] = 1;
-
+      const { quantity, ...editedMaterialsData } = editMaterialData;
     // Send a request to update the material information
     axios
-      .post(`http://127.0.0.1:8000/api/edit_material/`, editMaterialData)
+      .post(`http://127.0.0.1:8000/api/edit_material/`, editedMaterialsData)
       .then((response) => {
         //console.log("Material updated successfully:", response.data);
         toast.success("Material updated successfully");
@@ -143,7 +147,7 @@ export default function Materials() {
         setx((prev) => !prev); // Trigger re-fetching of related materials
       })
       .catch((error) => {
-        console.error(error, editMaterialData);
+        console.error(error, editedMaterialsData);
         toast.error("Error updating material");
       });
   };
@@ -236,6 +240,12 @@ export default function Materials() {
                     Quantity: {material.quantity}
                   </p>
                   <p className="text-gray-700 mb-2">
+                    Category-A: {material.quantity_A}
+                  </p>
+                  <p className="text-gray-700 mb-2">
+                    Category-B: {material.quantity_B}
+                  </p>
+                  <p className="text-gray-700 mb-2">
                     Critical Quantity: {material.critical_quantity}
                   </p>
                   <div className="mt-4 text-gray-600">
@@ -289,12 +299,24 @@ export default function Materials() {
                   {/* Quantity */}
                   <div>
                     <label className="block mb-1 text-gray-700">
-                      Quantity:
+                      Category-A:
                     </label>
                     <input
                       type="number"
-                      name="quantity"
-                      value={editMaterialData.quantity}
+                      name="quantity_A"
+                      value={editMaterialData.quantity_A}
+                      onChange={handleEditMaterialChange}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 text-gray-700">
+                      Category-B:
+                    </label>
+                    <input
+                      type="number"
+                      name="quantity_B"
+                      value={editMaterialData.quantity_B}
                       onChange={handleEditMaterialChange}
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
@@ -394,11 +416,22 @@ export default function Materials() {
                   />
                 </div>
                 <div>
-                  <label className="block mb-1 text-gray-700">Quantity:</label>
+                  <label className="block mb-1 text-gray-700">Category-A:</label>
                   <input
                     type="number"
-                    name="quantity"
-                    value={MaterialFormData.quantity}
+                    name="quantity_A"
+                    value={MaterialFormData.quantity_A}
+                    onChange={handleMaterialChange}
+                    required
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-gray-700">Category-B:</label>
+                  <input
+                    type="number"
+                    name="quantity_B"
+                    value={MaterialFormData.quantity_B}
                     onChange={handleMaterialChange}
                     required
                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"

@@ -44,9 +44,12 @@ class RegisterRequestSerializer(serializers.ModelSerializer):
 
 
 class MaterialSerializer(serializers.ModelSerializer):
+    quantity = serializers.SerializerMethodField()
     class Meta:
         model = Material
         fields = '__all__'
+    def get_quantity(self, obj):
+        return obj.quantity
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -101,7 +104,6 @@ class SanctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sanction
         fields = [
-
             "sanction_id",
             "ticket_id",
             "department",
@@ -118,7 +120,8 @@ class SanctionSerializer(serializers.ModelSerializer):
             "material_name",
             "price",
             "log",
-            "closed"
+            "closed",
+            "sanct_type",
         ]
 
     def get_material_name(self, obj):
@@ -141,6 +144,9 @@ class SanctionSerializer(serializers.ModelSerializer):
 
     def get_log(self, obj):
         return obj.log
+
+    def get_sanct_type(self, obj):
+        return obj.sanct_type
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
