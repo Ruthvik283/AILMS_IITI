@@ -185,15 +185,6 @@ def EditMaterial(request):
 
 
 @api_view(['GET', 'POST'])
-def BelowCriticalQuantity(request):
-    # quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
-    # F('critical_quantity'): This is a Django F() expression that references the critical_quantity field of the same model. F() expressions allow us to reference the values of model fields within queries.
-    materials = MaterialSerializer(Material.objects.filter(
-        quantity__lt=F('critical_quantity')), many=True)
-    return Response(materials.data)
-
-
-@api_view(['GET', 'POST'])
 def SendMail(request):
     materials = Material.objects.all()  # Retrieve all materials
 
@@ -377,8 +368,8 @@ def sanction_material(request):
                 id=data['technician_id']).first(),
             material=Material.objects.filter(
                 material_id=data['material_id'])[0],
-            quantity_sanctioned_A=int(data['quantity_sanctioned_A']),
-            quantity_sanctioned_B=int(data['quantity_sanctioned_B']),
+            quantity_sanctioned_A=int(data['quantity_sanctioned']),
+            sanct_type=data['sanct_type']
         )
 
         is_valid = sct.is_valid()
@@ -394,7 +385,7 @@ def sanction_material(request):
         return Response(
             {
                 "success": False,
-                "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[2]}, available {is_valid[1]})"
+                "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
             }
         )
 
@@ -508,23 +499,16 @@ class DepartmentCreateView(generics.CreateAPIView):
 def modify_sanction(request):
     try:
         data = request.data
-        # print(data)
-        # return Response(
-        #     {
-        #         "success": True
-        #     }
-        # )
-        quantity_A = data['quantity_A']
-        quantity_B = data['quantity_B']
+        quantity = data['quantity']
         sanction_id = data['sanct_id']
         type = data['type']
 
         sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
 
         if type == 'add':
-            sanct.sanction_add(quantity_A, quantity_B)
+            sanct.sanction_add(quantity)
         elif type == 'return':
-            sanct.sanction_return(quantity_A, quantity_B)
+            sanct.sanction_return(quantity)
         elif type == 'close':
             sanct.sanction_close()
         return Response(

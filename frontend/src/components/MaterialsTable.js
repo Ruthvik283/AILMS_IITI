@@ -213,14 +213,14 @@ const MaterialsTable = () => {
     );
   });
   const handleCheckboxChange = (materialId) => {
-        setSelectedMaterials((prevSelected) => {
-          if (prevSelected.includes(materialId)) {
-            return prevSelected.filter((id) => id !== materialId);
-          } else {
-            return [...prevSelected, materialId];
-          }
-        });
+    setSelectedMaterials((prevSelected) => {
+      if (prevSelected.includes(materialId)) {
+        return prevSelected.filter((id) => id !== materialId);
+      } else {
+        return [...prevSelected, materialId];
       }
+    });
+  }
   const indexOfLastEntry = currentPage * perPage;
   const indexOfFirstEntry = indexOfLastEntry - perPage;
   const currentEntries = filteredMaterials.slice(
@@ -228,15 +228,15 @@ const MaterialsTable = () => {
     indexOfLastEntry
   );
   const handleSendEmail = async () => {
-        toast.success("Sending emails")
-        const x = await fetch("http://127.0.0.1:8000/api/sendmail");
-        if (x.ok) {
-          toast.success("Emails sent successfully");
-        }
-    
-        console.log("Sending email for selected materials:", selectedMaterials);
-      };
-      
+    toast.success("Sending emails")
+    const x = await fetch("http://127.0.0.1:8000/api/sendmail");
+    if (x.ok) {
+      toast.success("Emails sent successfully");
+    }
+
+    console.log("Sending email for selected materials:", selectedMaterials);
+  };
+
 
   return (
     <div className="overflow-x-auto">
@@ -324,7 +324,7 @@ const MaterialsTable = () => {
                       Send Email
                     </button>
                   )}
-                </div>  
+                </div>
               )}
             </div>
           </div>
@@ -344,7 +344,10 @@ const MaterialsTable = () => {
                       Price
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Quantity
+                      Quantity A
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Quantity B
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Rack Number
@@ -387,13 +390,20 @@ const MaterialsTable = () => {
                         {material.price}
                       </td>
                       <td
-                        className={`px-5 py-4 border-b border-gray-200 text-sm ${
-                          material.belowCritical
+                        className={`px-5 py-4 border-b border-gray-200 text-sm ${material.belowCritical
                             ? "text-red-500"
                             : "text-green-500"
-                        }`}
+                          }`}
                       >
-                        {material.quantity}
+                        {material.quantity_A}
+                      </td>
+                      <td
+                        className={`px-5 py-4 border-b border-gray-200 text-sm ${material.belowCritical
+                            ? "text-red-500"
+                            : "text-green-500"
+                          }`}
+                      >
+                        {material.quantity_B}
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {material.rack_number}
