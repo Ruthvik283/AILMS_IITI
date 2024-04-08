@@ -21,7 +21,6 @@ urlpatterns = [
          PurchasesBetweenDates.as_view(), name='purchases-between-dates'),
     path('sanction/', views.sanction_material, name='sanction-material'),
     path('sanctions/', views.sanctionsData, name='sanction-data'),
-    path('technicians/', views.techniciansData, name='technician-data'),
     path('sanctions/<int:sanct_id>',
          views.sanctionsDataId, name='sanction-data-id'),
     path('add_purchase/', views.purchase_material, name='purchase-material'),
@@ -57,4 +56,9 @@ urlpatterns = [
          name='edit_register_request'),
     path('delete_register_request/<int:pk>',
          views.delete_register_request, name='delete_register_request'),
+    
+    path('technicians/', views.techniciansData, name='technician-data'),
+    path('add_technician/', views.add_technician, name='add_technician'),
+    path('edit_technician/<int:pk>/', views.edit_technician, name='edit_technician'),
+    path('delete_technician/<int:pk>/delete/', views.delete_technician, name='delete_technician')
 ]

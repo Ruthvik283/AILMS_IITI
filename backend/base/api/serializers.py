@@ -35,13 +35,14 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = '__all__'
-        
+
+
 class RegisterRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegisterRequest
         fields = '__all__'
-        
-        
+
+
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
@@ -61,9 +62,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TechnicianSerializer(serializers.ModelSerializer):
+    department_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Technician
         fields = '__all__'
+
+    def get_department_name(self, obj):
+        return obj.department.department_name if obj.department else None
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
@@ -72,7 +78,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Purchase
-        fields = ['purchase_id', 'material','purchase_type',
+        fields = ['purchase_id', 'material', 'purchase_type',
                   'vendor_details', 'date_time', 'material_name', 'price']
 
     def get_material_name(self, obj):
@@ -140,6 +146,6 @@ class SanctionSerializer(serializers.ModelSerializer):
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
-        fields = ['purchase_id', 'material','purchase_type', 'quantity_purchased',
+        fields = ['purchase_id', 'material', 'purchase_type', 'quantity_purchased',
                   'vendor_details', 'pdf_file', 'date_time']
         read_only_fields = ['purchase_id', 'date_time']

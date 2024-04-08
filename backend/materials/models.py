@@ -77,6 +77,7 @@ class Department(models.Model):
 
 class Technician(models.Model):
     technician_name = models.CharField(max_length=255)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT,null=True,blank=True)    
     technician_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):

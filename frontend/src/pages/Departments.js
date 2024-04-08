@@ -127,13 +127,72 @@ const DepartmentsPage = () => {
   };
 
   const handleAddDepartment = async () => {
-    // ... (the rest of the handleAddDepartment function remains the same)
+    try {
+      if (newDepartment.department_name === "") {
+        toast.error("Name cant be empty");
+        return;
+      }
+      if (newDepartment.is_main === false && !newDepartment.parent_department) {
+        toast.error("Parent department for non-main department cant be empty!");
+        return;
+      }
+      //   console.log(newDepartment);
+      //   return;
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/add_department/",
+        newDepartment
+      );
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Department added successfully");
+        fetchDepartments();
+      } else {
+        toast.error("error adding department");
+      }
+    } catch (error) {
+      console.error("Error adding department:", error);
+      toast.error("error adding department");
+    }
   };
 
   const handleEditDepartment = async () => {
-    // ... (the rest of the handleEditDepartment function remains the same)
-  };
+    try {
+      if (editDepartment.department_name === "") {
+        toast.error("Name cant be empty");
+        return;
+      }
+      if (
+        editDepartment.is_main === false &&
+        !editDepartment.parent_department
+      ) {
+        toast.error("Parent department for non-main department cant be empty!");
+        return;
+      }
+      console.log(JSON.stringify(editDepartment));
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/edit_department/",
+        JSON.stringify(editDepartment),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Department edited successfully");
+        fetchDepartments();
+      } else {
+        toast.error("error updating department");
+      }
 
+      //   const updatedDepartments = departments.map((dept) =>
+      //     dept.id === response.data.data.id ? response.data.data : dept
+      //   );
+      //   setDepartments(updatedDepartments);
+      setEditDepartment(null);
+    } catch (error) {
+      console.error("Error editing department:", error);
+    }
+  };
   const handleCancelEditDepartment = async () => {
     setEditDepartment(null);
   };

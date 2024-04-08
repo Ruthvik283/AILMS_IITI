@@ -20,6 +20,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
 import UserList from "./pages/UserList";
+import Technicians from "./pages/Technician";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
 import RegisterRequestList from "./pages/RegisterRequestPage";
@@ -76,6 +77,7 @@ export default function App() {
             <Route path="/sanction" element={<Sanction />} />
             <Route path="/material" element={<Material />} />
             <Route path="/users" element={<UserList />} />
+            <Route path="/technicians" element={<Technicians />} />
             <Route path="/materials" element={<Materials />} />
             <Route path="/departments" element={<Departments />} />
             <Route path="/purchaseform" element={<PurchaseFormPage />} />

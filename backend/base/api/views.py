@@ -751,3 +751,41 @@ def edit_department(request):
     department.save()
 
     return Response({"message": "Department updated successfully", "data": DepartmentSerializer(department).data}, status=status.HTTP_200_OK)
+
+
+
+@api_view(['POST'])
+def add_technician(request):
+    try:
+        serializer = TechnicianSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+def edit_technician(request, pk):
+    try:
+        technician = Technician.objects.get(pk=pk)
+        serializer = TechnicianSerializer(technician, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Technician.DoesNotExist:
+        return Response({'error': 'Technician does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+def delete_technician(request, pk):
+    try:
+        technician = Technician.objects.get(pk=pk)
+        technician.delete()
+        return Response({'message': 'Technician deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    except Technician.DoesNotExist:
+        return Response({'error': 'Technician does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
