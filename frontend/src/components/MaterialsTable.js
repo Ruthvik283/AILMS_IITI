@@ -25,16 +25,15 @@ const MaterialsTable = () => {
         const materialsResponse = await fetch(
           "http://127.0.0.1:8000/api/materials"
         );
-        const belowCriticalResponse = await fetch(
-          "http://127.0.0.1:8000/api/belowCritical/"
-        );
 
-        if (!materialsResponse.ok || !belowCriticalResponse.ok) {
+        if (!materialsResponse.ok) {
           throw new Error(`HTTP error! Status: ${materialsResponse.status}`);
         }
 
         const materialsData = await materialsResponse.json();
-        const belowCriticalData = await belowCriticalResponse.json();
+        const belowCriticalData = materialsData.filter(material => {
+            return material.quantity < material.critical_quantity;
+          });
 
         // Combine data from both responses
         const mergedData = materialsData.map((material) => ({
