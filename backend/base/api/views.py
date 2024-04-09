@@ -87,6 +87,7 @@ class getUsernameById(APIView):
 
         res = {}
         sub_departments = Department.objects.filter(parentDepartment=dept)
+        res["id"] = dept.id
         res["department_name"] = dept.department_name
         res["sub_departments"] = DepartmentSerializer(
             sub_departments, many=True).data
@@ -106,7 +107,8 @@ def get_related_categories(request, category_id):
         parent_category=current_category)
     related_categories_data = list(related_categories.values())
     # related_materials = Material.objects.filter(category=current_category)
-    related_materials_data = MaterialSerializer(Material.objects.filter(category=current_category),many=True).data
+    related_materials_data = MaterialSerializer(
+        Material.objects.filter(category=current_category), many=True).data
     return Response({'related_categories': related_categories_data, 'related_materials': related_materials_data})
 
 
@@ -147,7 +149,7 @@ def EditMaterial(request):
     try:
         data = request.data
         required_fields = ['material_id', 'material_name',
-                           'price', 'quantity_A','quantity_B', 'critical_quantity']
+                           'price', 'quantity_A', 'quantity_B', 'critical_quantity']
         for field in required_fields:
             if field not in data:
                 return Response({"error": f"Field '{field}' is required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -195,7 +197,7 @@ def BelowCriticalQuantity(request):
 @api_view(['GET', 'POST'])
 def SendMail(request):
     # materials = Material.objects.all()  # Retrieve all materials
-    data=request.data
+    data = request.data
     # Check if 'selected_materials' and 'email' keys exist in the data
     if 'selected_materials' not in data or 'email' not in data:
         return Response({'message': 'Missing required fields.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -375,7 +377,7 @@ class PurchasesBetweenDates(APIView):
             # y["price"] = 1
         return Response(x)
 
-
+from django.core.exceptions import ObjectDoesNotExist
 @api_view(['POST'])
 def sanction_material(request):
     data = request.data
@@ -383,21 +385,28 @@ def sanction_material(request):
         ticket1 = 0
     else:
         ticket1 = data['ticket_id']
-    if data['userData']['role'] == "Manager":
-        department1 = data['department']
-    else:
-        department1 = data['userData']['departmentName']
+
     try:
+
+        department_obj = Department.objects.filter(id=int(data["department"])).first()
+        if department_obj is None:
+            raise ObjectDoesNotExist("Department not found")
+
+        technician_obj = Technician.objects.filter(id=data['technician_id']).first()
+        if technician_obj is None:
+            raise ObjectDoesNotExist("Technician not found")
+
+        material_obj = Material.objects.filter(material_id=data['material_id']).first()
+        if material_obj is None:
+            raise ObjectDoesNotExist("Material not found")
 
         sct = Sanction(
             ticket_id=ticket1,
             description=data['description'],
-            department=Department.objects.filter(id=int(department1))[0],
+            department=department_obj,
             engineer_id=data['engineer_id'],
-            technician=Technician.objects.filter(
-                id=data['technician_id']).first(),
-            material=Material.objects.filter(
-                material_id=data['material_id'])[0],
+            technician=technician_obj,
+            material=material_obj,
             quantity_sanctioned_A=int(data['quantity_sanctioned']),
             sanct_type=data['sanct_type']
         )
@@ -429,7 +438,6 @@ def sanction_material(request):
         )
 
 
-
 @api_view(['POST'])
 def purchase_material(request):
     print(request.data)
@@ -443,7 +451,7 @@ def purchase_material(request):
 
         p = Purchase(
             material=Material.objects.filter(
-            material_id=int(data['material_id'])).first(),
+                material_id=int(data['material_id'])).first(),
             quantity_purchased=int(data['quantity_purchased']),
             vendor_details=data['vendor_details'],
             purchase_type=data['purchase_type'],
@@ -552,7 +560,6 @@ def modify_sanction(request):
         )
     except:
         return Response({"success": False, "message": "invalid data"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 @xframe_options_exempt
@@ -719,10 +726,9 @@ def edit_department(request):
     parent_department_id = None
     if not is_main:
         parent_department_id = int(request.data.get('parent_department'))
-    
+
     if is_main is False and parent_department_id is None:
         return Response({"error": "non main depts parent id is required"}, status=status.HTTP_400_BAD_REQUEST)
-
 
     if department_id is None:
         return Response({"error": "Department ID is required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -748,7 +754,6 @@ def edit_department(request):
     return Response({"message": "Department updated successfully", "data": DepartmentSerializer(department).data}, status=status.HTTP_200_OK)
 
 
-
 @api_view(['POST'])
 def add_technician(request):
     try:
@@ -759,6 +764,7 @@ def add_technician(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['PUT'])
 def edit_technician(request, pk):
@@ -773,6 +779,7 @@ def edit_technician(request, pk):
         return Response({'error': 'Technician does not exist'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['DELETE'])
 def delete_technician(request, pk):

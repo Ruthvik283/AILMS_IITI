@@ -12,6 +12,7 @@ const SanctionForm = () => {
   const [engineerId, setEngineerId] = useState(contextData.userData.id);
   const [technicianId, setTechnicianId] = useState("");
   const [material, setMaterial] = useState("");
+  const [sanct_type, setSanct_type] = useState("");
   const [quantitySanctioned, setQuantitySanctioned] = useState("");
   //const toaster = useToaster();
 
@@ -34,6 +35,7 @@ const SanctionForm = () => {
       material_id: material,
       quantity_sanctioned: quantitySanctioned,
       userData: contextData.userData,
+      sanct_type: sanct_type,
     };
     //console.log(formData);
 
@@ -54,11 +56,13 @@ const SanctionForm = () => {
         setEngineerId("");
         setTechnicianId("");
         setMaterial("");
+        setSanct_type("");
         setQuantitySanctioned("");
         toast.success("Successfully Sanctioned!");
         Navigate("/sanction");
       } else {
         toast.error("Failed to submit form");
+        console.log(response,JSON.stringify(formData));
       }
     } catch (error) {
       toast.error("Error submitting form:", error);
@@ -76,6 +80,7 @@ const SanctionForm = () => {
     depts.sub_departments.forEach((subDept) => {
       dict.push(subDept);
     });
+    console.log(dict);
     return dict;
   };
 
@@ -133,7 +138,7 @@ const SanctionForm = () => {
             Department
           </label>
           <select
-            id="materialCode"
+            id="department"
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
@@ -213,6 +218,27 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div> */}
+        <div>
+          <label htmlFor="materialCategory" className="block mb-1">
+            Material Category
+          </label>
+          <select
+            id="materialCategory"
+            value={sanct_type}
+            onChange={(e) => setSanct_type(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select the category</option>
+
+              <option value="A">
+                A
+              </option>
+              <option value="B">
+                B
+              </option>
+           
+          </select>
+        </div>
         <div>
           <label htmlFor="materialCode" className="block mb-1">
             Material

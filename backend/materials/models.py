@@ -104,7 +104,7 @@ class Sanction(models.Model):
     quantity_sanctioned = models.IntegerField(null=False, default=0)
     sanct_type = models.CharField(null=False, choices=(
         ('A', 'A'),
-        ('A', 'B')
+        ('B', 'B')
     ), default='A', max_length=1)
     log = PickledObjectField(default=list)
     closed = models.BooleanField(default=False)
