@@ -20,7 +20,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AuthContext from "./context/AuthContext";
 import SignupPage from "./pages/Signup";
 import UserList from "./pages/UserList";
-import Technicians from "./pages/Technician";
+import Technicians from "./pages/TechnicianPage";
 import { Toaster } from "react-hot-toast";
 import ModifySanctionForm from "./pages/ModifySanction";
 import RegisterRequestList from "./pages/RegisterRequestPage";
