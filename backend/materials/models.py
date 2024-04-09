@@ -64,7 +64,7 @@ class Purchase(models.Model):
         super().save(*args, **kwargs)
 
         # Update the quantity of the associated material
-        self.material.quantity += self.quantity_purchased
+        self.material.quantity_A += self.quantity_purchased
         self.material.save()
 
     def __str__(self):
@@ -172,8 +172,12 @@ class Sanction(models.Model):
         super().save(*args, **kwargs)
 
         # Update the quantity of the associated material
-        self.material.quantity -= self.quantity_sanctioned
-        self.material.save()
+        if self.sanct_type == 'A':
+            self.material.quantity_A -= self.quantity_sanctioned
+            self.material.save()
+        else:
+            self.material.quantity_B -= self.quantity_sanctioned
+            self.material.save()           
 
 
 class Role(models.Model):

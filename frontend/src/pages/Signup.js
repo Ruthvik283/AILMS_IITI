@@ -67,6 +67,7 @@ const SignupPage = () => {
       if (response.status === 201) {
         toast.success("Register request has been sent");
         e.target.reset();
+        setPassword("");
         //Navigate("/"); // Redirect to homepage or any desired route
       } else {
         toast.error("Something went wrong");

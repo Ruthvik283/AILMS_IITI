@@ -407,7 +407,7 @@ def sanction_material(request):
             engineer_id=data['engineer_id'],
             technician=technician_obj,
             material=material_obj,
-            quantity_sanctioned_A=int(data['quantity_sanctioned']),
+            quantity_sanctioned=int(data['quantity_sanctioned']),
             sanct_type=data['sanct_type']
         )
 

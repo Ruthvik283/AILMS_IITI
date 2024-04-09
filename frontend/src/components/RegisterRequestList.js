@@ -56,7 +56,7 @@ const RegisterRequestList = () => {
       toast.error("Please select a role for the user");
       return;
     }
-    signupUser(request);
+    await signupUser(request);
     fetchRegisterRequests();
   };
 

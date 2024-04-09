@@ -106,7 +106,7 @@ const PurchaseForm = () => {
             QUANTITY PURCHASED
           </label>
           <input
-            type="text"
+            type="number"
             id="quantityPurchased"
             value={quantityPurchased}
             onChange={(e) => setQuantityPurchased(e.target.value)}
