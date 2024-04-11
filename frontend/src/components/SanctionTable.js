@@ -20,7 +20,7 @@ const SanctionTable = () => {
   const [engineerDisplayData, setEngineerDisplayData] = useState([]);
   let [materialWisePrice, setmaterialWisePrice] = useState([]);
   const [departmentUsers, setDepartmentUsers] = useState({});
-  const [isTicketIdZero, setIsTicketIdZero] = useState("All");
+  const [isTicketIdNull, setIsTicketIdNull] = useState("All");
   const [isOpen, setIsOpen] = useState(false);
   const [DescriptionContent, setDescriptionContent] = useState("");
 
@@ -224,18 +224,32 @@ const SanctionTable = () => {
     return filteredByDate;
   };
 
-  const filterByTicketIdZero = (filteredData) => {
+  // const filterByTicketIdZero = (filteredData) => {
+  //   // Avoid filtering for "All" value
+  //   if (isTicketIdZero === "All") {
+  //     return filteredData;
+  //   }
+
+  //   const isZero = isTicketIdZero === "Zero";
+
+  //   const filteredTicketIdZero = filteredData.filter(
+  //     (sanc) => (isZero ? sanc.ticket_id === 0 : sanc.ticket_id !== 0)
+  //   );
+  //   return filteredTicketIdZero;
+  // };
+
+  const filterByTicketIdNull = (filteredData) => {
     // Avoid filtering for "All" value
-    if (isTicketIdZero === "All") {
+    if (isTicketIdNull === "All") {
       return filteredData;
     }
 
-    const isZero = isTicketIdZero === "Zero";
+    const isNull = isTicketIdNull === "Null";
 
-    const filteredTicketIdZero = filteredData.filter(
-      (sanc) => (isZero ? sanc.ticket_id === 0 : sanc.ticket_id !== 0)
+    const filteredTicketIdNull = filteredData.filter(
+      (sanc) => (isNull ? sanc.ticket_id === 0 : sanc.ticket_id !== 0)
     );
-    return filteredTicketIdZero;
+    return filteredTicketIdNull;
   };
 
   const fetchDescriptionContent = async (sanctionId) => {
@@ -291,7 +305,7 @@ const SanctionTable = () => {
     filteredData = filterByEngineerName(filteredData, selectedEngineerName, departmentData);
     filteredData = filterByTechicianName(filteredData, selectedTechnicianName)
     filteredData = filterByDate(filteredData, startDate, endDate);
-    filteredData = filterByTicketIdZero(filteredData);
+    filteredData = filterByTicketIdNull(filteredData);
 
     const newData = filteredData.filter((user) => {
       if (status !== "All" && user.closed !== (status === "Closed")) {
@@ -320,7 +334,7 @@ const SanctionTable = () => {
     search,
     status,
     selectedTechnicianName,
-    isTicketIdZero,
+    isTicketIdNull,
   ]);
 
   // Now you can use this 'options' array wherever you need it in your code.
@@ -400,7 +414,7 @@ const SanctionTable = () => {
                 allLabel="All Status"
               />
             </div>
-            <div className="relative dept mr-2 my-3">
+            {/* <div className="relative dept mr-2 my-3">
               <SearchableDropdown
                 options={[{ value: "All" }, { value: "Zero" }, { value: "Non-Zero" }]}
                 label="value"
@@ -409,7 +423,17 @@ const SanctionTable = () => {
                 handleChange={(val) => setIsTicketIdZero(val)}
                 allLabel="All Ticket IDs"
               />
-            </div>
+            </div> */}
+            <div className="relative dept mr-2 my-3">
+      <SearchableDropdown
+        options={[{ value: "All" }, { value: "Null" }, { value: "Non-Null" }]}
+        label="value"
+        id="id"
+        selectedVal={isTicketIdNull}
+        handleChange={(val) => setIsTicketIdNull(val)}
+        allLabel="All Ticket IDs"
+      />
+    </div>
           </div>
           <div className="relative flex justify-between tickets my-3">
             <div className="block relative ticketid">
@@ -477,8 +501,11 @@ const SanctionTable = () => {
                       Description
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Date & Time
+                    Sanction Type
                     </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Date & Time
+                    </th>  
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Quantity Sanctioned
                     </th>
@@ -519,6 +546,9 @@ const SanctionTable = () => {
                         >
                           View
                         </button>                        
+                      </td>
+                      <td className="px-5 py-4 border-b border-gray-200 text-sm">
+                        {sanction.sanct_type}
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 text-sm">
                         {new Date(sanction.date_time).toLocaleString()}
