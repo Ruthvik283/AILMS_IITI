@@ -27,7 +27,7 @@ const ModifySanctionForm = () => {
         const fetchData = async () => {
           try {
             const response1 = await fetch(
-              `http://127.0.0.1:8000/api/sanctions/${id}`,
+              `/api/sanctions/${id}`,
               {
                 method: "GET",
                 headers: {
@@ -52,7 +52,7 @@ const ModifySanctionForm = () => {
             //console.log("sanc_req", data1);
 
             const response2 = await fetch(
-              `http://127.0.0.1:8000/api/materials/${data1.material}`,
+              `/api/materials/${data1.material}`,
               {
                 method: "GET",
                 headers: {
@@ -123,7 +123,7 @@ const ModifySanctionForm = () => {
       const submitData = async () => {
         try {
           const response1 = await fetch(
-            `http://127.0.0.1:8000/api/modifysanction/`,
+            `/api/modifysanction/`,
             {
               method: "POST",
               headers: {

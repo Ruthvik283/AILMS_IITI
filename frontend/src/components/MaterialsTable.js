@@ -23,7 +23,7 @@ const MaterialsTable = () => {
     const fetchData = async () => {
       try {
         const materialsResponse = await fetch(
-          "http://127.0.0.1:8000/api/materials"
+          "/api/materials"
         );
 
         if (!materialsResponse.ok) {
@@ -96,7 +96,7 @@ const MaterialsTable = () => {
     //   const dict={ selected_materials: globalSelectedMaterials,email: email }
     //     console.log("selected",JSON.stringify({ selected_materials: globalSelectedMaterials,email: email }));
     //     return;
-      const response = await fetch("http://127.0.0.1:8000/api/sendmail/", {
+      const response = await fetch("/api/sendmail/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

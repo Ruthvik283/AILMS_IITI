@@ -19,7 +19,7 @@
 //   const fetchTechnicians = async () => {
 //     try {
 //       const response = await axios.get(
-//         "http://127.0.0.1:8000/api/technicians/"
+//         "/api/technicians/"
 //       );
 //       setTechnicians(response.data);
 //     } catch (error) {
@@ -44,7 +44,7 @@
 //   const confirmDeleteTechnician = async () => {
 //     try {
 //       await axios.delete(
-//         `http://127.0.0.1:8000/api/delete_technician/${technicianToDelete.id}/delete/`
+//         `/api/delete_technician/${technicianToDelete.id}/delete/`
 //       );
 //       toast.success("technician deleted successfully!");
 //       setShowDeleteConfirmation(false);
@@ -156,7 +156,7 @@
 //       return;
 //     }
 //     try {
-//       await axios.post("http://127.0.0.1:8000/api/add_technician/", technician);
+//       await axios.post("/api/add_technician/", technician);
 //       setShowAddForm(false);
 //       toast.success("Technician added successfully!");
 //       fetchTechnicians();
@@ -279,7 +279,7 @@
 //     }
 //     try {
 //       await axios.put(
-//         `http://127.0.0.1:8000/api/edit_technician/${technician.id}/`,
+//         `/api/edit_technician/${technician.id}/`,
 //         editedTechnician
 //       );
 //       setShowEditForm(false);
@@ -436,7 +436,7 @@ const TechnicianTable = () => {
   const fetchTechnicians = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/technicians/"
+        "/api/technicians/"
       );
       setTechnicians(response.data);
     } catch (error) {
@@ -452,7 +452,7 @@ const TechnicianTable = () => {
   const handleUpdateTechnician = async () => {
     try {
       await axios.put(
-        `http://127.0.0.1:8000/api/edit_technician/${editedTechnician.id}/`,
+        `/api/edit_technician/${editedTechnician.id}/`,
         editedTechnician
       );
       setEditingTechnicianId(null);
@@ -471,7 +471,7 @@ const TechnicianTable = () => {
   const confirmDeleteTechnician = async () => {
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/delete_technician/${technicianToDelete.id}/delete/`
+        `/api/delete_technician/${technicianToDelete.id}/delete/`
       );
       toast.success("Technician deleted successfully!");
       setShowDeleteConfirmation(false);
@@ -663,7 +663,7 @@ const AddTechnicianForm = ({ setEditingTechnicianId, fetchTechnicians }) => {
       return;
     }
     try {
-      await axios.post("http://127.0.0.1:8000/api/add_technician/", technician);
+      await axios.post("/api/add_technician/", technician);
       setEditingTechnicianId(null);
       toast.success("Technician added successfully!");
       fetchTechnicians();

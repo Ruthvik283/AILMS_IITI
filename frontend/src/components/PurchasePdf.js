@@ -10,7 +10,7 @@
 // //                 <iframe
 // //                     id="iFrameExample"
 // //                     title="iFrame Example"
-// //                     src="http://127.0.0.1:8000/api/api_test/"
+// //                     src="/api/api_test/"
 // //                     height="700px"
 // //                     width="1000px"
 // //                 ></iframe>
@@ -34,7 +34,7 @@ const PurchasePdf = () => {
       <IFrame
         id="purchase-pdf"
         title="Purchase PDF"
-        src={`http://127.0.0.1:8000/api/purchase-pdf/${purchase_id}`}
+        src={`/api/purchase-pdf/${purchase_id}`}
       />
     </Container>
   );
@@ -74,7 +74,7 @@ const IFrame = styled.iframe`
 //         <iframe
 //           id="purchase-pdf"
 //           title="Purchase PDF"
-//           src={`http://127.0.0.1:8000/api/purchase-pdf/${purchaseId}`}
+//           src={`/api/purchase-pdf/${purchaseId}`}
 //           className="w-full h-[700px] border border-gray-300 rounded-lg shadow-lg"
 //         />
 //       </div>

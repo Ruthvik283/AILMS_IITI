@@ -19,7 +19,7 @@ const UserList = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/get_users/")
+      .get("/api/get_users/")
       .then((response) => {
         setUsers(response.data);
       })
@@ -47,7 +47,7 @@ const UserList = () => {
       return;
     }
     axios
-      .post("http://127.0.0.1:8000/api/update_user/", formData)
+      .post("/api/update_user/", formData)
       .then((response) => {
         toast.success("User updated successfully!");
         // Reset state and fetch updated user data
@@ -61,7 +61,7 @@ const UserList = () => {
         });
         setUsers([]);
         axios
-          .get("http://127.0.0.1:8000/api/get_users/")
+          .get("/api/get_users/")
           .then((response) => {
             setUsers(response.data);
           })

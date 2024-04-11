@@ -81,7 +81,7 @@ export default function Materials() {
     e.preventDefault();
     const { quantity, ...editedMaterialsData } = MaterialFormData;
     axios
-      .post("http://127.0.0.1:8000/api/create-material/", {
+      .post("/api/create-material/", {
         ...editedMaterialsData,
         category: categoryId,
       })
@@ -111,7 +111,7 @@ export default function Materials() {
     e.preventDefault();
 
     axios
-      .post("http://127.0.0.1:8000/api/create-category/", {
+      .post("/api/create-category/", {
         ...CategoryFormData,
         parent_category: categoryId,
       })
@@ -139,7 +139,7 @@ export default function Materials() {
       const { quantity, ...editedMaterialsData } = editMaterialData;
     // Send a request to update the material information
     axios
-      .post(`http://127.0.0.1:8000/api/edit_material/`, editedMaterialsData)
+      .post(`/api/edit_material/`, editedMaterialsData)
       .then((response) => {
         //console.log("Material updated successfully:", response.data);
         toast.success("Material updated successfully");

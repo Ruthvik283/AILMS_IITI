@@ -28,7 +28,7 @@ const SanctionTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/sanctions/", {
+        const response = await fetch("/api/sanctions/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -68,7 +68,7 @@ const SanctionTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/departments", {
+        const response = await fetch("/api/departments", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const SanctionTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/technicians/", {
+        const response = await fetch("/api/technicians/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -240,7 +240,7 @@ const SanctionTable = () => {
 
   const fetchDescriptionContent = async (sanctionId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/sanctions/${sanctionId}`);
+      const response = await fetch(`/api/sanctions/${sanctionId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

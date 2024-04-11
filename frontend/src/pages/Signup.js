@@ -55,7 +55,7 @@ const SignupPage = () => {
     // Make a POST request to the add_register_request endpoint
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/add_register_request/",
+        "/api/add_register_request/",
         {
           username: username,
           email: email,

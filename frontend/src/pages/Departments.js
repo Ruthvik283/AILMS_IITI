@@ -119,7 +119,7 @@ const DepartmentsPage = () => {
 
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/departments");
+      const response = await axios.get("/api/departments");
       setDepartments(response.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -139,7 +139,7 @@ const DepartmentsPage = () => {
       //   console.log(newDepartment);
       //   return;
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/add_department/",
+        "/api/add_department/",
         newDepartment
       );
       if (response.status >= 200 && response.status < 300) {
@@ -169,7 +169,7 @@ const DepartmentsPage = () => {
       }
       console.log(JSON.stringify(editDepartment));
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/edit_department/",
+        "/api/edit_department/",
         JSON.stringify(editDepartment),
         {
           headers: {

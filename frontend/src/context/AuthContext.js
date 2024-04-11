@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/materials", {
+        const response = await fetch("/api/materials", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/technicians", {
+        const response = await fetch("/api/technicians", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/departments", {
+        const response = await fetch("/api/departments", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get_roles", {
+        const response = await fetch("/api/get_roles", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -159,7 +159,7 @@ export const AuthProvider = ({ children }) => {
     //console.log("loginUser");
     // to prevent default reload
     e.preventDefault();
-    let response = await fetch("http://127.0.0.1:8000/api/token/", {
+    let response = await fetch("/api/token/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export const AuthProvider = ({ children }) => {
       let data2 = jwtDecode(data.access);
       //console.log("data: ", data2.id);
       let response2 = await fetch(
-        `http://127.0.0.1:8000/api/get_username/${data2.id}`
+        `/api/get_username/${data2.id}`
       );
       if (response2.status == 400) {
         toast.error(
@@ -212,7 +212,7 @@ export const AuthProvider = ({ children }) => {
     //   alert("Passwords don't match");
     //   return;
     // }
-    let response = await fetch("http://127.0.0.1:8000/api/register/", {
+    let response = await fetch("/api/register/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -237,7 +237,7 @@ export const AuthProvider = ({ children }) => {
       // setUser(jwtDecode(data.access))
       // localStorage.setItem('authTokens', JSON.stringify(data))
 
-      //   let response = await fetch("http://127.0.0.1:8000/api/token/", {
+      //   let response = await fetch("/api/token/", {
       //     method: "POST",
       //     headers: {
       //       "Content-Type": "application/json",
@@ -255,7 +255,7 @@ export const AuthProvider = ({ children }) => {
       //     // let data2 = jwtDecode(data.access);
       //     // //console.log("data: ", data2.id);
       //     // let response2 = await fetch(
-      //     //   `http://127.0.0.1:8000/api/get_username/${data2.id}`
+      //     //   `/api/get_username/${data2.id}`
       //     // );
       //     // let total_user_data = await response2.json();
       //     // //console.log("data: ");
@@ -340,7 +340,7 @@ export const AuthProvider = ({ children }) => {
         let data2 = jwtDecode(data.access);
 
         let response2 = await fetch(
-          `http://127.0.0.1:8000/api/get_username/${data2.id}`
+          `/api/get_username/${data2.id}`
         );
         let total_user_data = await response2.json();
         //console.log("data: ");
@@ -357,7 +357,7 @@ export const AuthProvider = ({ children }) => {
         //JUST FOR EXTRA SECURITY , NOT REQUIRED!
         //     let data2 = jwtDecode(data.access)
         // //console.log("data: ",data2.id)
-        // let response2 = await fetch(`http://127.0.0.1:8000/api/get_username/${data2.id}`)
+        // let response2 = await fetch(`/api/get_username/${data2.id}`)
         // let total_user_data = await response2.json()
         // //console.log("data: ")
         // //console.log(total_user_data)
@@ -396,7 +396,7 @@ export const AuthProvider = ({ children }) => {
     "/sanctionform",
     "/modifysanction",
     "/modifysanction/:sanct_id",
-    "/purchase/purchase_pdf/:purchase_id",
+    "/purchase/purchase_pdf/",
     "/report",
     "/Report",
   ];
@@ -426,7 +426,7 @@ export const AuthProvider = ({ children }) => {
           try {
             let data2 = jwtDecode(storedToken);
             let response2 = await fetch(
-              `http://127.0.0.1:8000/api/get_username/${data2.id}`
+              `/api/get_username/${data2.id}`
             );
             if (response2.ok) {
               let total_user_data = await response2.json();
@@ -451,8 +451,7 @@ export const AuthProvider = ({ children }) => {
           !nonManagerIsValidRoute &&
           !location.pathname.startsWith("/modifysanction")
         ) {
-          console.log(role);
-          toast.error(role);
+          toast.error("Access denied");
           Navigate("/");
         }
       }
