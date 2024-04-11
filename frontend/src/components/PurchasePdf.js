@@ -34,7 +34,7 @@ const PurchasePdf = () => {
       <IFrame
         id="purchase-pdf"
         title="Purchase PDF"
-        src={`/api/purchase-pdf/${purchase_id}`}
+        src={`http://127.0.0.1:8000/api/purchase-pdf/${purchase_id}`}
       />
     </Container>
   );
