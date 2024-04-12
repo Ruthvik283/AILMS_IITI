@@ -357,6 +357,10 @@ const MaterialsTable = () => {
   const [perPage, setPerPage] = useState(5);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentEntries, setCurrentEntries] = useState([]);
+  const [indexOfLastEntry, setIndexOfLastEntry] = useState(currentPage * perPage);
+  const [indexOfFirstEntry, setIndexOfFirstEntry] = useState(indexOfLastEntry - perPage);
+
 
   const handlePrevClick = () => {
     setCurrentPage((prevPage) => prevPage - 1);
@@ -388,6 +392,7 @@ const MaterialsTable = () => {
             (item) => item.material_id === material.material_id
           ),
         }));
+        setCurrentPage(1);
 
         setMaterialsData(mergedData);
       } catch (error) {
@@ -416,13 +421,24 @@ const MaterialsTable = () => {
     });
   };
 
-  const indexOfLastEntry = currentPage * perPage;
-  const indexOfFirstEntry = indexOfLastEntry - perPage;
-  const currentEntries = filteredMaterials.slice(
-    indexOfFirstEntry,
-    indexOfLastEntry
-  );
+  // const indexOfLastEntry = currentPage * perPage;
+  // const indexOfFirstEntry = indexOfLastEntry - perPage;
+  // const currentEntries = filteredMaterials.slice(
+  //   indexOfFirstEntry,
+  //   indexOfLastEntry
+  // );
 
+  useEffect(() => {
+    setIndexOfLastEntry  (currentPage * perPage);
+    setIndexOfFirstEntry( indexOfLastEntry - perPage);
+    const currentEntries = filteredMaterials.slice(indexOfFirstEntry, indexOfLastEntry);
+    setCurrentEntries(currentEntries);
+  }, [currentPage, perPage, filteredMaterials, search]);
+  
+  
+  useEffect(()=>{
+    setCurrentPage(1);
+  },[search,selectedMaterials])
   const handleSendEmail = async () => {
     try {
       if (globalSelectedMaterials.length === 0) {
@@ -489,26 +505,7 @@ const MaterialsTable = () => {
                 className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
               />
             </div>
-            <div className="relative perpage ">
-              <select
-                value={perPage}
-                onChange={(e) => setPerPage(parseInt(e.target.value))}
-                className="appearance-none h-full border block w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg
-                  className="fill-current h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
-            </div>
+            
           </div>
           <div className="bg-[#FFFEFA] py-4 md:py-2 px-2 md:px-4 xl:px-1">
             <div className="sm:flex items-center justify-between">
@@ -518,6 +515,7 @@ const MaterialsTable = () => {
                     className="rounded-l border block appearance-none bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) => {
                       setShowAllMaterials(e.target.value === "All");
+                      setCurrentPage(1);
                     }}
                   >
                     <option value="All">All</option>
@@ -559,8 +557,29 @@ const MaterialsTable = () => {
               )}
             </div>
           </div>
-
-          <div className="-mx-4 sm:-mx-8 px-4 sm:px-4 py-10 overflow-x-auto m-4">
+          <div className="relative flex justify-end my-3">
+          <div className="relative perpage ">
+              <select
+                value={perPage}
+                onChange={(e) => setPerPage(parseInt(e.target.value))}
+                className="appearance-none h-full border block w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+</div>
+<div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto ">
             <div className="inline-block min-w-full shadow overflow-hidden">
               <table className="min-w-full leading-normal bg-white">
                 <thead className="bg-gray-100">
