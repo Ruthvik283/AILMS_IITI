@@ -104,11 +104,34 @@ code blocks for commands
 * If any materials is found to have fallen below their predetermined critical threshold, an email notification can be sent to the designated personnel, apprising them of the shortage within the warehouse.
 
 <div align="center">
-    <img src="readmeImg\materialsList.png" alt="Logo" width="full" height="auto">
-        <img src="readmeImg\materialsList.png" alt="Logo" width="full" height="auto">
+    <img src="readmeImg\materialsList.png" alt="Logo" width="700px" height="auto">
+</div>
 
+#### 2. View the Sanction and Purchases Table
+
+* The manager has the capability to view the sanction table, where they can check detailed descriptions of sanctions, including ticket ID, sanctioned materials, assigned technician, engineer authorizing the materials, status, etc. Filtering options are available for refining searches based on these fields.
+
+
+<div align="center">
+    <img src="readmeImg\Sanctiontable.png" alt="Logo" width="700px" height="auto">
+
+</div>
+
+* Likewise, the manager can access the purchase table to inspect specific purchases and view associated invoice PDFs, along with comprehensive details pertaining to each purchase transaction.
+<div align="center">
+    <img src="readmeImg\PurchaseTable.png" alt="Logo" width="700px" height="auto">
+
+</div>
+
+#### 3. Report Generation
+
+A comprehensive report can be generated, offering valuable insights and aiding in overseeing budget management and other pertinent aspects.
+
+<div align="center">
+    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
   
 </div>
+
 
 
 
@@ -118,14 +141,6 @@ Contributors names and contact info
 
 ex. Dominique Pizzie  
 ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
 
 ## License
 
