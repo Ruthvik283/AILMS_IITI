@@ -251,10 +251,10 @@ const ModifySanctionForm = () => {
                       hour12: true,
                     })}
                   </li>
-                  <li className="py-3 text-gray-700">
+                  <li className="py-3 text-gray-700 font-bold">
                     Net quantity sanctioned: {sanctionData.quantity_sanctioned}
                   </li>
-                  <li className="py-3 text-gray-700">
+                  <li className="py-3 text-gray-700 font-bold">
                     Material Sanctioned: {sanctionData.material_name}
                   </li>
                 </ul>
