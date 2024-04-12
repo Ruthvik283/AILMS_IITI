@@ -32,7 +32,7 @@ const PurchaseForm = () => {
     formData.append("invoice_pdf", invoicePdf);
 
     try {
-      console.log("formData", formData);
+      // console.log("formData", formData);
       const response = await fetch("/api/add_purchase/", {
         method: "POST",
         // headers: {
