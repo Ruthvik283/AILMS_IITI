@@ -12,6 +12,9 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(eyeOff);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [email, setEmail] = useState("");
   const Navigate = useNavigate();
   const handleToggle = () => {
     if (type === "password" && password != "") {
@@ -20,6 +23,51 @@ const SignupPage = () => {
     } else {
       setIcon(eyeOff);
       setType("password");
+    }
+  };
+  const sendVerificationEmail = async () => {
+    //verifyEmail("ab8b3c");
+    //return;
+    try {
+      if (!email.endsWith("@iiti.ac.in")) {
+        toast.error("Please login with institute email-id");
+        return; // Stop further execution
+      }
+      const response = await axios.post("/api/send-verification-email/", {
+        email,
+      });
+      if (response.status === 201) {
+        // Show a prompt or modal to the user to enter the verification code
+        const code = window.prompt(
+          "Please enter the verification code sent to your email:"
+        );
+        setVerificationCode(code);
+        verifyEmail(code);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while sending the verification email");
+    }
+  };
+  const verifyEmail = async (code) => {
+    //console.log(JSON.stringify({"email":email,"code":code}));
+    try {
+      const response = await axios.post("/api/verify-email/", {
+        email: email,
+        code: code,
+      });
+      //console.log(JSON.stringify({ email: email, code: code }));
+      if (response.status === 200) {
+        setIsEmailVerified(true);
+        toast.success("Email verified successfully");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while verifying the email");
     }
   };
   useEffect(() => {
@@ -51,23 +99,27 @@ const SignupPage = () => {
       toast.error("Passwords do not match");
       return;
     }
+    if (!isEmailVerified) {
+      toast.error("Please verify your email before submitting the form");
+      return;
+    }
 
     // Make a POST request to the add_register_request endpoint
     try {
-      const response = await axios.post(
-        "/api/add_register_request/",
-        {
-          username: username,
-          email: email,
-          password: password,
-          department: department,
-        }
-      );
+      const response = await axios.post("/api/add_register_request/", {
+        username: username,
+        email: email,
+        password: password,
+        department: department,
+      });
 
       if (response.status === 201) {
         toast.success("Register request has been sent");
+        setIsEmailVerified(false);
         e.target.reset();
         setPassword("");
+        setC("");
+        setP("");
         //Navigate("/"); // Redirect to homepage or any desired route
       } else {
         toast.error("Something went wrong");
@@ -80,10 +132,6 @@ const SignupPage = () => {
 
   useEffect(() => {
     document.title = "Sign Up - AILMS";
-    // if (contextData.userData.role !== "Manager") {
-    //   toast.error("Only admin can permit user registration");
-    //   Navigate("/login");
-    // }
     window.scrollTo(0, 0);
   }, []);
 
@@ -92,15 +140,8 @@ const SignupPage = () => {
   useEffect(() => {
     if (p === c) {
       document.querySelector("#diff_passwords").classList.add("opacity-0");
-      //document.querySelector("#confirmpassword").classList.add('mb3')
-      ////console.log(document.querySelector("#confirmpassword").classList)
-      // //console.log('matched')
     } else {
       document.querySelector("#diff_passwords").classList.remove("opacity-0");
-      //document.querySelector("#confirmpassword").classList.remove('mb3')
-      // document.querySelector("#confirmpassword").classList.remove('mb3')
-      // //console.log(document.querySelector("#confirmpassword").classList)
-      // //console.log('different')
     }
   }, [p, c]);
   return (
@@ -154,7 +195,29 @@ const SignupPage = () => {
                           id="email"
                           type="email"
                           placeholder="Email-id"
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            setIsEmailVerified(false);
+                          }}
                         />
+                      </div>
+                      <div className="flex justify-center w-[100%]">
+                        {isEmailVerified ? (
+                          <button
+                            className="w-3/4 rounded bg-green-500 text-white py-2 px-4 mt-2"
+                            disabled
+                          >
+                            Email Verified
+                          </button>
+                        ) : (
+                          <button
+                            className="w-3/4 rounded bg-blue-500 text-white py-2 px-4 mt-2"
+                            type="button"
+                            onClick={sendVerificationEmail}
+                          >
+                            Send Verification Email
+                          </button>
+                        )}
                       </div>
                       <div className="text-gray-400  w-[100%]">
                         <select

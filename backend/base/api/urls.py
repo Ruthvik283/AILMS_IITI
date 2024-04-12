@@ -60,5 +60,8 @@ urlpatterns = [
     path('technicians/', views.techniciansData, name='technician-data'),
     path('add_technician/', views.add_technician, name='add_technician'),
     path('edit_technician/<int:pk>/', views.edit_technician, name='edit_technician'),
-    path('delete_technician/<int:pk>/delete/', views.delete_technician, name='delete_technician')
+    path('delete_technician/<int:pk>/delete/', views.delete_technician, name='delete_technician'),
+    
+    path('send-verification-email/', views.send_verification_email, name='send_verification_email'),
+    path('verify-email/', views.verify_email, name='verify_email'),
 ]

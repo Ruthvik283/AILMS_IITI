@@ -791,3 +791,69 @@ def delete_technician(request, pk):
         return Response({'error': 'Technician does not exist'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# emailverification/views.py
+from django.template.loader import render_to_string
+
+# @api_view(['POST'])
+# def SendVerificationEmailView(request):
+#     email
+@api_view(['POST'])
+def send_verification_email(request):
+
+    data=request.data
+    
+    if 'email' not in data:
+        return Response({'detail': 'Email field is missing'}, status=status.HTTP_400_BAD_REQUEST)
+
+    email = data['email']
+
+    if not email:
+        return Response({'detail': 'Email field is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    
+    try:
+        model_instance = EmailVerificationCode.objects.get(email=email)
+        model_instance.code=secrets.token_hex(3)
+        model_instance.save()
+    except EmailVerificationCode.DoesNotExist:
+        model_instance = EmailVerificationCode(email=email)
+        model_instance.save()
+
+
+        # Create the email message
+    message = f"Your email verification code is: {model_instance.code}"
+
+    # Send the verification email
+    send_mail(
+        'Email Verification',
+        message,
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+    )
+
+    return Response({'detail': f'Verification email sent to {email}'}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def verify_email(request):
+    if request.method == 'POST':
+        data = request.data
+        print("here",data)
+        email = data.get('email', '')
+        code = data.get('code', '')
+
+        # Check if email and code are provided
+        if not email or not code:
+            return Response({'detail': 'Email and code fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the email and code match in the database
+        try:
+            verification_entry = EmailVerificationCode.objects.get(email=email, code=code)
+            verification_entry.delete()  # Optionally, you can delete the entry after verification
+            return Response({'detail': 'Email verified successfully'}, status=status.HTTP_200_OK)
+        except EmailVerificationCode.DoesNotExist:
+            return Response({'detail': 'Invalid email or code'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'detail': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

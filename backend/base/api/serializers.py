@@ -155,3 +155,9 @@ class PurchaseSerializer(serializers.ModelSerializer):
         fields = ['purchase_id', 'material', 'purchase_type', 'quantity_purchased',
                   'vendor_details', 'pdf_file', 'date_time']
         read_only_fields = ['purchase_id', 'date_time']
+    
+
+class EmailVerificationCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailVerificationCode
+        fields = ['email', 'code']
