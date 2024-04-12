@@ -92,6 +92,26 @@ This section should list any major frameworks/libraries used to bootstrap your p
 ```
 code blocks for commands
 ```
+
+## How to Use?
+
+### For the manager
+
+#### 1. View the materials table
+
+* It is possible for Manager to access and examine the inventory housed within the warehouse.
+* They can search for inventory to check its contents and respective quantities.
+* If any materials is found to have fallen below their predetermined critical threshold, an email notification can be sent to the designated personnel, apprising them of the shortage within the warehouse.
+
+<div align="center">
+    <img src="readmeImg\materialsList.png" alt="Logo" width="full" height="auto">
+        <img src="readmeImg\materialsList.png" alt="Logo" width="full" height="auto">
+
+  
+</div>
+
+
+
 ## Authors
 
 Contributors names and contact info
