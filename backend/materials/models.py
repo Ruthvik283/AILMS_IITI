@@ -1,3 +1,5 @@
+import secrets
+import os
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -7,7 +9,10 @@ User = get_user_model()
 
 
 def pdf_path(instance, filename):
-    return f'files//purchase_{instance.purchase_id}.pdf'
+    path = f'files/purchase_{instance.purchase_id}.pdf'
+    if os.path.exists(path):
+        os.remove(path)
+    return f'files/purchase_{instance.purchase_id}.pdf'
 
 # Create your models here.
 
@@ -47,6 +52,7 @@ class Material(models.Model):
     def quantity(self):
         return self.quantity_A + self.quantity_B
 
+
 class Purchase(models.Model):
     purchase_id = models.AutoField(primary_key=True)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
@@ -84,7 +90,8 @@ class Department(models.Model):
 
 class Technician(models.Model):
     technician_name = models.CharField(max_length=255)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT,null=True,blank=True)    
+    department = models.ForeignKey(
+        Department, on_delete=models.PROTECT, null=True, blank=True)
     technician_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -177,7 +184,7 @@ class Sanction(models.Model):
             self.material.save()
         else:
             self.material.quantity_B -= self.quantity_sanctioned
-            self.material.save()           
+            self.material.save()
 
 
 class Role(models.Model):
@@ -192,11 +199,12 @@ class Role(models.Model):
 class RegisterRequest(models.Model):
     username = models.CharField(max_length=255)
     email = models.EmailField(max_length=254)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT,null=True,blank=True)
-    role = models.ForeignKey(Role, on_delete=models.PROTECT,null=True,blank=True)
-    password =models.CharField(max_length=255)
+    department = models.ForeignKey(
+        Department, on_delete=models.PROTECT, null=True, blank=True)
+    role = models.ForeignKey(
+        Role, on_delete=models.PROTECT, null=True, blank=True)
+    password = models.CharField(max_length=255)
 
-import secrets
 
 class EmailVerificationCode(models.Model):
     email = models.EmailField(unique=True)

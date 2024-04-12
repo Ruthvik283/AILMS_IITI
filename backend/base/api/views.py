@@ -1,3 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.template.loader import render_to_string
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from rest_framework import serializers, status
@@ -377,7 +379,7 @@ class PurchasesBetweenDates(APIView):
             # y["price"] = 1
         return Response(x)
 
-from django.core.exceptions import ObjectDoesNotExist
+
 @api_view(['POST'])
 def sanction_material(request):
     data = request.data
@@ -388,15 +390,18 @@ def sanction_material(request):
 
     try:
 
-        department_obj = Department.objects.filter(id=int(data["department"])).first()
+        department_obj = Department.objects.filter(
+            id=int(data["department"])).first()
         if department_obj is None:
             raise ObjectDoesNotExist("Department not found")
 
-        technician_obj = Technician.objects.filter(id=data['technician_id']).first()
+        technician_obj = Technician.objects.filter(
+            id=data['technician_id']).first()
         if technician_obj is None:
             raise ObjectDoesNotExist("Technician not found")
 
-        material_obj = Material.objects.filter(material_id=data['material_id']).first()
+        material_obj = Material.objects.filter(
+            material_id=data['material_id']).first()
         if material_obj is None:
             raise ObjectDoesNotExist("Material not found")
 
@@ -792,17 +797,18 @@ def delete_technician(request, pk):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 # emailverification/views.py
-from django.template.loader import render_to_string
 
 # @api_view(['POST'])
 # def SendVerificationEmailView(request):
 #     email
+
 @api_view(['POST'])
 def send_verification_email(request):
 
-    data=request.data
-    
+    data = request.data
+
     if 'email' not in data:
         return Response({'detail': 'Email field is missing'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -811,15 +817,13 @@ def send_verification_email(request):
     if not email:
         return Response({'detail': 'Email field is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    
     try:
         model_instance = EmailVerificationCode.objects.get(email=email)
-        model_instance.code=secrets.token_hex(3)
+        model_instance.code = secrets.token_hex(3)
         model_instance.save()
     except EmailVerificationCode.DoesNotExist:
         model_instance = EmailVerificationCode(email=email)
         model_instance.save()
-
 
         # Create the email message
     message = f"Your email verification code is: {model_instance.code}"
@@ -840,7 +844,7 @@ def send_verification_email(request):
 def verify_email(request):
     if request.method == 'POST':
         data = request.data
-        print("here",data)
+        print("here", data)
         email = data.get('email', '')
         code = data.get('code', '')
 
@@ -850,10 +854,37 @@ def verify_email(request):
 
         # Check if the email and code match in the database
         try:
-            verification_entry = EmailVerificationCode.objects.get(email=email, code=code)
+            verification_entry = EmailVerificationCode.objects.get(
+                email=email, code=code)
             verification_entry.delete()  # Optionally, you can delete the entry after verification
             return Response({'detail': 'Email verified successfully'}, status=status.HTTP_200_OK)
         except EmailVerificationCode.DoesNotExist:
             return Response({'detail': 'Invalid email or code'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'detail': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(['POST'])
+def editPurchasePDF(request):
+    data = request.data
+    purchase_id = data["purchase_id"]
+    pdf = request.FILES["invoice_pdf"]
+    # print(request.FILES)
+    # print(data)
+    # return Response(status=status.HTTP_200_OK)
+    try:
+        obj = Purchase.objects.filter(purchase_id=purchase_id)[0]
+        obj.pdf_file = pdf
+        obj.raw_save()
+        return Response({
+            "success": True
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(e)
+        return Response(
+            {
+                "message": "Invalid Details"
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

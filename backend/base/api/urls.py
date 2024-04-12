@@ -42,11 +42,11 @@ urlpatterns = [
     path('get_users/', views.get_users, name='get_users'),
     path('get_roles/', views.get_roles, name='get_roles'),
     path('edit_material/', views.EditMaterial, name='edit-material'),
-    
+
     path('get_department/<int:id>', views.departmentData, name='get_dept'),
     path('departments', views.departments_data, name='get_depts'),
-    path('add_department/', views.add_department,name='add_department'),
-    path('edit_department/', views.edit_department,name='edit_department'),  
+    path('add_department/', views.add_department, name='add_department'),
+    path('edit_department/', views.edit_department, name='edit_department'),
 
     path('register_requests/', views.get_registerRequests,
          name='get_registerRequests'),
@@ -56,12 +56,16 @@ urlpatterns = [
          name='edit_register_request'),
     path('delete_register_request/<int:pk>',
          views.delete_register_request, name='delete_register_request'),
-    
+
     path('technicians/', views.techniciansData, name='technician-data'),
     path('add_technician/', views.add_technician, name='add_technician'),
-    path('edit_technician/<int:pk>/', views.edit_technician, name='edit_technician'),
-    path('delete_technician/<int:pk>/delete/', views.delete_technician, name='delete_technician'),
-    
-    path('send-verification-email/', views.send_verification_email, name='send_verification_email'),
+    path('edit_technician/<int:pk>/',
+         views.edit_technician, name='edit_technician'),
+    path('delete_technician/<int:pk>/delete/',
+         views.delete_technician, name='delete_technician'),
+
+    path('send-verification-email/', views.send_verification_email,
+         name='send_verification_email'),
     path('verify-email/', views.verify_email, name='verify_email'),
+    path('editpdf/', views.editPurchasePDF, name='edit_pdf'),
 ]
