@@ -6,6 +6,11 @@ import SanctionForm from '../components/SanctionForm';
 
 export default function SanctionFormPage() {
 
+    useEffect(() => {
+        document.title = "Modify-Sanction- AILMS";
+        window.scrollTo(0, 0);
+      }, []);
+
     return (
         <>
         <div className="min-h-screen bg-[#FFFEFA]">

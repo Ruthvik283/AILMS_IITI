@@ -512,6 +512,11 @@ const DepartmentsPage = () => {
     fetchDepartments();
   }, []);
 
+  useEffect(() => {
+    document.title = "Departments- AILMS";
+    window.scrollTo(0, 0);
+  }, []);
+
   const fetchDepartments = async () => {
     try {
       const response = await axios.get("/api/departments");

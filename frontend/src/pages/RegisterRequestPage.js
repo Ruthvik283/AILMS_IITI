@@ -4,6 +4,10 @@ import Navbar  from '../components/Navbar'
 import RegisterRequestList from '../components/RegisterRequestList';
 
 export default function RegisterRequestPage(){
+  useEffect(() => {
+    document.title = "Register-Request- AILMS";
+    window.scrollTo(0, 0);
+  }, []);
   return(
     <>
     <Navbar></Navbar>

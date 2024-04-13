@@ -5,6 +5,10 @@ import SanctionTable from "../components/SanctionTable";
 import { Link } from "react-router-dom";
 
 export default function SanctionFormPage() {
+  useEffect(() => {
+    document.title = "Sanction- AILMS";
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
     <div className="bg-[#FFFEFA]">

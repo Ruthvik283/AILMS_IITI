@@ -4,6 +4,10 @@ import Navbar  from '../components/Navbar'
 import Technician from '../components/Technician';
 
 export default function TechnicianPage(){
+  useEffect(() => {
+    document.title = "Technicians- AILMS";
+    window.scrollTo(0, 0);
+  }, []);
   return(
     <>
     <Navbar></Navbar>

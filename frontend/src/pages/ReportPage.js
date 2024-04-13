@@ -6,7 +6,10 @@ import AuthContext from "../context/AuthContext";
 import Report from "../components/Report";
 
 export default function ReportPage() {
-
+  useEffect(() => {
+    document.title = "Report- AILMS";
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className=" bg-[#f2f2f2] min-h-screen">

@@ -7,6 +7,11 @@ import PurchaseForm from '../components/PurchaseForm';
 
 export default function PurchaseFormPage() {
 
+    useEffect(() => {
+        document.title = "Add-purchase- AILMS";
+        window.scrollTo(0, 0);
+      }, []);
+
     return (
         <>
            <div className='bg-[#FFFEFA]'>

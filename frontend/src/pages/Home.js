@@ -11,6 +11,12 @@ export default function Home() {
   const { userData, logoutUser } = useContext(AuthContext);
 
   useEffect(() => {
+    document.title = "Home - AILMS";
+    window.scrollTo(0, 0);
+  }, []);
+
+
+  useEffect(() => {
     if (!userData.id) {
       logoutUser();
     }
