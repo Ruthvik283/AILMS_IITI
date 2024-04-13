@@ -3,6 +3,60 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
 
+const ConfirmationPopup = ({ formData, onConfirm, onCancel }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Confirm Sanction</h2>
+          <button
+            onClick={onCancel}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="mb-4">
+          <p className="font-semibold">Ticket ID: {formData.ticket_id}</p>
+          <p className="font-semibold">Description: {formData.description}</p>
+          <p className="font-semibold">Department: {formData.department}</p>
+          <p className="font-semibold">Engineer ID: {formData.engineer_id}</p>
+          <p className="font-semibold">Technician ID: {formData.technician_id}</p>
+          <p className="font-semibold">Material: {formData.material_id}</p>
+          <p className="font-semibold">Quantity Sanctioned: {formData.quantity_sanctioned}</p>
+          <p className="font-semibold">Sanction Type: {formData.sanct_type}</p>
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={onConfirm}
+            className="bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2"
+          >
+            Confirm
+          </button>
+          <button
+            onClick={onCancel}
+            className="bg-gray-300 text-gray-700 py-2 px-4 rounded-full hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SanctionForm = () => {
   const contextData = useContext(AuthContext);
   const Navigate = useNavigate();
@@ -14,18 +68,16 @@ const SanctionForm = () => {
   const [material, setMaterial] = useState("");
   const [sanct_type, setSanct_type] = useState("");
   const [quantitySanctioned, setQuantitySanctioned] = useState("");
-  //const toaster = useToaster();
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+  const [formData, setFormData] = useState({});
 
-  //   const rrr = () => {
-  //     //console.log('here')
-  //     toast.success('Successfully navigated to sanctions page!');
-  //   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (ticketId == "" && description == "") {
+    if (ticketId === "" && description === "") {
       toast.error("Either ticket-id or description must be present");
       return;
     }
+
     const formData = {
       ticket_id: ticketId,
       description: description,
@@ -37,8 +89,12 @@ const SanctionForm = () => {
       userData: contextData.userData,
       sanct_type: sanct_type,
     };
-    //console.log(formData);
 
+    setFormData(formData);
+    setShowConfirmationPopup(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     try {
       const response = await fetch("/api/sanction/", {
         method: "POST",
@@ -49,7 +105,6 @@ const SanctionForm = () => {
       });
 
       if (response.ok) {
-        //console.log("Sanction form submitted successfully!");
         // Reset form fields if needed
         setTicketId("");
         setDepartment("");
@@ -62,11 +117,17 @@ const SanctionForm = () => {
         Navigate("/sanction");
       } else {
         toast.error("Failed to submit form");
-        console.log(response,JSON.stringify(formData));
+        console.log(response, JSON.stringify(formData));
       }
     } catch (error) {
       toast.error("Error submitting form:", error);
+    } finally {
+      setShowConfirmationPopup(false);
     }
+  };
+
+  const handleCancelConfirmation = () => {
+    setShowConfirmationPopup(false);
   };
 
   const userDepts = (depts) => {
@@ -83,7 +144,6 @@ const SanctionForm = () => {
     console.log(dict);
     return dict;
   };
-
 
   return (
     <div className="max-w-md mx-auto mt-8 ">
@@ -119,20 +179,6 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div>
-        {/* {contextData.userData.role === "Manager" && (
-          <div>
-            <label htmlFor="department" className="block mb-1">
-              DEPARTMENT
-            </label>
-            <input
-              type="text"
-              id="department"
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-            />
-          </div>
-        )} */}
         <div>
           <label htmlFor="materialCode" className="block mb-1">
             Department
@@ -144,7 +190,6 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           >
             <option value="">Select Department</option>
-            {/* Assuming materials is an array of material names */}
             {userDepts(contextData.userData.department).map((department) => (
               <option key={department.id} value={department.id}>
                 {department.department_name}
@@ -175,20 +220,8 @@ const SanctionForm = () => {
             />
           )}
         </div>
-        {/* <div>
-          <label htmlFor="technicianId" className="block mb-1">
-            TECHNICIAN ID
-          </label>
-          <input
-            type="text"
-            id="technicianId"
-            value={technicianId}
-            onChange={(e) => setTechnicianId(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div> */}
         <div>
-          <label htmlFor="materialCode" className="block mb-1">
+          <label htmlFor="Technician" className="block mb-1">
             Technician
           </label>
           <select
@@ -198,7 +231,6 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           >
             <option value="">Select technician</option>
-            {/* Assuming materials is an array of material names */}
             {contextData.techniciansData.map((technician) => (
               <option key={technician.id} value={technician.id}>
                 {technician.technician_name}-{technician.technician_id}
@@ -206,18 +238,6 @@ const SanctionForm = () => {
             ))}
           </select>
         </div>
-        {/* <div>
-          <label htmlFor="material" className="block mb-1">
-            MATERIAL
-          </label>
-          <input
-            type="text"
-            id="material"
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div> */}
         <div>
           <label htmlFor="materialCategory" className="block mb-1">
             Material Category
@@ -229,14 +249,8 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           >
             <option value="">Select the category</option>
-
-              <option value="A">
-                A
-              </option>
-              <option value="B">
-                B
-              </option>
-           
+            <option value="A">A</option>
+            <option value="B">B</option>
           </select>
         </div>
         <div>
@@ -250,7 +264,6 @@ const SanctionForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           >
             <option value="">Select a material</option>
-            {/* Assuming materials is an array of material names */}
             {contextData.materialsData.map((material) => (
               <option key={material.material_id} value={material.material_id}>
                 {material.material_name}
@@ -277,6 +290,13 @@ const SanctionForm = () => {
           Submit
         </button>
       </form>
+      {showConfirmationPopup && (
+        <ConfirmationPopup
+          formData={formData}
+          onConfirm={handleConfirmSubmit}
+          onCancel={handleCancelConfirmation}
+        />
+      )}
     </div>
   );
 };
