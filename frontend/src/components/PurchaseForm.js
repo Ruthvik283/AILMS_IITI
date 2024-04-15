@@ -61,8 +61,8 @@ const PurchaseForm = () => {
 
   const purchaseType = [
     { name: "Type A" },
-    { name: "Type B"},
-    {name:"Type C"}
+    { name: "Type B" },
+    { name: "Type C" }
   ];
 
 
@@ -71,7 +71,7 @@ const PurchaseForm = () => {
       <form onSubmit={handleSubmit} className="space-y-4 py-8">
         <div>
           <label htmlFor="materialCode" className="block mb-1">
-           MATERIAL
+            MATERIAL
           </label>
           <select
             id="materialCode"
@@ -100,7 +100,7 @@ const PurchaseForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div> */}
-        
+
         <div>
           <label htmlFor="quantityPurchased" className="block mb-1">
             QUANTITY PURCHASED
@@ -115,7 +115,7 @@ const PurchaseForm = () => {
         </div>
         <div>
           <label htmlFor="purchase_type" className="block mb-1">
-           Purchase Type
+            Purchase Type
           </label>
           <select
             id="purchase_type"
