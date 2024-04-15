@@ -15,6 +15,7 @@ const ModifySanctionForm = () => {
   const [materialData, setmaterialData] = useState({});
   const [quantity, setquantity] = useState("");
   const [type, settype] = useState("");
+  const [totype, settotype] = useState("");
   const [messages, setmessages] = useState([]);
   const [X, setX] = useState(true);
 
@@ -104,7 +105,7 @@ const ModifySanctionForm = () => {
       err.push("Invalid quantity");
     } else if (Number(quantity) <= 0) {
       err.push("Quantity must be greater than 0");
-    } else if (type === "add" && materialData.quantity < Number(quantity)) {
+    } else if (type === "add" && ((sanctionData.sanct_type === "A" && materialData.quantity_A < quantity) || (sanctionData.sanct_type === "B" && materialData.quantity_B < quantity))) {
       err.push(
         `Amount of material left is Insufficient. Only ${materialData.quantity} units left`
       );
@@ -133,6 +134,7 @@ const ModifySanctionForm = () => {
                 quantity: Number(quantity),
                 type: type,
                 sanct_id: sanctionData.sanction_id,
+                to_type: totype,
               }),
             }
           );
@@ -195,6 +197,28 @@ const ModifySanctionForm = () => {
                 <option value="return">Return</option>
                 <option value="close">Close</option>
               </select>
+            </div>
+            <div className="mb-4">
+              {sanctionData.sanct_type == "A" && type == "return" && (
+                <>
+                  <label
+                    htmlFor="type"
+                    className="block text-gray-700 font-bold mb-2"
+                  >
+                    To Type
+                  </label>
+                  <select
+                    name="type"
+                    id="type"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    onChange={(event) => settotype(event.target.value)}
+                  >
+                    <option value="head">-Choose option-</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                  </select>
+                </>
+              )}
             </div>
             <div className="mb-4">
               {type != "close" && (
@@ -278,15 +302,14 @@ const ModifySanctionForm = () => {
                               })}
                             </div>
                             <div
-                              className={`${
-                                Number(entry[1]) > 0
-                                  ? "text-green-600"
-                                  : "text-red-600"
-                              } font-semibold`}
+                              className={`${Number(entry[1]) > 0
+                                ? "text-green-600"
+                                : "text-red-600"
+                                } font-semibold`}
                             >
                               {Number(entry[1]) > 0
                                 ? `${entry[1]} Added(+)`
-                                : `${entry[1]} Returned(-)`}
+                                : `${entry[1]} Returned(-) -> ${entry[2]}`}
                             </div>
                           </li>
                         );

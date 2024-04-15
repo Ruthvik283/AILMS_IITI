@@ -542,20 +542,32 @@ def modify_sanction(request):
         quantity = data['quantity']
         sanction_id = data['sanct_id']
         type = data['type']
+        to_type = data['to_type']
+
+        print(data)
 
         sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
-
+        succ = True
         if type == 'add':
-            sanct.sanction_add(quantity)
+            succ = succ and sanct.sanction_add(quantity)
         elif type == 'return':
-            sanct.sanction_return(quantity)
+            succ = succ and sanct.sanction_return(quantity, to_type)
         elif type == 'close':
-            sanct.sanction_close()
-        return Response(
-            {
-                "success": True
-            }
-        )
+            succ = succ and sanct.sanction_close()
+        if succ:
+            return Response(
+                {
+                    "success": True
+                }
+            )
+        else:
+            print("Insufficient materials")
+            return Response(
+                {
+                    "success": False
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
     except:
         return Response({"success": False, "message": "invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -812,7 +824,7 @@ def send_verification_email(request):
 
     try:
         model_instance = EmailVerificationCode.objects.get(email=email)
-        model_instance.code=secrets.randbelow(899999)+100000
+        model_instance.code = secrets.randbelow(899999)+100000
         model_instance.save()
     except EmailVerificationCode.DoesNotExist:
         model_instance = EmailVerificationCode(email=email)
