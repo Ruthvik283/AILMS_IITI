@@ -7,6 +7,11 @@ import MaterialsTable from '../components/MaterialsTable';
 
 export default function Material() {
 
+    useEffect(() => {
+        document.title = "Materials-Table - AILMS";
+        window.scrollTo(0, 0);
+      }, []);
+
     return (
         <>
 

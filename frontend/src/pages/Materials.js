@@ -31,6 +31,11 @@ export default function Materials() {
   const [showAddMaterialsForm, setShowAddMaterialsForm] = useState(false);
 
   useEffect(() => {
+    document.title = "Materials - AILMS";
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (categoryId) {
       axios
         .get(`/api/categories/${categoryId}/related/`)

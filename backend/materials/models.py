@@ -116,34 +116,46 @@ class Sanction(models.Model):
     log = PickledObjectField(default=list)
     closed = models.BooleanField(default=False)
 
-    def sanction_return(self, quantity: int):
-        if quantity > self.quantity_sanctioned or quantity <= 0 or self.closed:
+    def sanction_return(self, quantity: int, to_type: str):
+        if self.quantity_sanctioned >= quantity and quantity > 0:
             return False
-        self.log = self.log + [[str(datetime.now()), -quantity]]
-        self.quantity_sanctioned -= quantity
         if self.sanct_type == 'A':
-            self.material.quantity_A += quantity
+            if to_type == 'A':
+                self.quantity_sanctioned -= quantity
+                self.material.quantity_A += quantity
+                self.log = self.log + [[str(datetime.now()), 'A', -quantity]]
+            else:
+                self.quantity_sanctioned -= quantity
+                self.material.quantity_B += quantity
+                self.log = self.log + [[str(datetime.now()), 'B', -quantity]]
         else:
+            self.quantity_sanctioned -= quantity
             self.material.quantity_B += quantity
+            self.log = self.log + [[str(datetime.now()), 'B', -quantity]]
+
         super().save()
         self.material.save()
+        return True
 
     def sanction_add(self, quantity: int):
+
         if self.sanct_type == 'A':
-            if quantity > self.material.quantity_A:
+            if self.material.quantity_A >= quantity and quantity > 0:
+                self.material.quantity_A -= quantity
+                self.quantity_sanctioned += quantity
+                self.log = self.log + [[str(datetime.now()), quantity]]
+            else:
                 return False
         else:
-            if quantity > self.material.quantity_B:
+            if self.material.quantity_B >= quantity and quantity > 0:
+                self.material.quantity_B -= quantity
+                self.quantity_sanctioned += quantity
+                self.log = self.log + [[str(datetime.now()), quantity]]
+            else:
                 return False
-        self.log = self.log + [[str(datetime.now()), quantity]]
-        if self.sanct_type == 'A':
-            self.material.quantity_A -= quantity
-            self.quantity_sanctioned += quantity
-        else:
-            self.material.quantity_B += quantity
-            self.quantity_sanctioned += quantity
         super().save()
         self.material.save()
+        return True
 
     def sanction_close(self):
         if self.closed:
@@ -208,7 +220,8 @@ class RegisterRequest(models.Model):
 
 class EmailVerificationCode(models.Model):
     email = models.EmailField(unique=True)
-    code = models.CharField(max_length=6, default=secrets.token_hex(3))
+    code = models.CharField(
+        max_length=6, default=secrets.randbelow(899999)+100000)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

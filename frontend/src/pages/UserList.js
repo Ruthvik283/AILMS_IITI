@@ -18,6 +18,11 @@ const UserList = () => {
   });
 
   useEffect(() => {
+    document.title = "Users- AILMS";
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     axios
       .get("/api/get_users/")
       .then((response) => {
