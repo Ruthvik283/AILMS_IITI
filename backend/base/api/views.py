@@ -430,7 +430,8 @@ def sanction_material(request):
             {
                 "success": False,
                 "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
-            }
+            },
+            status=status.HTTP_400_BAD_REQUEST
         )
 
     except Exception as e:
@@ -548,14 +549,17 @@ def modify_sanction(request):
         data = request.data
         quantity = data['quantity']
         sanction_id = data['sanct_id']
-        to_type = data['type']
+        type = data['type']
+        to_type = data['to_type']
+
+        print(data)
 
         sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
         succ = True
         if type == 'add':
-            succ = succ and sanct.sanction_add(quantity, to_type)
+            succ = succ and sanct.sanction_add(quantity)
         elif type == 'return':
-            succ = succ and sanct.sanction_return(quantity)
+            succ = succ and sanct.sanction_return(quantity, to_type)
         elif type == 'close':
             succ = succ and sanct.sanction_close()
         if succ:
@@ -565,6 +569,7 @@ def modify_sanction(request):
                 }
             )
         else:
+            print("Insufficient materials")
             return Response(
                 {
                     "success": False

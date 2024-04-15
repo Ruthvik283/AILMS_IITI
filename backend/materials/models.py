@@ -117,7 +117,7 @@ class Sanction(models.Model):
     closed = models.BooleanField(default=False)
 
     def sanction_return(self, quantity: int, to_type: str):
-        if self.quantity_sanctioned >= quantity and quantity > 0:
+        if self.quantity_sanctioned <= quantity and quantity > 0:
             return False
         if self.sanct_type == 'A':
             if to_type == 'A':
@@ -138,7 +138,6 @@ class Sanction(models.Model):
         return True
 
     def sanction_add(self, quantity: int):
-
         if self.sanct_type == 'A':
             if self.material.quantity_A >= quantity and quantity > 0:
                 self.material.quantity_A -= quantity
