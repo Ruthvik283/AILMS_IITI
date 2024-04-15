@@ -51,12 +51,21 @@
 
 # Project Title
 
-AILMS
+AILMS - Assets, Inventory and Logistic Management System
 
 ## Description
 
 
-Introducing an integrated Asset, Inventory, and Logistic Management System, designed to streamline all operational processes into a unified software platform. This system serves as a vital link connecting technicians, associated engineers, and managers. With its user-friendly interface, it offers robust functionalities for managing warehouse materials and facilitating the sanctioning of materials requested by technicians, subject to approval by associated engineers. Furthermore, it provides the ability to track purchases made from vendors, ensuring full transparency and accountability throughout the procurement process.Moreover, it includes comprehensive report generation capabilities, enabling in-depth analysis of budgets. 
+
+
+
+* Introducing an integrated Asset, Inventory, and Logistic Management System
+* Designed to streamline all operational processes into a unified software platform
+* Serves as a vital link connecting technicians, associated engineers, and managers
+* Offers a user-friendly interface with robust functionalities
+* Manages warehouse materials and facilitates the sanctioning of materials requested by technicians, subject to approval by associated engineers
+* Tracks purchases made from vendors, ensuring full transparency and accountability throughout the procurement process
+* Includes comprehensive report generation capabilities for in-depth analysis of budgets
 ## Motivation
 
 In our college, specifically at Indore, there was a notable absence of a comprehensive system to track essential processes like asset and inventory management. This gap led to numerous loopholes and a lack of transparency in our operations. Everything relied heavily on manual registers, leaving ample room for error and the potential for material leakage. Additionally, without proper tracking mechanisms in place, analyzing material usage was virtually impossible. Recognizing these challenges, the concept for a software solution was born, aimed at fulfilling all these critical needs and revolutionizing our management processes.
@@ -65,7 +74,7 @@ In our college, specifically at Indore, there was a notable absence of a compreh
 
 ## Tech/Framework used
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+
 
 * [![React][React.js]][React-url]
 * [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-131F3E?style=for-the-badge&logo=tailwind-css&logoColor=38B2AC)](https://tailwindcss.com/)
@@ -93,6 +102,9 @@ This section should list any major frameworks/libraries used to bootstrap your p
 code blocks for commands
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 ## How to Use?
 
 
@@ -101,7 +113,7 @@ code blocks for commands
   
 </div>
 
-### For the manager
+
 
 #### 1. View the materials table
 
@@ -120,6 +132,10 @@ code blocks for commands
     <img src="readmeImg\critalQuantity.png" alt="Logo" width="700px" height="auto">
 
 </div>
+
+* A new material can be added
+
+<br></br>
 
 
 #### 2. Sanction and Purchases Table
@@ -145,10 +161,11 @@ code blocks for commands
 </div>
 
 
+<br></br>
 
 
 
-#### 4. Report Generation
+#### 3. Report Generation
 
 A comprehensive report can be generated, offering valuable insights and aiding in overseeing budget management and other pertinent aspects.
 
@@ -156,58 +173,58 @@ A comprehensive report can be generated, offering valuable insights and aiding i
     <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
   
 </div>
+<br></br>
 
 
-#### 5. Maintaining Technicians and Departments
+#### 4. Maintaining Technicians and Departments
 
-* for a technician to get register, they must be be approved by
+* A different tables containing information on departments, technicians, and all users is available for reference.
+* The system allows for the addition of new departments, technicians, and other users.
+<div align="center">
+    <img src="readmeImg\departmentTable.jpeg" alt="Logo" width="700px" height="auto">
+  
+</div>
+<div align="center">
+    <img src="readmeImg\techniciansTable.jpeg" alt="Logo" width="700px" height="auto">
+  
+</div>
+
 
   <div align="center">
-    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+    <img src="readmeImg\allUsers.jpeg" alt="Logo" width="700px" height="auto">
   
 </div>
+
+* When a new user signs up, they are required to provide all their details. On submission, the manager must approve the user. The manager has the authority to modify the entries provided by the new user and subsequently approve them as a valid user.
+
 <div align="center">
-    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+    <img src="readmeImg\signUp.jpeg" alt="Logo" width="200px" height="auto">
   
 </div>
+
 <div align="center">
-    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+    <img src="readmeImg\userApproval.jpeg" alt="Logo" width="700px" height="auto">
   
 </div>
 
+<br></br>
 
-#### 4. Report Generation
-
-
-
-#### 4. Report Generation
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 
 
 
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
 
 ## License
 
 This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Acknowledgments
 
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
-* [contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+
+ [contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
 [contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
 [forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
