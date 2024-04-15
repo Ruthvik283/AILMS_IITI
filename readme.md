@@ -95,25 +95,46 @@ code blocks for commands
 
 ## How to Use?
 
+
+<div align="center">
+    <img src="readmeImg\Home page.jpeg" alt="Logo" width="700px" height="auto">
+  
+</div>
+
 ### For the manager
 
 #### 1. View the materials table
 
 * It is possible for Manager to access and examine the inventory housed within the warehouse.
 * They can search for inventory to check its contents and respective quantities.
-* If any materials is found to have fallen below their predetermined critical threshold, an email notification can be sent to the designated personnel, apprising them of the shortage within the warehouse.
+
 
 <div align="center">
     <img src="readmeImg\materialsList.png" alt="Logo" width="700px" height="auto">
+
 </div>
 
-#### 2. View the Sanction and Purchases Table
+* If any materials is found to have fallen below their predetermined critical threshold, an email notification can be sent to the designated personnel, apprising them of the shortage within the warehouse.
 
-* The manager has the capability to view the sanction table, where they can check detailed descriptions of sanctions, including ticket ID, sanctioned materials, assigned technician, engineer authorizing the materials, status, etc. Filtering options are available for refining searches based on these fields.
+<div align="center">
+    <img src="readmeImg\critalQuantity.png" alt="Logo" width="700px" height="auto">
+
+</div>
+
+
+#### 2. Sanction and Purchases Table
+
+* The manager has the capability to view and add entries to the sanction table, where they can check detailed descriptions of sanctions, including ticket ID, sanctioned materials, assigned technician, engineer authorizing the materials, status, etc. Filtering options are available for refining searches based on these fields.
 
 
 <div align="center">
     <img src="readmeImg\Sanctiontable.png" alt="Logo" width="700px" height="auto">
+
+</div>
+
+* Moreover, a particular sanction can be modified, and we can obtain a Sanction log for the same.
+<div align="center">
+    <img src="readmeImg\modifySanction.png" alt="Logo" width="700px" height="auto">
 
 </div>
 
@@ -123,7 +144,11 @@ code blocks for commands
 
 </div>
 
-#### 3. Report Generation
+
+
+
+
+#### 4. Report Generation
 
 A comprehensive report can be generated, offering valuable insights and aiding in overseeing budget management and other pertinent aspects.
 
@@ -131,6 +156,34 @@ A comprehensive report can be generated, offering valuable insights and aiding i
     <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
   
 </div>
+
+
+#### 5. Maintaining Technicians and Departments
+
+* for a technician to get register, they must be be approved by
+
+  <div align="center">
+    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+  
+</div>
+<div align="center">
+    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+  
+</div>
+<div align="center">
+    <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+  
+</div>
+
+
+#### 4. Report Generation
+
+
+
+#### 4. Report Generation
+
+
+
 
 
 
