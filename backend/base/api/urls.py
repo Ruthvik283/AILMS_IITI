@@ -29,8 +29,6 @@ urlpatterns = [
          views.MaterialbyID, name='material-by-id'),
     path('categories/<int:category_id>/related/',
          get_related_categories, name='related_categories'),
-    path('belowCritical/', views.BelowCriticalQuantity,
-         name='below critical quantity materials'),
     path('sendmail/', views.SendMail, name='send email'),
     path('create-category/', CategoryCreateView.as_view(), name='create-category'),
     path('create-material/', MaterialCreateView.as_view(), name='create-material'),

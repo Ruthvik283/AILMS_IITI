@@ -33,9 +33,13 @@ const ConfirmationPopup = ({ formData, onConfirm, onCancel }) => {
           <p className="font-semibold">Description: {formData.description}</p>
           <p className="font-semibold">Department: {formData.department}</p>
           <p className="font-semibold">Engineer ID: {formData.engineer_id}</p>
-          <p className="font-semibold">Technician ID: {formData.technician_id}</p>
+          <p className="font-semibold">
+            Technician ID: {formData.technician_id}
+          </p>
           <p className="font-semibold">Material: {formData.material_id}</p>
-          <p className="font-semibold">Quantity Sanctioned: {formData.quantity_sanctioned}</p>
+          <p className="font-semibold">
+            Quantity Sanctioned: {formData.quantity_sanctioned}
+          </p>
           <p className="font-semibold">Sanction Type: {formData.sanct_type}</p>
         </div>
         <div className="flex justify-end">
@@ -66,6 +70,10 @@ const SanctionForm = () => {
   const [engineerId, setEngineerId] = useState(contextData.userData.id);
   const [technicianId, setTechnicianId] = useState("");
   const [material, setMaterial] = useState("");
+  const [selectedMaterialQuantityA, setSelectedMaterialQuantityA] =
+    useState("");
+  const [selectedMaterialQuantityB, setSelectedMaterialQuantityB] =
+    useState("");
   const [sanct_type, setSanct_type] = useState("");
   const [quantitySanctioned, setQuantitySanctioned] = useState("");
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
@@ -75,6 +83,48 @@ const SanctionForm = () => {
     event.preventDefault();
     if (ticketId === "" && description === "") {
       toast.error("Either ticket-id or description must be present");
+      return;
+    }
+    if (department === "") {
+      toast.error("Please select a department");
+      return;
+    }
+
+    if (technicianId === "") {
+      toast.error("Please select a technician");
+      return;
+    }
+
+    if (material === "") {
+      toast.error("Please select a material");
+      return;
+    }
+
+    if (quantitySanctioned === "") {
+      toast.error("Please enter quantity sanctioned");
+      return;
+    }
+
+    if (sanct_type === "") {
+      toast.error("Please select a sanction type");
+      return;
+    }
+
+    if (
+      sanct_type === "A" &&
+      parseInt(quantitySanctioned) > selectedMaterialQuantityA
+    ) {
+      toast.error(
+        "Quantity sanctioned for cannot be more than available quantity"
+      );
+      return;
+    }
+
+    if (
+      sanct_type === "B" &&
+      parseInt(quantitySanctioned) > selectedMaterialQuantityB
+    ) {
+      toast.error("Quantity sanctioned cannot be more than available quantity");
       return;
     }
 
@@ -111,9 +161,12 @@ const SanctionForm = () => {
         setEngineerId("");
         setTechnicianId("");
         setMaterial("");
+        setSelectedMaterialQuantityB("");
+        setSelectedMaterialQuantityA("");
         setSanct_type("");
         setQuantitySanctioned("");
         toast.success("Successfully Sanctioned!");
+        console.log(response, JSON.stringify(formData));
         Navigate("/sanction");
       } else {
         toast.error("Failed to submit form");
@@ -238,6 +291,49 @@ const SanctionForm = () => {
             ))}
           </select>
         </div>
+        <div className="mt-4">
+          <label htmlFor="materialCode" className="block mb-1">
+            Material
+          </label>
+          <select
+            id="materialCode"
+            value={material}
+            onChange={(e) => {
+              setMaterial(e.target.value);
+              const selectedMaterial = contextData.materialsData.find(
+                (mat) => mat.material_id === parseInt(e.target.value)
+              );
+              console.log(contextData.materialsData);
+              console.log("Selected material:", selectedMaterial);
+              if (selectedMaterial) {
+                setSelectedMaterialQuantityA(selectedMaterial.quantity_A);
+                setSelectedMaterialQuantityB(selectedMaterial.quantity_B);
+              }
+            }}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select a material</option>
+            {contextData.materialsData.map((material) => (
+              <option key={material.material_id} value={material.material_id}>
+                {material.material_name}
+              </option>
+            ))}
+          </select>
+          <div className="mt-2">
+            <label className="block mb-1">Available Quantity</label>
+            {material ? (
+              <p className="text-sm text-gray-900">
+                Category-A: {selectedMaterialQuantityA}, Category-B:{" "}
+                {selectedMaterialQuantityB}
+              </p>
+            ) : (
+              <p className="text-sm text-gray-500">
+                Quantity will be displayed once the material is selected
+              </p>
+            )}
+          </div>
+        </div>
+
         <div>
           <label htmlFor="materialCategory" className="block mb-1">
             Material Category
@@ -254,30 +350,13 @@ const SanctionForm = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="materialCode" className="block mb-1">
-            Material
-          </label>
-          <select
-            id="materialCode"
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select a material</option>
-            {contextData.materialsData.map((material) => (
-              <option key={material.material_id} value={material.material_id}>
-                {material.material_name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
           <label htmlFor="quantitySanctioned" className="block mb-1">
             QUANTITY SANCTIONED
           </label>
           <input
-            type="text"
+            type="number"
             id="quantitySanctioned"
+            min="1"
             value={quantitySanctioned}
             onChange={(e) => setQuantitySanctioned(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"

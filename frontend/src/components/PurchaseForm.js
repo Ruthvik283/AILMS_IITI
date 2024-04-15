@@ -75,6 +75,35 @@ const PurchaseForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (material === "") {
+        toast.error("Please select a material");
+        return;
+      }
+    
+      if (purchase_type === "") {
+        toast.error("Please select a purchase type");
+        return;
+      }
+    
+      if (quantityPurchased==""||quantityPurchased <= 0) {
+        toast.error("Quantity purchased must be greater than 0");
+        return;
+      }
+    
+      if (vendorDetails === "") {
+        toast.error("Please provide vendor details");
+        return;
+      }
+    
+      if (invoicePdf === null) {
+        toast.error("Please upload an invoice PDF");
+        return;
+      }
+
+      if (invoicePdf.type !== "application/pdf") {
+        toast.error("Uploaded file must be a PDF");
+        return;
+      }
 
     const formData = {
       material_id: material,
@@ -156,6 +185,7 @@ const PurchaseForm = () => {
           <input
             type="number"
             id="quantityPurchased"
+            min="1"
             value={quantityPurchased}
             onChange={(e) => setQuantityPurchased(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
@@ -198,6 +228,7 @@ const PurchaseForm = () => {
           <input
             type="file"
             id="invoicePdf"
+            accept=".pdf"
             onChange={(e) => setPdf(e.target)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />

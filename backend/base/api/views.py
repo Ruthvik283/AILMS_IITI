@@ -187,14 +187,6 @@ def EditMaterial(request):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
-def BelowCriticalQuantity(request):
-    # quantity__lt: This is a field lookup. It specifies that we're comparing the quantity field of the Material model.
-    # F('critical_quantity'): This is a Django F() expression that references the critical_quantity field of the same model. F() expressions allow us to reference the values of model fields within queries.
-    materials = MaterialSerializer(Material.objects.filter(
-        quantity__lt=F('critical_quantity')), many=True)
-    return Response(materials.data)
-
 
 @api_view(['GET', 'POST'])
 def SendMail(request):
@@ -430,7 +422,8 @@ def sanction_material(request):
             {
                 "success": False,
                 "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
-            }
+            },
+            status=status.HTTP_400_BAD_REQUEST
         )
 
     except Exception as e:
