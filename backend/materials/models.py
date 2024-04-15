@@ -123,15 +123,15 @@ class Sanction(models.Model):
             if to_type == 'A':
                 self.quantity_sanctioned -= quantity
                 self.material.quantity_A += quantity
-                self.log = self.log + [[str(datetime.now()), 'A', -quantity]]
+                self.log = self.log + [[str(datetime.now()), -quantity, 'A']]
             else:
                 self.quantity_sanctioned -= quantity
                 self.material.quantity_B += quantity
-                self.log = self.log + [[str(datetime.now()), 'B', -quantity]]
+                self.log = self.log + [[str(datetime.now()), -quantity, 'B']]
         else:
             self.quantity_sanctioned -= quantity
             self.material.quantity_B += quantity
-            self.log = self.log + [[str(datetime.now()), 'B', -quantity]]
+            self.log = self.log + [[str(datetime.now()), -quantity, 'B']]
 
         super().save()
         self.material.save()
