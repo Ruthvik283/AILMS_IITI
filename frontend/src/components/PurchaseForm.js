@@ -64,6 +64,7 @@ const PurchaseForm = () => {
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [vendorDetails, setVendorDetails] = useState("");
   const [invoicePdf, setInvoicePdf] = useState(null);
+  const [formData, setFormData] = useState(null)
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
 
   function setPdf(targ) {
@@ -104,19 +105,20 @@ const PurchaseForm = () => {
       return;
     }
 
-    // setFormData(formData);
+    const formData1 = new FormData();
+
+    formData1.append("material_id", material);
+    formData1.append("materialCode", materialCode);
+    formData1.append("purchase_type", purchase_type);
+    formData1.append("quantity_purchased", quantityPurchased);
+    formData1.append("vendor_details", vendorDetails);
+    formData1.append("invoice_pdf", invoicePdf);
+
+    setFormData(formData1);
     setShowConfirmationPopup(true);
   };
 
   const handleConfirmSubmit = async () => {
-    const formData = new FormData();
-
-    formData.append("material_id", material);
-    formData.append("materialCode", materialCode);
-    formData.append("purchase_type", purchase_type);
-    formData.append("quantity_purchased", quantityPurchased);
-    formData.append("vendor_details", vendorDetails);
-    formData.append("invoice_pdf", invoicePdf);
     try {
       const response = await fetch("/api/add_purchase/", {
         method: "POST",
