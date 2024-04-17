@@ -105,14 +105,17 @@ Before you begin, ensure you have met the following requirements:
     cd AILMS_IITI
     ```
 
-3. Navigate into the backend directory:
+3. Navigate into the backend directory and install Python dependencies using pip and the provided `requirements.txt` file:
     ```sh
     cd backend
+    pip install -r requirements.txt
     ```
 
-4. Install Python dependencies using pip and the provided `requirements.txt` file:
+4. Return to the project root directory, navigate into the frontend directory and install frontend dependencies using npm:
     ```sh
-    pip install -r requirements.txt
+    cd ..
+    cd frontend
+    npm install
     ```
 
 5. Return to the project root directory:
@@ -120,20 +123,7 @@ Before you begin, ensure you have met the following requirements:
     cd ..
     ```
 
-6. Navigate into the frontend directory:
-    ```sh
-    cd frontend
-    ```
 
-7. Install frontend dependencies using npm:
-    ```sh
-    npm install
-    ```
-
-8. Return to the project root directory:
-    ```sh
-    cd ..
-    ```
 
 ### Configuration
 
@@ -213,7 +203,7 @@ Before you begin, ensure you have met the following requirements:
 
 </div>
 
-* Moreover, a particular sanction can be modified, and we can obtain a Sanction log for the same.
+* Moreover, a particular sanction can be modified, and we can obtain a Sanction log for the same. 
 <div align="center">
     <img src="readmeImg\modifySanction.png" alt="Logo" width="700px" height="auto">
 
@@ -236,8 +226,11 @@ A comprehensive report can be generated, offering valuable insights and aiding i
 
 <div align="center">
     <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+    <img src="readmeImg\graph.png" alt="Logo" width="700px" height="auto">    
   
-</div>
+</div
+
+
 <br></br>
 
 
