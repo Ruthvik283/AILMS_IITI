@@ -8,14 +8,73 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const VerificationPopup = ({ onConfirm, onCancel }) => {
+  const [verificationCode, setVerificationCode] = useState("");
+
+  const handleConfirm = () => {
+    onConfirm(verificationCode);
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Enter Verification Code</h2>
+          <button
+            onClick={onCancel}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            placeholder="Enter verification code"
+          />
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={handleConfirm}
+            className="bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2"
+          >
+            Confirm
+          </button>
+          <button
+            onClick={onCancel}
+            className="bg-gray-300 text-gray-700 py-2 px-4 rounded-full hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(eyeOff);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
   const [email, setEmail] = useState("");
   const Navigate = useNavigate();
+
   const handleToggle = () => {
     if (type === "password" && password != "") {
       setIcon(eye);
@@ -25,24 +84,23 @@ const SignupPage = () => {
       setType("password");
     }
   };
+
+  const [showVerificationPopup, setShowVerificationPopup] = useState(false);
+
   const sendVerificationEmail = async () => {
-    //verifyEmail("ab8b3c");
-    //return;
     try {
       if (!email.endsWith("@iiti.ac.in")) {
         toast.error("Please login with institute email-id");
         return; // Stop further execution
       }
+      toast.success("Sending verification email")
+
       const response = await axios.post("/api/send-verification-email/", {
         email,
       });
+
       if (response.status === 201) {
-        // Show a prompt or modal to the user to enter the verification code
-        const code = window.prompt(
-          "Please enter the verification code sent to your email:"
-        );
-        setVerificationCode(code);
-        verifyEmail(code);
+        setShowVerificationPopup(true);
       } else {
         toast.error("Something went wrong");
       }
@@ -51,14 +109,14 @@ const SignupPage = () => {
       toast.error("An error occurred while sending the verification email");
     }
   };
+
   const verifyEmail = async (code) => {
-    //console.log(JSON.stringify({"email":email,"code":code}));
     try {
       const response = await axios.post("/api/verify-email/", {
-        email: email,
-        code: code,
+        email,
+        code,
       });
-      //console.log(JSON.stringify({ email: email, code: code }));
+
       if (response.status === 200) {
         setIsEmailVerified(true);
         toast.success("Email verified successfully");
@@ -68,8 +126,19 @@ const SignupPage = () => {
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while verifying the email");
+    } finally {
+      setShowVerificationPopup(false);
     }
   };
+
+  const handleVerificationConfirm = (code) => {
+    verifyEmail(code);
+  };
+
+  const handleVerificationCancel = () => {
+    setShowVerificationPopup(false);
+  };
+
   useEffect(() => {
     setP(password);
 
@@ -77,10 +146,8 @@ const SignupPage = () => {
       document.querySelector("#password_btn").classList.add("opacity-0");
       setIcon(eyeOff);
       setType("password");
-      //document.querySelector("#password_btn").removeEventListener('click', handleToggle);
     } else {
       document.querySelector("#password_btn").classList.remove("opacity-0");
-      //document.querySelector("#password_btn").addEventListener('click', handleToggle);
     }
   }, [password]);
 
@@ -94,7 +161,6 @@ const SignupPage = () => {
     const department = e.target.elements.department.value;
     const confirmPassword = e.target.elements.confirmpassword.value;
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
@@ -104,7 +170,6 @@ const SignupPage = () => {
       return;
     }
 
-    // Make a POST request to the add_register_request endpoint
     try {
       const response = await axios.post("/api/add_register_request/", {
         username: username,
@@ -120,7 +185,6 @@ const SignupPage = () => {
         setPassword("");
         setC("");
         setP("");
-        //Navigate("/"); // Redirect to homepage or any desired route
       } else {
         toast.error("Something went wrong");
       }
@@ -144,16 +208,10 @@ const SignupPage = () => {
       document.querySelector("#diff_passwords").classList.remove("opacity-0");
     }
   }, [p, c]);
+
   return (
     <>
       <div className=" min-h-screen py-[3%] flex flex-col justify-center bg-gray-300">
-        {/* <Link to="/" className="sticky top-[2%]">
-          <div className="flex justify-end mr-[2%] z-50">
-            <button className="py-2 px-4 absolute top-[2%] text-black text-base font-bold rounded-[50px] overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-blue-800 before:to-blue-400 before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-[50px] hover:before:left-0">
-              Skip Login »
-            </button>
-          </div>
-        </Link> */}
         <div className="flex justify-center main md:mt-0 mt-2 w-full md:w-[100%]">
           <div className="my-auto px-[0%] md:px-[0%]">
             <div className="bg-black m-auto  text-white rounded-lg md:flex  shadow-2xl">
@@ -332,6 +390,13 @@ const SignupPage = () => {
           }
         `}
       </style>
+
+      {showVerificationPopup && (
+        <VerificationPopup
+          onConfirm={handleVerificationConfirm}
+          onCancel={handleVerificationCancel}
+        />
+      )}
     </>
   );
 };

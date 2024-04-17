@@ -71,7 +71,7 @@ function Navbar() {
                     activeClassName="text-white bg-gray-900 hover:bg-gray-700"
                     className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Sanctions
+                    Approvals
                   </Link>
                   <Link
                     to="/purchase"

@@ -40,9 +40,10 @@
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+<!--     <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> -->
+    <a href="https://github.com/Ruthvik283/AILMS_IITI/issues/new?title=Bug%20report%20%F0%9F%90%9E&body=%23%23%20Describe%20the%20bug%0AA%20clear%20and%20concise%20description%20of%20what%20the%20bug%20is.%0A%0A%23%23%23%20Steps%20to%20reproduce%0ASteps%20to%20reproduce%20the%20behavior.%0A%0A%23%23%23%20Expected%20behavior%0AA%20clear%20and%20concise%20description%20of%20what%20you%20expected%20to%20happen.%0A%0A%23%23%23%20Environment%0A%20-%20OS%3A%20%5Be.g.%20Arch%20Linux%5D%0A%20-%20Other%20details%20that%20you%20think%20may%20affect.%0A%0A%23%23%23%20Additional%20context%0AAdd%20any%20other%20context%20about%20the%20problem%20here.&labels=bug">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/Ruthvik283/AILMS_IITI/issues/new?title=Feature%20request%20%F0%9F%8E%AF&body=%23%23%20Summary%0ABrief%20explanation%20of%20the%20feature.%0A%0A%23%23%23%20Basic%20example%0AInclude%20a%20basic%20example%20or%20links%20here.%0A%0A%23%23%23%20Motivation%0AWhy%20are%20we%20doing%20this%3F%20What%20use%20cases%20does%20it%20support%3F%20What%20is%20the%20expected%20outcome%3F%0A%0A&labels=feature%20request">Request Feature</a>
   </p>
 </div>
 
@@ -82,25 +83,79 @@ In our college, specifically at Indore, there was a notable absence of a compreh
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 ## Getting Started
-### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+### Prerequisites
 
-### Installing
+Before you begin, ensure you have met the following requirements:
+- Python 3.6 or higher installed on your machine.
+- pip package manager.
+- Node.js and npm installed to manage frontend dependencies.
+- Git to clone the repository (optional).
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+### Installation
 
-### Executing program
+1. Clone the repository to your local machine:
+    ```sh
+    git clone https://github.com/Ruthvik283/AILMS_IITI.git
+    ```
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+2. Navigate into the project directory:
+    ```sh
+    cd AILMS_IITI
+    ```
+
+3. Navigate into the backend directory and install Python dependencies using pip and the provided `requirements.txt` file:
+    ```sh
+    cd backend
+    pip install -r requirements.txt
+    ```
+
+4. Return to the project root directory, navigate into the frontend directory and install frontend dependencies using npm:
+    ```sh
+    cd ..
+    cd frontend
+    npm install
+    ```
+
+5. Return to the project root directory:
+    ```sh
+    cd ..
+    ```
+
+
+
+### Configuration
+
+1. Copy the `.env.example` file in the backend directory to `.env` and configure the environment variables according to your setup:
+    ```sh
+    cp backend/.env.example backend/.env
+    ```
+
+2. Configure your Django settings in `backend/settings.py`, including database settings, secret key, etc.
+
+### Running the Application
+
+1. In one terminal, navigate into the backend directory and run Django migrations to create necessary database tables:
+    ```sh
+    cd backend
+    python manage.py migrate
+    ```
+
+2. Start the Django development server:
+    ```sh
+    python manage.py runserver
+    ```
+
+3. In a separate terminal, navigate into the frontend directory and start the React development server:
+    ```sh
+    cd frontend
+    npm start
+    ```
+
+4. Visit `http://localhost:3000` in your browser to view the application.
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -148,7 +203,7 @@ code blocks for commands
 
 </div>
 
-* Moreover, a particular sanction can be modified, and we can obtain a Sanction log for the same.
+* Moreover, a particular sanction can be modified, and we can obtain a Sanction log for the same. 
 <div align="center">
     <img src="readmeImg\modifySanction.png" alt="Logo" width="700px" height="auto">
 
@@ -171,8 +226,11 @@ A comprehensive report can be generated, offering valuable insights and aiding i
 
 <div align="center">
     <img src="readmeImg\modifiedReport.jpeg" alt="Logo" width="700px" height="auto">
+    <img src="readmeImg\graph.png" alt="Logo" width="700px" height="auto">    
   
-</div>
+</div
+
+
 <br></br>
 
 
@@ -215,17 +273,34 @@ A comprehensive report can be generated, offering valuable insights and aiding i
 
 
 
+## Contributing
 
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-## License
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
- [contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+[contributors-shield]:https://img.shields.io/badge/CONTRIBUTORS-5-green?style=for-the-badge
+[contributors-url]:https://github.com/Ruthvik283/AILMS_IITI/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
 [forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
 [stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge

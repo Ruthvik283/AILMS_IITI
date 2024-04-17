@@ -31,10 +31,18 @@ const ConfirmationPopup = ({ formData, materialName, onConfirm, onCancel }) => {
         </div>
         <div className="mb-4">
           <p className="font-semibold">Material: {materialName}</p>
-          <p className="font-semibold">Purchase Type: {formData.get("purchase_type")}</p>
-          <p className="font-semibold">Quantity Purchased: {formData.get("quantity_purchased")}</p>
-          <p className="font-semibold">Vendor Details: {formData.get("vendor_details")}</p>
-          <p className="font-semibold">Invoice PDF: {formData.get("invoice_pdf")?.name}</p>
+          <p className="font-semibold">
+            Purchase Type: {formData.get("purchase_type")}
+          </p>
+          <p className="font-semibold">
+            Quantity Purchased: {formData.get("quantity_purchased")}
+          </p>
+          <p className="font-semibold">
+            Vendor Details: {formData.get("vendor_details")}
+          </p>
+          <p className="font-semibold">
+            Invoice PDF: {formData.get("invoice_pdf")?.name}
+          </p>
         </div>
         <div className="flex justify-end">
           <button
@@ -150,7 +158,7 @@ const PurchaseForm = () => {
     { name: "Direct" },
     { name: "Gem" },
     { name: "LPC" },
-    { name: "AMC/CMC"},
+    { name: "AMC/CMC" },
   ];
   const [selectedMaterial, setSelectedMaterial] = useState("");
 
@@ -161,7 +169,6 @@ const PurchaseForm = () => {
     );
     if (selectedMaterial) {
       setMaterial(selectedMaterial.material_id.toString());
-      setMaterialCode(selectedMaterial.material_code);
     }
   };
 
@@ -172,6 +179,19 @@ const PurchaseForm = () => {
           <label htmlFor="materialCode" className="block mb-1">
             MATERIAL
           </label>
+          {/* <select
+            id="materialCode"
+            value={material}
+            onChange={(e) => setMaterial(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select a material</option>
+            {contextData.materialsData.map((material) => (
+              <option key={material.material_id} value={material.material_id}>
+                {material.material_name}
+              </option>
+            ))}
+          </select>  */}
           <SearchableDropdown
             options={contextData.materialsData}
             label="material_name"
@@ -247,9 +267,11 @@ const PurchaseForm = () => {
       {showConfirmationPopup && (
         <ConfirmationPopup
           formData={formData}
-          materialName={contextData.materialsData.find(
-            (mat) => mat.material_id === parseInt(material)
-          ).material_name}
+          materialName={
+            contextData.materialsData.find(
+              (mat) => mat.material_id === parseInt(material)
+            ).material_name
+          }
           onConfirm={handleConfirmSubmit}
           onCancel={handleCancelConfirmation}
         />
