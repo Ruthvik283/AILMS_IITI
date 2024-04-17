@@ -20,7 +20,7 @@ export default function SanctionFormPage() {
             to="/sanctionform"
             className="bg-[#3c50e0] hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
           >
-            Add Sanction
+            Add Approval Entry
           </Link>
         </div>
       </div>

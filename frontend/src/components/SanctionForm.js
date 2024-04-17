@@ -220,6 +220,21 @@ const SanctionForm = () => {
     return dict;
   };
 
+  const [selectedMaterial, setSelectedMaterial] = useState("");
+  
+
+  const handleChange = (value) => {
+    setSelectedMaterial(value);
+    const selectedMaterial = contextData.materialsData.find(
+      (mat) => mat.material_name === value
+    );
+    if (selectedMaterial) {
+      setMaterial(selectedMaterial.material_id.toString());
+      setSelectedMaterialQuantityA(selectedMaterial.quantity_A);
+      setSelectedMaterialQuantityB(selectedMaterial.quantity_B);
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto mt-8 ">
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -331,18 +346,28 @@ const SanctionForm = () => {
             Material
           </label>
 
-          {/* <SearchableDropdown
+     {/* <SearchableDropdown
             options={contextData.materialsData}
             label="material_name"
-            id="id"
+            id="materialCode"
             selectedVal={material}
             handleChange={(val) => {
               setMaterial(val);
             }}
 
             allLabel="Select Material"
-          /> */}
+          />  */}
 
+<SearchableDropdown
+        options={contextData.materialsData}
+        label="material_name"
+        id="materialCode"
+        selectedVal={selectedMaterial}
+        handleChange={handleChange}
+        allLabel="Select a material"
+        display="Select a material"
+      />
+{/* 
           <select
             id="materialCode"
             value={material}
@@ -366,7 +391,7 @@ const SanctionForm = () => {
                 {material.material_name}
               </option>
             ))}
-          </select>
+          </select> */}
           <div className="mt-2">
             <label className="block mb-1">Available Quantity</label>
             {material ? (
@@ -399,7 +424,7 @@ const SanctionForm = () => {
         </div>
         <div>
           <label htmlFor="quantitySanctioned" className="block mb-1">
-            QUANTITY SANCTIONED
+            QUANTITY APPROVED
           </label>
           <input
             type="number"

@@ -344,7 +344,7 @@ const SanctionTable = () => {
       <div className="container mx-auto px-4 bg-[#FFFEFA] sm:px-8 my-5">
         <div className="py-4">
           <div>
-            <h2 className="text-2xl font-semibold leading-tight">Sanctions</h2>
+            <h2 className="text-2xl font-semibold leading-tight">Approvals</h2>
           </div>
           <div className="relative dates flex">
             <div>
@@ -480,7 +480,7 @@ const SanctionTable = () => {
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Sanction ID
+                     Approval ID
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Ticket ID
@@ -501,20 +501,20 @@ const SanctionTable = () => {
                       Description
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Sanction Type
+                    Approval Type
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Date & Time
                     </th>  
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Quantity Sanctioned
+                      Quantity Approved
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Status
                     </th>
 
                     <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Modify Sanction
+                      Modify Approval
                     </th>
                   </tr>
                 </thead>

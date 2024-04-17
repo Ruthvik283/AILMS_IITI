@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import SearchableDropdown from "./SearchableDropdown";
 
 const ConfirmationPopup = ({ formData, onConfirm, onCancel }) => {
   return (
@@ -153,6 +154,20 @@ const PurchaseForm = () => {
     { name: "Type B" },
     { name: "Type C" },
   ];
+  const [selectedMaterial, setSelectedMaterial] = useState("");
+  
+
+  const handleChange = (value) => {
+    setSelectedMaterial(value);
+    const selectedMaterial = contextData.materialsData.find(
+      (mat) => mat.material_name === value
+    );
+    if (selectedMaterial) {
+      setMaterial(selectedMaterial.material_id.toString());
+    }
+  };
+
+
 
   return (
     <div className="max-w-md min-h-screen mx-auto mt-8">
@@ -161,7 +176,7 @@ const PurchaseForm = () => {
           <label htmlFor="materialCode" className="block mb-1">
             MATERIAL
           </label>
-          <select
+          {/* <select
             id="materialCode"
             value={material}
             onChange={(e) => setMaterial(e.target.value)}
@@ -173,7 +188,17 @@ const PurchaseForm = () => {
                 {material.material_name}
               </option>
             ))}
-          </select>
+          </select>  */}
+          <SearchableDropdown
+  options={contextData.materialsData}
+  label="material_name"
+  id="materialCode"
+  selectedVal={selectedMaterial}
+  handleChange={handleChange}
+  allLabel="Select a material"
+  display="Select a material"
+/>
+
         </div>
         {/* <div>
           <label htmlFor="materialCode" className="block mb-1">
