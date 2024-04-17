@@ -6,6 +6,15 @@ module.exports = {
     theme: {
       extend: {},
     },
-    plugins: [],
+    plugins: [
+        function ({ addUtilities }) {
+          const newUtilities = {
+            '.user-select-none': {
+              userSelect: 'none',
+            },
+          };
+          addUtilities(newUtilities, ['responsive', 'hover']);
+        },
+      ],
   }
 

@@ -2,8 +2,9 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import SearchableDropdown from "./SearchableDropdown";
 
-const ConfirmationPopup = ({ formData, onConfirm, onCancel }) => {
+const ConfirmationPopup = ({ formData, materialName, onConfirm, onCancel }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -29,12 +30,11 @@ const ConfirmationPopup = ({ formData, onConfirm, onCancel }) => {
           </button>
         </div>
         <div className="mb-4">
-          <p className="font-semibold">Material: {formData.material_id}</p>
-          <p className="font-semibold">Material Code: {formData.materialCode}</p>
-          <p className="font-semibold">Purchase Type: {formData.purchase_type}</p>
-          <p className="font-semibold">Quantity Purchased: {formData.quantity_purchased}</p>
-          <p className="font-semibold">Vendor Details: {formData.vendor_details}</p>
-          <p className="font-semibold">Invoice PDF: {formData.invoice_pdf?.name}</p>
+          <p className="font-semibold">Material: {materialName}</p>
+          <p className="font-semibold">Purchase Type: {formData.get("purchase_type")}</p>
+          <p className="font-semibold">Quantity Purchased: {formData.get("quantity_purchased")}</p>
+          <p className="font-semibold">Vendor Details: {formData.get("vendor_details")}</p>
+          <p className="font-semibold">Invoice PDF: {formData.get("invoice_pdf")?.name}</p>
         </div>
         <div className="flex justify-end">
           <button
@@ -64,12 +64,10 @@ const PurchaseForm = () => {
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [vendorDetails, setVendorDetails] = useState("");
   const [invoicePdf, setInvoicePdf] = useState(null);
-  const [formData, setFormData] = useState(null)
+  const [formData, setFormData] = useState(null);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
 
   function setPdf(targ) {
-    console.log(targ.files);
-    console.log(JSON.stringify(targ.files[0]));
     setInvoicePdf(targ.files[0]);
   }
 
@@ -149,10 +147,23 @@ const PurchaseForm = () => {
   };
 
   const purchaseType = [
-    { name: "Type A" },
-    { name: "Type B" },
-    { name: "Type C" },
+    { name: "Direct" },
+    { name: "Gem" },
+    { name: "LPC" },
+    { name: "AMC/CMC"},
   ];
+  const [selectedMaterial, setSelectedMaterial] = useState("");
+
+  const handleChange = (value) => {
+    setSelectedMaterial(value);
+    const selectedMaterial = contextData.materialsData.find(
+      (mat) => mat.material_name === value
+    );
+    if (selectedMaterial) {
+      setMaterial(selectedMaterial.material_id.toString());
+      setMaterialCode(selectedMaterial.material_code);
+    }
+  };
 
   return (
     <div className="max-w-md min-h-screen mx-auto mt-8">
@@ -161,33 +172,16 @@ const PurchaseForm = () => {
           <label htmlFor="materialCode" className="block mb-1">
             MATERIAL
           </label>
-          <select
+          <SearchableDropdown
+            options={contextData.materialsData}
+            label="material_name"
             id="materialCode"
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select a material</option>
-            {contextData.materialsData.map((material) => (
-              <option key={material.material_id} value={material.material_id}>
-                {material.material_name}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/* <div>
-          <label htmlFor="materialCode" className="block mb-1">
-            Material code
-          </label>
-          <input
-            type="text"
-            id="materialCode"
-            value={materialCode}
-            onChange={(e) => setMaterialCode(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            selectedVal={selectedMaterial}
+            handleChange={handleChange}
+            allLabel="Select a material"
+            display="Select a material"
           />
-        </div> */}
-
+        </div>
         <div>
           <label htmlFor="quantityPurchased" className="block mb-1">
             QUANTITY PURCHASED
@@ -253,6 +247,9 @@ const PurchaseForm = () => {
       {showConfirmationPopup && (
         <ConfirmationPopup
           formData={formData}
+          materialName={contextData.materialsData.find(
+            (mat) => mat.material_id === parseInt(material)
+          ).material_name}
           onConfirm={handleConfirmSubmit}
           onCancel={handleCancelConfirmation}
         />

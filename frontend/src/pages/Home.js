@@ -40,7 +40,7 @@ export default function Home() {
   }, [userData, navigate, logoutUser]);
 
   return (
-    <>
+    <div className="user-select-none">
       <div
         className="fixed inset-0 w-screen h-screen z-0"
         style={{
@@ -57,7 +57,7 @@ export default function Home() {
       // transition={{ duration: 1 }}
       >
         <Navbar />
-        <div className="content-container text-center pt-16">
+        <div className=" content-container text-center pt-16">
           <img
             src="https://upload.wikimedia.org/wikipedia/en/c/c4/Indian_Institute_of_Technology%2C_Indore_Logo.png?20190402045212"
             alt="IIT Indore Logo"
@@ -78,6 +78,6 @@ export default function Home() {
       </motion.div>
 
       <Footer2 />
-    </>
+    </div>
   );
 }

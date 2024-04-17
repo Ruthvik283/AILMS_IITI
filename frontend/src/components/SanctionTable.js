@@ -43,7 +43,16 @@ const SanctionTable = () => {
         }
 
         const data = await response.json();
-        setSanctionData(data);
+        // Sort items based on their sanction dates in descending order
+        const sortedItems = data.sort((a, b) => {
+            // Convert sanction-date strings to Date objects for comparison
+            const dateA = new Date(a.date_time);
+            const dateB = new Date(b.date_time);
+            // Compare dates in reverse order (most recent first)
+            return dateB - dateA;
+        });
+        setSanctionData(sortedItems);
+        //console.log("sanctions",data);
         setmaterialWisePrice(
           data.reduce((acc, purchase) => {
             acc["Total Price"] = acc["Total Price"] || 0;

@@ -107,9 +107,10 @@ export default function Report() {
   ];
 
   const purchaseType = [
-    { name: "Type A" },
-    { name: "Type B"},
-    {name:"Type C"}
+    { name: "Direct" },
+    { name: "Gem" },
+    { name: "LPC" },
+    { name: "AMC/CMC"},
   ];
 
 

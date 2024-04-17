@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
 
-const ConfirmationPopup = ({ formData, technician, onConfirm, onCancel }) => {
+const ConfirmationPopup = ({ formData, technician, departmentName, materialName, engineerName, onConfirm, onCancel }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -31,12 +31,12 @@ const ConfirmationPopup = ({ formData, technician, onConfirm, onCancel }) => {
         <div className="mb-4">
           <p className="font-semibold">Ticket ID: {formData.ticket_id}</p>
           <p className="font-semibold">Description: {formData.description}</p>
-          <p className="font-semibold">Department: {formData.department}</p>
-          <p className="font-semibold">Engineer ID: {formData.engineer_id}</p>
+          <p className="font-semibold">Department: {departmentName}</p>
+          <p className="font-semibold">Engineer: {engineerName}</p>
           <p className="font-semibold">
             Technician: {technician}
           </p>
-          <p className="font-semibold">Material: {formData.material_id}</p>
+          <p className="font-semibold">Material: {materialName}</p>
           <p className="font-semibold">
             Quantity Sanctioned: {formData.quantity_sanctioned}
           </p>
@@ -160,7 +160,7 @@ const SanctionForm = () => {
         // Reset form fields if needed
         setTicketId("");
         setDepartment("");
-        setEngineerId("");
+        setEngineerId(contextData.userData.id);
         setTechnicianId("");
         setTechnicianName("");
         setMaterial("");
@@ -255,9 +255,9 @@ const SanctionForm = () => {
         </div>
         <div>
           <label htmlFor="engineerId" className="block mb-1">
-            ENGINEER ID
+            Engineer Name
           </label>
-          {contextData.userData.role === "Manager" ? (
+          {/* {contextData.userData.role === "Manager" ? (
             <input
               type="text"
               id="engineerId"
@@ -274,11 +274,19 @@ const SanctionForm = () => {
               style={{ pointerEvents: "none" }}
               className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
             />
-          )}
+          )} */}
+            <input
+              type="text"
+              id="engineerId"
+              value={contextData.userData.username}
+              readOnly
+              style={{ pointerEvents: "none" }}
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            />
         </div>
         <div>
           <label htmlFor="Technician" className="block mb-1">
-            Technician
+            Technician Details
           </label>
           <select
             id="Technician"
@@ -389,6 +397,13 @@ const SanctionForm = () => {
         <ConfirmationPopup
           formData={formData}
           technician={technicianName}
+          departmentName={contextData.departmentData.find(
+            (dept) => dept.id === parseInt(department)
+          ).department_name}
+          materialName={contextData.materialsData.find(
+            (mat) => mat.material_id === parseInt(material)
+          ).material_name}
+          engineerName={contextData.userData.username}
           onConfirm={handleConfirmSubmit}
           onCancel={handleCancelConfirmation}
         />
