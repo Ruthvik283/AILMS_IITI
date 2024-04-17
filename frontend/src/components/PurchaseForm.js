@@ -64,8 +64,8 @@ const PurchaseForm = () => {
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [vendorDetails, setVendorDetails] = useState("");
   const [invoicePdf, setInvoicePdf] = useState(null);
+  const [formData, setFormData] = useState(null)
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
-  const [formData, setFormData] = useState({});
 
   function setPdf(targ) {
     console.log(targ.files);
@@ -76,45 +76,45 @@ const PurchaseForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (material === "") {
-        toast.error("Please select a material");
-        return;
-      }
-    
-      if (purchase_type === "") {
-        toast.error("Please select a purchase type");
-        return;
-      }
-    
-      if (quantityPurchased==""||quantityPurchased <= 0) {
-        toast.error("Quantity purchased must be greater than 0");
-        return;
-      }
-    
-      if (vendorDetails === "") {
-        toast.error("Please provide vendor details");
-        return;
-      }
-    
-      if (invoicePdf === null) {
-        toast.error("Please upload an invoice PDF");
-        return;
-      }
+      toast.error("Please select a material");
+      return;
+    }
 
-      if (invoicePdf.type !== "application/pdf") {
-        toast.error("Uploaded file must be a PDF");
-        return;
-      }
+    if (purchase_type === "") {
+      toast.error("Please select a purchase type");
+      return;
+    }
 
-    const formData = {
-      material_id: material,
-      materialCode: materialCode,
-      purchase_type: purchase_type,
-      quantity_purchased: quantityPurchased,
-      vendor_details: vendorDetails,
-      invoice_pdf: invoicePdf,
-    };
+    if (quantityPurchased == "" || quantityPurchased <= 0) {
+      toast.error("Quantity purchased must be greater than 0");
+      return;
+    }
 
-    setFormData(formData);
+    if (vendorDetails === "") {
+      toast.error("Please provide vendor details");
+      return;
+    }
+
+    if (invoicePdf === null) {
+      toast.error("Please upload an invoice PDF");
+      return;
+    }
+
+    if (invoicePdf.type !== "application/pdf") {
+      toast.error("Uploaded file must be a PDF");
+      return;
+    }
+
+    const formData1 = new FormData();
+
+    formData1.append("material_id", material);
+    formData1.append("materialCode", materialCode);
+    formData1.append("purchase_type", purchase_type);
+    formData1.append("quantity_purchased", quantityPurchased);
+    formData1.append("vendor_details", vendorDetails);
+    formData1.append("invoice_pdf", invoicePdf);
+
+    setFormData(formData1);
     setShowConfirmationPopup(true);
   };
 
@@ -122,9 +122,6 @@ const PurchaseForm = () => {
     try {
       const response = await fetch("/api/add_purchase/", {
         method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
         body: formData,
       });
 
@@ -190,7 +187,7 @@ const PurchaseForm = () => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           />
         </div> */}
-        
+
         <div>
           <label htmlFor="quantityPurchased" className="block mb-1">
             QUANTITY PURCHASED

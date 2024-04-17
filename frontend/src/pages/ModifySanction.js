@@ -107,7 +107,7 @@ const ModifySanctionForm = () => {
       err.push("Quantity must be greater than 0");
     } else if (type === "add" && ((sanctionData.sanct_type === "A" && materialData.quantity_A < quantity) || (sanctionData.sanct_type === "B" && materialData.quantity_B < quantity))) {
       err.push(
-        `Amount of material left is Insufficient. Only ${materialData.quantity} units left`
+        `Amount of material left is Insufficient. Only ${materialData.quantity_A} units of category-${sanctionData.sanct_type} left`
       );
     } else if (
       type === "return" &&
@@ -205,7 +205,7 @@ const ModifySanctionForm = () => {
                     htmlFor="type"
                     className="block text-gray-700 font-bold mb-2"
                   >
-                    To Type
+                    Return as
                   </label>
                   <select
                     name="type"
@@ -214,8 +214,8 @@ const ModifySanctionForm = () => {
                     onChange={(event) => settotype(event.target.value)}
                   >
                     <option value="head">-Choose option-</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
+                    <option value="A">Category-A</option>
+                    <option value="B">Category-B</option>
                   </select>
                 </>
               )}
@@ -280,6 +280,12 @@ const ModifySanctionForm = () => {
                   </li>
                   <li className="py-3 text-gray-700 font-bold">
                     Material Sanctioned: {sanctionData.material_name}
+                  </li>
+                  <li className="py-3 text-gray-700 font-bold">
+                    Category Sanctioned: {sanctionData.sanct_type}
+                  </li>
+                  <li className="py-3 text-gray-700">
+                    Quantity left: Category A:-{materialData.quantity_A} B:-{materialData.quantity_B}
                   </li>
                 </ul>
                 {sanctionData.log && sanctionData.log.length > 0 ? (
