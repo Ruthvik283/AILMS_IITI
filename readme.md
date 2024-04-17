@@ -41,9 +41,9 @@
     <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
     ·
 <!--     <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> -->
-    <a href="https://github.com/Ruthvik283/AILMS_IITI/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/Ruthvik283/AILMS_IITI/issues/new?title=Bug%20report%20%F0%9F%90%9E&body=%23%23%20Describe%20the%20bug%0AA%20clear%20and%20concise%20description%20of%20what%20the%20bug%20is.%0A%0A%23%23%23%20Steps%20to%20reproduce%0ASteps%20to%20reproduce%20the%20behavior.%0A%0A%23%23%23%20Expected%20behavior%0AA%20clear%20and%20concise%20description%20of%20what%20you%20expected%20to%20happen.%0A%0A%23%23%23%20Environment%0A%20-%20OS%3A%20%5Be.g.%20Arch%20Linux%5D%0A%20-%20Other%20details%20that%20you%20think%20may%20affect.%0A%0A%23%23%23%20Additional%20context%0AAdd%20any%20other%20context%20about%20the%20problem%20here.&labels=bug">Report Bug</a>
     ·
-    <a href="https://github.com/Ruthvik283/AILMS_IITI/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/Ruthvik283/AILMS_IITI/issues/new?title=Feature%20request%20%F0%9F%8E%AF&body=%23%23%20Summary%0ABrief%20explanation%20of%20the%20feature.%0A%0A%23%23%23%20Basic%20example%0AInclude%20a%20basic%20example%20or%20links%20here.%0A%0A%23%23%23%20Motivation%0AWhy%20are%20we%20doing%20this%3F%20What%20use%20cases%20does%20it%20support%3F%20What%20is%20the%20expected%20outcome%3F%0A%0A&labels=feature%20request">Request Feature</a>
   </p>
 </div>
 
@@ -216,16 +216,29 @@ A comprehensive report can be generated, offering valuable insights and aiding i
 
 
 
+## Contributing
 
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-## License
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
+<!-- LICENSE -->
+## License
 
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
