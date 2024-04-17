@@ -35,7 +35,7 @@ const ConfirmationPopup = ({ formData, technician, onConfirm, onCancel }) => {
           <p className="font-semibold">Department: {formData.department}</p>
           <p className="font-semibold">Engineer ID: {formData.engineer_id}</p>
           <p className="font-semibold">
-            Technician ID: {formData.technician_id}
+            Technician: {technician}
           </p>
           <p className="font-semibold">Material: {formData.material_id}</p>
           <p className="font-semibold">
@@ -70,6 +70,8 @@ const SanctionForm = () => {
   const [department, setDepartment] = useState("");
   const [engineerId, setEngineerId] = useState(contextData.userData.id);
   const [technicianId, setTechnicianId] = useState("");
+  const [technicianName, setTechnicianName] = useState("");
+  //const [technicianID, setTechnicianId] = useState("");
   const [material, setMaterial] = useState("");
   const [selectedMaterialQuantityA, setSelectedMaterialQuantityA] =
     useState("");
@@ -179,6 +181,7 @@ const SanctionForm = () => {
         setDepartment("");
         setEngineerId("");
         setTechnicianId("");
+        setTechnicianName("");
         setMaterial("");
         setSelectedMaterialQuantityB("");
         setSelectedMaterialQuantityA("");
@@ -299,7 +302,20 @@ const SanctionForm = () => {
           <select
             id="Technician"
             value={technicianId}
-            onChange={(e) => setTechnicianId(e.target.value)}
+            onChange={(e) => {
+                const selectedTechnicianId = e.target.value;
+                const selectedTechnician = contextData.techniciansData.find(
+                  (technician) => technician.id === parseInt(selectedTechnicianId)
+                );
+      
+                if (selectedTechnician) {
+                  setTechnicianId(selectedTechnicianId);
+                  setTechnicianName(`${selectedTechnician.technician_name}-${selectedTechnician.technician_id}`);
+                } else {
+                  setTechnicianId('');
+                  setTechnicianName('');
+                }
+              }}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           >
             <option value="">Select technician</option>
@@ -404,6 +420,7 @@ const SanctionForm = () => {
       {showConfirmationPopup && (
         <ConfirmationPopup
           formData={formData}
+          technician={technicianName}
           onConfirm={handleConfirmSubmit}
           onCancel={handleCancelConfirmation}
         />
