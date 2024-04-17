@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import SearchableDropdown from "./SearchableDropdown";
 
 const ConfirmationPopup = ({ formData, onConfirm, onCancel }) => {
   return (
@@ -143,6 +144,24 @@ const SanctionForm = () => {
     setFormData(formData);
     setShowConfirmationPopup(true);
   };
+
+
+  // useEffect(() => {
+
+ 
+  //     const selectedMaterial = contextData.materialsData.find(
+  //       (mat) => mat.material_name == material
+  //     );
+  //     console.log("material",material);
+  //     console.log(contextData.materialsData);
+  //     console.log("Selected material:", selectedMaterial);
+  //     if (selectedMaterial) {
+  //       setSelectedMaterialQuantityA(selectedMaterial.quantity_A);
+  //       setSelectedMaterialQuantityB(selectedMaterial.quantity_B);
+  //     }
+    
+  // }, [material]);
+
 
   const handleConfirmSubmit = async () => {
     try {
@@ -295,6 +314,19 @@ const SanctionForm = () => {
           <label htmlFor="materialCode" className="block mb-1">
             Material
           </label>
+
+          {/* <SearchableDropdown
+            options={contextData.materialsData}
+            label="material_name"
+            id="id"
+            selectedVal={material}
+            handleChange={(val) => {
+              setMaterial(val);
+            }}
+
+            allLabel="Select Material"
+          /> */}
+
           <select
             id="materialCode"
             value={material}
