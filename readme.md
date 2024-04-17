@@ -83,25 +83,89 @@ In our college, specifically at Indore, there was a notable absence of a compreh
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 ## Getting Started
-### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+### Prerequisites
 
-### Installing
+Before you begin, ensure you have met the following requirements:
+- Python 3.6 or higher installed on your machine.
+- pip package manager.
+- Node.js and npm installed to manage frontend dependencies.
+- Git to clone the repository (optional).
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+### Installation
 
-### Executing program
+1. Clone the repository to your local machine:
+    ```sh
+    git clone https://github.com/Ruthvik283/AILMS_IITI.git
+    ```
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+2. Navigate into the project directory:
+    ```sh
+    cd AILMS_IITI
+    ```
+
+3. Navigate into the backend directory:
+    ```sh
+    cd backend
+    ```
+
+4. Install Python dependencies using pip and the provided `requirements.txt` file:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+5. Return to the project root directory:
+    ```sh
+    cd ..
+    ```
+
+6. Navigate into the frontend directory:
+    ```sh
+    cd frontend
+    ```
+
+7. Install frontend dependencies using npm:
+    ```sh
+    npm install
+    ```
+
+8. Return to the project root directory:
+    ```sh
+    cd ..
+    ```
+
+### Configuration
+
+1. Copy the `.env.example` file in the backend directory to `.env` and configure the environment variables according to your setup:
+    ```sh
+    cp backend/.env.example backend/.env
+    ```
+
+2. Configure your Django settings in `backend/settings.py`, including database settings, secret key, etc.
+
+### Running the Application
+
+1. In one terminal, navigate into the backend directory and run Django migrations to create necessary database tables:
+    ```sh
+    cd backend
+    python manage.py migrate
+    ```
+
+2. Start the Django development server:
+    ```sh
+    python manage.py runserver
+    ```
+
+3. In a separate terminal, navigate into the frontend directory and start the React development server:
+    ```sh
+    cd frontend
+    npm start
+    ```
+
+4. Visit `http://localhost:3000` in your browser to view the application.
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
