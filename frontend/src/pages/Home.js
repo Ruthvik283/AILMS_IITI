@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Footer2 from "../components/Footer";
 import Navbar from "../components/Navbar";
 import AuthContext from "../context/AuthContext";
+import backgroundImage from './IITI_bg.jpg';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function Home() {
         className="fixed inset-0 w-screen h-screen z-0"
         style={{
           backgroundImage:
-            "url('https://static.janbharattimes.com/wp-content/uploads/2023/06/IIT-Indore.jpg')",
+            `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

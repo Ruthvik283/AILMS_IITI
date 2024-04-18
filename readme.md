@@ -188,7 +188,12 @@ Before you begin, ensure you have met the following requirements:
 
 </div>
 
-* A new material can be added
+* The materials are organized into various categories, and users can add new materials within a specific category. The materials page also displays the path to each category, providing clear navigation for users.
+
+<div align="center">
+    <img src="readmeImg\addMaterial.jpg" alt="Logo" width="700px" height="auto">
+
+</div>
 
 <br></br>
 
@@ -209,11 +214,15 @@ Before you begin, ensure you have met the following requirements:
 
 </div>
 
+*There is an option on the sanction page to create new sanctions, which can be used to sanction materials to technicians, leading to a corresponding decrement in the inventory once sanctioned.
+
 * Likewise, the manager can access the purchase table to inspect specific purchases and view associated invoice PDFs, along with comprehensive details pertaining to each purchase transaction.
 <div align="center">
     <img src="readmeImg\PurchaseTable.png" alt="Logo" width="700px" height="auto">
 
 </div>
+
+*An option to add purchases has also been included, after which the corresponding material purchased will get incremented in the inventory.
 
 
 <br></br>
@@ -291,11 +300,11 @@ Don't forget to give the project a star! Thanks again!
 
 
 <!-- LICENSE -->
-## License
+<!-- ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
