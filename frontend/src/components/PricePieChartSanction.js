@@ -63,34 +63,30 @@ const materialData = data.reduce(
   ];
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-      <h3 className="text-lg font-semibold mb-2">Sanctions Cost</h3>
-      <div style={{ width: "100%", height: "100%" }}>
-        <PieChart width={300} height={250}>
-         
-          <Pie
-            data={pieChartData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-            nameKey="name"
-            >
-            {pieChartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-          </Pie>
-          <Tooltip
-            formatter={(value) => `${value.toFixed(3)}%`}
-            />
-          
-
-          <Legend/>
-        </PieChart>
-      </div>
+    <div className="bg-white rounded-lg shadow-md p-4 mb-4" style={{ width: '100%' }}>
+    <h3 className="text-lg font-semibold mb-2">Sanctions Cost</h3>
+    <div style={{ width: '100%', height: 'auto', maxWidth: '300px', margin: '0 auto' }}>
+      <PieChart width={'100%'} height={'100%'}>
+        <Pie
+          data={pieChartData}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          outerRadius={80}
+          fill="#8884d8"
+          dataKey="value"
+          nameKey="name"
+        >
+          {pieChartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip formatter={(value) => `${value.toFixed(3)}%`} />
+        <Legend />
+      </PieChart>
     </div>
+  </div>
+  
   );
 };
 

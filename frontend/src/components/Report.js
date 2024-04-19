@@ -105,6 +105,13 @@ export default function Report() {
     { name: "AMC/CMC" },
   ];
 
+  
+  const sanctionType = [
+    { name: "A" },
+    { name: "B" },
+  ];
+
+
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
   };
@@ -118,9 +125,11 @@ export default function Report() {
   const [selectedFields, setSelectedFields] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedPurchaseType, setSelectedPurchaseType] = useState([]);
+  const [selectedSanctionType, setSelectedSanctionType] = useState([]);
   const [selectedShowSubDepartments, setSelectedShowSubDepartments] = useState(
     []
   );
+
   const [selectedSubDepartments, setSelectedSubDepartments] = useState([]);
 
   const [filteredSanctionList, setFilteredSanctionList] = useState([]);
@@ -179,6 +188,18 @@ export default function Report() {
     const filteredData = filteredPurchaseData.filter((purchase) => {
       return selectedPurchaseType.some(
         (mat) => mat.name === purchase.purchase_type
+      );
+    });
+    return filteredData;
+  };
+  const filterSanctionDataBySanctionType = (filteredSanctionData) => {
+    if (!selectedSanctionType) {
+      return;
+    }
+
+    const filteredData = filteredSanctionData.filter((sanction) => {
+      return selectedSanctionType.some(
+        (mat) => mat.name === sanction.sanct_type
       );
     });
     return filteredData;
@@ -250,6 +271,7 @@ export default function Report() {
       filteredSanction = filterByDate(filteredSanction);
       filteredSanction = filterSanctionDataBySubDepartment(filteredSanction);
       filteredSanction = filterSanctionDataByMaterials(filteredSanction);
+      filteredSanction = filterSanctionDataBySanctionType(filteredSanction);
       if(filteredSanction.length===0){
         toast.error("No approvals match the selected filters.");
       }
@@ -277,11 +299,7 @@ export default function Report() {
     }
       // Set filtered lists
     setFilteredPurchaseList(filteredPurchase);
-      // if(filteredPurchaseList.length===0){
-      //   toast.error("no entry exists to display");
-      //   return;
-      // }
-      // setShowPurchase(true);
+
     }
   };
 
@@ -337,6 +355,10 @@ export default function Report() {
         toast.error("Please select department");
         return;
       }
+      if (selectedSanctionType.length === 0) {
+        toast.error("Please select a Sanction type");
+        return;
+      }
     } else if (isSanction) {
       if (selectedMaterials.length === 0) {
         toast.error("Please select a material");
@@ -345,6 +367,10 @@ export default function Report() {
       // sanction
       if (selectedDepartments.length === 0) {
         toast.error("Please select department");
+        return;
+      }
+      if (selectedSanctionType.length === 0) {
+        toast.error("Please select a Sanction type");
         return;
       }
     } else if (isPurchase) {
@@ -442,6 +468,19 @@ export default function Report() {
                   options={selectedShowSubDepartments}
                   optionLabel="department_name"
                   placeholder="Select Sub Department"
+                  maxSelectedLabels={10}
+                  className="w-full md:w-20rem border border-gray-100"
+                />
+              </div>
+              <div className="card flex flex-col justify-content-center my-5">
+                <label className="text-gray-700 my-2	">Type of Sanction:</label>
+
+                <MultiSelect
+                  value={selectedSanctionType}
+                  onChange={(e) => setSelectedSanctionType(e.value)}
+                  options={sanctionType}
+                  optionLabel="name"
+                  placeholder="Select Sanction Type"
                   maxSelectedLabels={10}
                   className="w-full md:w-20rem border border-gray-100"
                 />
