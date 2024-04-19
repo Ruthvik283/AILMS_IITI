@@ -43,7 +43,7 @@ function Navbar() {
                   </div>
                 </div>
               </div>
-              <div className="hidden md:block">
+              <div className="hidden custom-md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   <Link
                     to="/"
@@ -109,7 +109,7 @@ function Navbar() {
                   </button>
                 </div>
               </div>
-              <div className="-mr-2 flex md:hidden">
+              <div className="-mr-2 flex custom-md:hidden">
                 <button
                   onClick={toggleNavbar}
                   className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
@@ -144,7 +144,7 @@ function Navbar() {
               </div>
             </div>
           </div>
-          <div className={`${isOpen ? "block" : "hidden"} md:hidden`}>
+          <div className={`${isOpen ? "block" : "hidden"} custom-md:hidden`}>
             <div className="px-2 pt-2 pb-3 sm:px-3">
               <Link
                 to="/"
