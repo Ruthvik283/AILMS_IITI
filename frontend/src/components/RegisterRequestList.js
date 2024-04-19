@@ -118,7 +118,8 @@ const RegisterRequestList = () => {
   const fetchRegisterRequests = async () => {
     try {
       const response = await axios.get("/api/register_requests/");
-      setRegisterRequests(response.data);
+      const reversedData = response.data.reverse();
+      setRegisterRequests(reversedData);
     } catch (error) {
       console.error("Error fetching register requests:", error);
     }

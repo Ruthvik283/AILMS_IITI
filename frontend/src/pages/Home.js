@@ -6,6 +6,7 @@ import Footer2 from "../components/Footer";
 import Navbar from "../components/Navbar";
 import AuthContext from "../context/AuthContext";
 import backgroundImage from './IITI_bg.jpg';
+import IITILogo from './IITI_logo.png';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -60,10 +61,10 @@ export default function Home() {
         <Navbar />
         <div className=" content-container text-center pt-16">
           <img
-            src="https://upload.wikimedia.org/wikipedia/en/c/c4/Indian_Institute_of_Technology%2C_Indore_Logo.png?20190402045212"
+            src={IITILogo}
             alt="IIT Indore Logo"
-            className="mx-auto mb-2"
-            style={{ width: "20%" }} // Adjust the width as needed
+            className="mx-auto mb-2 p-5 backdrop-blur-md shadow-lg bg-white/20 rounded-lg w-3/4 md:w-1/5" 
+            //style={{ width: "20%" }} // Adjust the width as needed
           />
           <h1
             id="typed-text"
