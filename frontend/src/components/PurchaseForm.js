@@ -173,25 +173,12 @@ const PurchaseForm = () => {
   };
 
   return (
-    <div className="max-w-md min-h-screen mx-auto mt-8">
+    <div className="max-w-md min-h-screen mx-auto mt-8 p-4">
       <form onSubmit={handleSubmit} className="space-y-4 py-8">
         <div>
           <label htmlFor="materialCode" className="block mb-1">
             MATERIAL
           </label>
-          {/* <select
-            id="materialCode"
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select a material</option>
-            {contextData.materialsData.map((material) => (
-              <option key={material.material_id} value={material.material_id}>
-                {material.material_name}
-              </option>
-            ))}
-          </select>  */}
           <SearchableDropdown
             options={contextData.materialsData}
             label="material_name"

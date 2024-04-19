@@ -96,7 +96,7 @@ export default function Report() {
     fetchData();
   }, []);
 
-  const fields = [{ name: "Purchase" }, { name: "Sanction" }];
+  const fields = [{ name: "Purchase" }, { name: "Approval" }];
 
   const purchaseType = [
     { name: "Direct" },
@@ -376,7 +376,7 @@ export default function Report() {
     setIsPurchase(purchasePresent);
 
     const sanctionPresent = selectedFields.some(
-      (item) => item.name === "Sanction"
+      (item) => item.name === "Approval"
     );
     setIsSanction(sanctionPresent);
   }, [selectedFields]);

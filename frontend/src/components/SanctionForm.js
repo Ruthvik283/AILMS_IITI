@@ -236,7 +236,7 @@ const SanctionForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 ">
+    <div className="max-w-md mx-auto mt-8 p-4 ">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="ticketId" className="block mb-1">

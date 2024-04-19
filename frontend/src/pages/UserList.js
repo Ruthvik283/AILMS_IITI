@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
+import Footer2 from "../components/Footer";
 import {Link} from "react-router-dom"
 
 const UserList = () => {
@@ -84,7 +85,7 @@ const UserList = () => {
       <Navbar />
       <div className="container mx-auto py-8">
        
-        <h1 className="text-2xl font-semibold leading-tight px-4">Users</h1>
+        <h1 className="text-2xl font-semibold leading-tight px-10">Users</h1>
       <div class="flex justify-end">
   <a href="/register_requests" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-2 mt-1 rounded">Register Requests</a>
   <a href="/technicians" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-2 mt-1 rounded">Technicians</a>
@@ -219,6 +220,7 @@ const UserList = () => {
           ))}
         </div>
       </div>
+      <Footer2></Footer2>
     </>
   );
 };
