@@ -250,6 +250,12 @@ export default function Report() {
       filteredSanction = filterByDate(filteredSanction);
       filteredSanction = filterSanctionDataBySubDepartment(filteredSanction);
       filteredSanction = filterSanctionDataByMaterials(filteredSanction);
+      if(filteredSanction.length===0){
+        toast.error("No approvals match the selected filters.");
+      }
+      else{
+      setShowSanction(true);
+      }
       setFilteredSanctionList(filteredSanction);
       // if(filteredSanctionList.length===0){
       //   toast.error("no entry exists to display");
@@ -262,9 +268,15 @@ export default function Report() {
       filteredPurchase = filterByDate(filteredPurchase);
       filteredPurchase = filterPurchaseDataByMaterials(filteredPurchase);
       filteredPurchase = filterPurchaseDataByPurchaseType(filteredPurchase);
-
+    if(filteredPurchase.length===0){
+        toast.error("No purchases match the selected filters.");
+        //return;
+    }
+    else{
+    setShowPurchase(true);
+    }
       // Set filtered lists
-      setFilteredPurchaseList(filteredPurchase);
+    setFilteredPurchaseList(filteredPurchase);
       // if(filteredPurchaseList.length===0){
       //   toast.error("no entry exists to display");
       //   return;
@@ -273,22 +285,7 @@ export default function Report() {
     }
   };
 
-  const CheckEntryExistance=()=>{
-    if (isSanction) {
-      if(filteredSanctionList.length===0){
-        toast.error("no entry exists to display");
-        return;
-      }
-      setShowSanction(true);
-    }
-    if (isPurchase) {
-      if(filteredPurchaseList.length===0){
-        toast.error("no entry exists to display");
-        return;
-      }
-      setShowPurchase(true);
-    }
-  }
+
 
 // for updating subDepartments when ddepartment changes
   useEffect(() => {
@@ -361,11 +358,10 @@ export default function Report() {
         return;
       }
     }
-
     setShowPurchase(false);
     setShowSanction(false);
     filterAll();
-    CheckEntryExistance();
+   // CheckEntryExistance();
   };
 
   const [isPurchase, setIsPurchase] = useState(false);

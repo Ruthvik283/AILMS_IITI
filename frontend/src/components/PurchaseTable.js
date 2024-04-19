@@ -56,7 +56,14 @@ const PurchaseTable = () => {
         }
 
         const data = await response.json();
-        setPurchaseData(data);
+        const sortedItems = data.sort((a, b) => {
+            // Convert sanction-date strings to Date objects for comparison
+            const dateA = new Date(a.date_time);
+            const dateB = new Date(b.date_time);
+            // Compare dates in reverse order (most recent first)
+            return dateB - dateA;
+        });
+        setPurchaseData(sortedItems);
         //console.log("PurchaseData", data);
         setmaterialWisePrice(
           data.reduce((acc, purchase) => {
