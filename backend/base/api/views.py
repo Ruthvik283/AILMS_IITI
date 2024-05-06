@@ -547,6 +547,7 @@ def modify_sanction(request):
         print(data)
 
         sanct = Sanction.objects.filter(sanction_id=sanction_id)[0]
+        # print(sanct)
         succ = True
         if type == 'add':
             succ = succ and sanct.sanction_add(quantity)

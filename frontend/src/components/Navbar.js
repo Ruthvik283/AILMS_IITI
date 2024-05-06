@@ -172,7 +172,7 @@ function Navbar() {
                 activeClassName="bg-gray-900 text-white"
                 className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
               >
-                Sanctions
+                Approvals
               </Link>
               <Link
                 to="/purchase"
@@ -250,7 +250,7 @@ function Navbar() {
                     activeClassName="text-white bg-gray-900 hover:bg-gray-700"
                     className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Sanctions
+                    Your Approvals
                   </Link>
                   {/* <Link
                     to="/purchase"
@@ -337,7 +337,7 @@ function Navbar() {
                 activeClassName="bg-gray-900 text-white"
                 className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
               >
-                Sanctions
+                Your Approvals
               </Link>
               {/* <Link
                 to="/purchase"

@@ -240,7 +240,7 @@ export default function Materials() {
                   <h2 className="text-xl font-bold mb-2 text-gray-800">
                     {material.material_name}
                   </h2>
-                  <p className="text-gray-700 mb-2">Price: ${material.price}</p>
+                  <p className="text-gray-700 mb-2">Price: ₹{material.price}</p>
                   <p className="text-gray-700 mb-2">
                     Quantity: {material.quantity}
                   </p>

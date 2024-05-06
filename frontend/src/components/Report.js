@@ -621,13 +621,13 @@ export default function Report() {
                         {sanction.ticket_id}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
-                        {sanction.department}
+                        {sanction.department_name}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
-                        {sanction.engineer_id}
+                        {sanction.engineer_name}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
-                        {sanction.technician_id}
+                        {sanction.technician_name}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
                         {sanction.material_name}

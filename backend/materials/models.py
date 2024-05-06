@@ -160,8 +160,9 @@ class Sanction(models.Model):
         if self.closed:
             return False
         self.closed = True
-        self.log = self.log + [[str(datetime.now()), 0]]
+        self.log = self.log + [[str(datetime.now()), 0,'closed']]
         super().save()
+        return True
 
     def is_valid(self):
         if self.sanct_type == 'A':
