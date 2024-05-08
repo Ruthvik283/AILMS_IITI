@@ -542,12 +542,12 @@ export default function Report() {
 
             <div className="Stats w-full flex flex-wrap">
               <div className="bg-gray-200 p-4 m-2 flex-1">
-                <header className="font-bold mb-2">Number of Sanctions</header>
+                <header className="font-bold mb-2">Number of Approvals</header>
                 <p className="text-lg">{filteredSanctionList.length}</p>
               </div>
               <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">
-                  Prize worth of Sanctions
+                  Price worth of Approvals
                 </header>
                 <p className="text-lg">
                   {" "}
@@ -565,7 +565,7 @@ export default function Report() {
               </div>
               {/* <div className="bg-gray-200 p-4 m-2 flex-1">
                 <header className="font-bold mb-2">
-                  Prize worth of Sanctions
+                  Price worth of Sanctions
                 </header>
                 <p className="text-lg">$10 million</p>
               </div> */}
@@ -694,7 +694,7 @@ export default function Report() {
             </div>
             <div className="bg-gray-200 p-4 m-2 flex-1">
               <header className="font-bold mb-2">
-                Prize worth of Sanctions
+                Price worth of Sanctions
               </header>
               <p className="text-lg">
                 {Object.entries(materialPurchaseWisePrice).map(
@@ -713,7 +713,7 @@ export default function Report() {
           <div className="Graphical Stats my-10">
             <div class="flex flex-row flex-wrap justify-around">
               <MaterialPieChartPurchase data={filteredPurchaseList} />
-              <PricePieChartSanction data={filteredPurchaseList} />
+              {/* <PricePieChartSanction data={filteredPurchaseList} /> */}
             </div>
           </div>
 
@@ -799,7 +799,14 @@ export default function Report() {
             </table>
           </div>
         </div>)}
+
       </div>
+      {/* <button
+            onClick={window.print()}
+            className="bg-[#3c50e0] hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
+          >
+            Print
+          </button> */}
     </>
   );
 }

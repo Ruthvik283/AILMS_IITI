@@ -93,7 +93,7 @@ const ModifySanctionForm = () => {
     const err = [];
     if (type === "close") {
       if (sanctionData.closed) {
-        err.push("Sanction is closed and cannot be edited");
+        err.push("Approval is closed and cannot be edited");
       }
     } else if (Object.keys(sanctionData).length === 0) {
       err.push("Invalid Sanction ID");
@@ -144,7 +144,7 @@ const ModifySanctionForm = () => {
           } else {
             setX(!X);
             Navigate(`/modifysanction/${sanctionData.sanction_id}`);
-            toast.success(`Sanction updated successfully!`);
+            toast.success(`Approval updated successfully!`);
           }
         } catch (error) {
           console.error("Error data:", error);
@@ -160,7 +160,7 @@ const ModifySanctionForm = () => {
     <>
       <Navbar />
       <div className="max-w-4xl mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-4">Modify Sanction</h1>
+        <h1 className="text-2xl font-bold mb-4">Modify Approval</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div className="mb-4">
@@ -168,7 +168,7 @@ const ModifySanctionForm = () => {
                 htmlFor="sanct_id"
                 className="block text-gray-700 font-bold mb-2"
               >
-                Sanction ID
+                Approval ID
               </label>
               <input
                 type="text"
@@ -261,11 +261,11 @@ const ModifySanctionForm = () => {
           <div>
             <div className="mb-4">
               <div>
-                <h3 className="text-lg font-bold mb-2">Sanction Log</h3>
+                <h3 className="text-lg font-bold mb-2">Approval Log</h3>
                 <ul className="divide-y divide-gray-200">
                   {/* Initial sanction entry */}
                   <li className="py-3 text-gray-700">
-                    Sanction opened at{" "}
+                    Approval opened at{" "}
                     {new Date(sanctionData.date_time).toLocaleString("en-US", {
                       year: "numeric",
                       month: "long",
@@ -276,13 +276,13 @@ const ModifySanctionForm = () => {
                     })}
                   </li>
                   <li className="py-3 text-gray-700 font-bold">
-                    Net quantity sanctioned: {sanctionData.quantity_sanctioned}
+                    Net quantity approved: {sanctionData.quantity_sanctioned}
                   </li>
                   <li className="py-3 text-gray-700 font-bold">
-                    Material Sanctioned: {sanctionData.material_name}
+                    Material Approved: {sanctionData.material_name}
                   </li>
                   <li className="py-3 text-gray-700 font-bold">
-                    Category Sanctioned: {sanctionData.sanct_type}
+                    Category : {sanctionData.sanct_type}
                   </li>
                   <li className="py-3 text-gray-700">
                     Quantity left: Category A:-{materialData.quantity_A} B:-{materialData.quantity_B}
@@ -329,7 +329,7 @@ const ModifySanctionForm = () => {
                 )}
 
                 <div className="mt-4">
-                  <span className="text-lg font-bold">Sanction Status: </span>
+                  <span className="text-lg font-bold">Approval Status: </span>
                   {sanctionData.closed ? (
                     <span className="text-red-600 font-semibold">Closed</span>
                   ) : (
