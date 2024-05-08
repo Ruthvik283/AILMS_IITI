@@ -374,66 +374,76 @@ class PurchasesBetweenDates(APIView):
 
 @api_view(['POST'])
 def sanction_material(request):
-    data = request.data
-    if data['ticket_id'] == "":
-        ticket1 = 0
-    else:
-        ticket1 = data['ticket_id']
+    data_list = request.data
+    # print(data_list)
 
-    try:
+    invalid_sanctions = []
+    valid_sanctions = []
 
-        department_obj = Department.objects.filter(
-            id=int(data["department"])).first()
-        if department_obj is None:
-            raise ObjectDoesNotExist("Department not found")
+    for data in data_list:
+        if data['ticket_id'] == "":
+            ticket1 = 0
+        else:
+            ticket1 = data['ticket_id']
 
-        technician_obj = Technician.objects.filter(
-            id=data['technician_id']).first()
-        if technician_obj is None:
-            raise ObjectDoesNotExist("Technician not found")
+        try:
+            department_obj = Department.objects.get(id=int(data["department"]))
+            technician_obj = Technician.objects.get(id=data['technician_id'])
+            material_obj = Material.objects.get(material_id=data['material_id'])
 
-        material_obj = Material.objects.filter(
-            material_id=data['material_id']).first()
-        if material_obj is None:
-            raise ObjectDoesNotExist("Material not found")
-
-        sct = Sanction(
-            ticket_id=ticket1,
-            description=data['description'],
-            department=department_obj,
-            engineer_id=data['engineer_id'],
-            technician=technician_obj,
-            material=material_obj,
-            quantity_sanctioned=int(data['quantity_sanctioned']),
-            sanct_type=data['sanct_type']
-        )
-
-        is_valid = sct.is_valid()
-
-        if (is_valid[0]):
-            sct.save()
-            return Response(
-                {
-                    "success": True
-                }
+            sct = Sanction(
+                ticket_id=ticket1,
+                description=data['description'],
+                department=department_obj,
+                engineer_id=data['engineer_id'],
+                technician=technician_obj,
+                material=material_obj,
+                quantity_sanctioned=int(data['quantity_sanctioned']),
+                sanct_type=data['sanct_type']
             )
 
+            is_valid = sct.is_valid()
+
+            if is_valid[0]:
+                valid_sanctions.append(sct)
+            else:
+                invalid_sanctions.append({
+                    "data": data,
+                    "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
+                })
+
+        except ObjectDoesNotExist as e:
+            invalid_sanctions.append({
+                "data": data,
+                "error": str(e)
+            })
+
+        except Exception as e:
+            print(e)
+            invalid_sanctions.append({
+                "data": data,
+                "error": "Invalid Sanction Details"
+            })
+
+    if invalid_sanctions:
         return Response(
             {
                 "success": False,
-                "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
+                "invalid_sanctions": invalid_sanctions
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+    # print(valid_sanctions)
+    for sct in valid_sanctions:
+        sct.save()
 
-    except Exception as e:
-        print(e)
-        return Response(
-            {
-                "error": "Invalid Sanction Details"
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    return Response(
+        {
+            "success": True,
+            "message": "All valid sanctions saved successfully"
+        }
+    )
+
 
 
 @api_view(['POST'])

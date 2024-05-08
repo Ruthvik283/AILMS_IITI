@@ -49,28 +49,29 @@ export const AuthProvider = ({ children }) => {
 
   //Data fetched here to reduce redundancy
   const [materialsData, setMaterialsData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/materials", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  let fetchMaterialsData = async () => {
+    try {
+      const response = await fetch("/api/materials", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setMaterialsData(data);
-        //console.log(data);
-      } catch (error) {
-        //console.error("Error fetching data:", error);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
-    fetchData();
+
+      const data = await response.json();
+      setMaterialsData(data);
+      //toast.success("hi");
+      //console.log(data);
+    } catch (error) {
+      //console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchMaterialsData();
   }, []);
 
   const [techniciansData, setTechniciansData] = useState([]);
@@ -467,6 +468,7 @@ export const AuthProvider = ({ children }) => {
     logoutUser: logoutUser,
     signupUser: signupUser,
     setUserData: setUserData,
+    fetchMaterialsData: fetchMaterialsData,
     setUser: setUser,
     setAuthTokens: setAuthTokens,
     materialsData: materialsData,

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
@@ -74,6 +74,11 @@ const PurchaseForm = () => {
   const [invoicePdf, setInvoicePdf] = useState(null);
   const [formData, setFormData] = useState(null);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+
+  let { fetchMaterialsData } = useContext(AuthContext);
+  useEffect(() => {
+    fetchMaterialsData();
+  }, []);
 
   function setPdf(targ) {
     setInvoicePdf(targ.files[0]);
