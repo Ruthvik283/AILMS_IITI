@@ -28,11 +28,18 @@ const SanctionTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+    
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
         const response = await fetch("/api/sanctions/", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers,
 
           body: JSON.stringify(contextData.userData),
         });
@@ -104,13 +111,20 @@ const SanctionTable = () => {
   const [technicianData, setTechnicianData] = useState([]);
 
   useEffect(() => {
+    const tokenString = localStorage.getItem('authTokens');
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     const fetchData = async () => {
       try {
         const response = await fetch("/api/technicians/", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers,
         });
 
         if (!response.ok) {

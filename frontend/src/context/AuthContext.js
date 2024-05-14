@@ -51,11 +51,19 @@ export const AuthProvider = ({ children }) => {
   const [materialsData, setMaterialsData] = useState([]);
   let fetchMaterialsData = async () => {
     try {
+        const tokenString = localStorage.getItem("authTokens");
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+        
+        console.log("token",token)
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
       const response = await fetch("/api/materials", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
       });
 
       if (!response.ok) {

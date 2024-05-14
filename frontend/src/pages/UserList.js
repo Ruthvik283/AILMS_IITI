@@ -24,8 +24,17 @@ const UserList = () => {
   }, []);
 
   useEffect(() => {
+    const tokenString = localStorage.getItem('authTokens');
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     axios
-      .get("/api/get_users/")
+      .get("/api/get_users/",{ headers })
       .then((response) => {
         setUsers(response.data);
       })
@@ -52,8 +61,17 @@ const UserList = () => {
       );
       return;
     }
+    const tokenString = localStorage.getItem('authTokens');
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     axios
-      .post("/api/update_user/", formData)
+      .post("/api/update_user/", formData, { headers })
       .then((response) => {
         toast.success("User updated successfully!");
         // Reset state and fetch updated user data
@@ -67,7 +85,7 @@ const UserList = () => {
         });
         setUsers([]);
         axios
-          .get("/api/get_users/")
+          .get("/api/get_users/",{headers})
           .then((response) => {
             setUsers(response.data);
           })

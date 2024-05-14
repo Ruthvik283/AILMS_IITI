@@ -41,13 +41,21 @@ const PurchaseTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const tokenString = localStorage.getItem("authTokens");
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+        
+        // console.log("token",token)
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
         const response = await fetch(
           `/api/purchases/NULL/NULL/`,
           {
             method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: headers,
           }
         );
 

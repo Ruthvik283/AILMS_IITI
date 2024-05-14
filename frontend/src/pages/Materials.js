@@ -37,8 +37,17 @@ export default function Materials() {
 
   useEffect(() => {
     if (categoryId) {
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+    
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
       axios
-        .get(`/api/categories/${categoryId}/related/`)
+        .get(`/api/categories/${categoryId}/related/`,{headers})
         .then((response) => {
           setRelatedData(response.data);
         })
@@ -84,12 +93,21 @@ export default function Materials() {
 
   const handleMaterialSubmit = (e) => {
     e.preventDefault();
+    const tokenString = localStorage.getItem('authTokens');
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     const { quantity, ...editedMaterialsData } = MaterialFormData;
     axios
       .post("/api/create-material/", {
         ...editedMaterialsData,
         category: categoryId,
-      })
+      },{headers})
       .then((response) => {
         //console.log("Material created successfully:", response.data);
         toast.success("Material created successfully");
@@ -114,12 +132,21 @@ export default function Materials() {
 
   const handleCategorySubmit = (e) => {
     e.preventDefault();
+    const tokenString = localStorage.getItem('authTokens');
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
 
     axios
       .post("/api/create-category/", {
         ...CategoryFormData,
         parent_category: categoryId,
-      })
+      },{headers})
       .then((response) => {
         //console.log("Category created successfully:", response.data);
         toast.success("Category created successfully");
@@ -139,12 +166,21 @@ export default function Materials() {
   };
   const handleEditMaterialSubmit = (e) => {
     e.preventDefault();
+    const tokenString = localStorage.getItem('authTokens');
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     // const newx = editMaterialData;
     // newx["category"] = 1;
       const { quantity, ...editedMaterialsData } = editMaterialData;
     // Send a request to update the material information
     axios
-      .post(`/api/edit_material/`, editedMaterialsData)
+      .post(`/api/edit_material/`, editedMaterialsData,{headers})
       .then((response) => {
         //console.log("Material updated successfully:", response.data);
         toast.success("Material updated successfully");

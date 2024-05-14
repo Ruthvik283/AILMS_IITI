@@ -7,6 +7,7 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
 
 import toast from "react-hot-toast";
+import IITILogo from './IITI_logo.png';
 
 const LoginPage = () => {
   const [password, setPassword] = useState("");
@@ -71,7 +72,7 @@ const LoginPage = () => {
                   <div className="text-center">
                     <img
                       className="mx-auto md:h-32 h-[5%]"
-                      src="https://upload.wikimedia.org/wikipedia/en/c/c4/Indian_Institute_of_Technology%2C_Indore_Logo.png?20190402045212"
+                      src={IITILogo}
                       alt="logo"
                     />
 

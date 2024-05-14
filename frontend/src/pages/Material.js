@@ -17,7 +17,7 @@ export default function Material() {
 
             <Navbar></Navbar>
             
-            <div className='bg-[#FFFEFA]'>
+            <div className='bg-[#FFFEFA] min-h-screen'>
             <MaterialsTable/>
             </div>
 

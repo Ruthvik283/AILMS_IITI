@@ -117,7 +117,16 @@ const RegisterRequestList = () => {
 
   const fetchRegisterRequests = async () => {
     try {
-      const response = await axios.get("/api/register_requests/");
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+      const response = await axios.get("/api/register_requests/",{headers});
       const reversedData = response.data.reverse();
       setRegisterRequests(reversedData);
     } catch (error) {
@@ -133,7 +142,16 @@ const RegisterRequestList = () => {
 
   const handleUpdateRequest = async () => {
     try {
-      await axios.post("/api/edit_register_request/", editedRequest);
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+    
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
+      await axios.post("/api/edit_register_request/", editedRequest,{headers});
       setEditingRequestId(null);
       toast.success("Register-request updated successfully!");
       fetchRegisterRequests();
@@ -153,7 +171,16 @@ const RegisterRequestList = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.post(`/api/delete_register_request/${deleteRequest.id}`, editedRequest);
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+    
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
+      await axios.post(`/api/delete_register_request/${deleteRequest.id}`, editedRequest,{headers});
       setShowDeletePopup(false);
       toast.success("Register-request deleted successfully!");
       fetchRegisterRequests();

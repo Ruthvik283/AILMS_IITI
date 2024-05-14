@@ -189,7 +189,7 @@ const SanctionForm = () => {
       }
     });
     if (invalidMaterials.length > 0) {
-        return;
+      return;
     }
 
     // if (quantitySanctioned === "") {
@@ -237,7 +237,7 @@ const SanctionForm = () => {
     });
 
     setFormData(formDataArray);
-    console.log("formData",formDataArray);
+    console.log("formData", formDataArray);
 
     //setShowConfirmationPopup(true);
     handleConfirmSubmit(formDataArray);
@@ -260,11 +260,18 @@ const SanctionForm = () => {
 
   const handleConfirmSubmit = async (formData) => {
     try {
+      const tokenString = localStorage.getItem("authTokens");
+      const token = tokenString ? JSON.parse(tokenString).access : null;
+
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
       const response = await fetch("/api/sanction/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify(formData),
       });
 
@@ -343,6 +350,7 @@ const SanctionForm = () => {
               margin: 0 /* Optional: Adjust as needed */,
               appearance: "textfield" /* Edge and other modern browsers */,
             }}
+            // onWheel={(e) => e.preventDefault()}
             id="ticketId"
             value={ticketId}
             onChange={(e) => setTicketId(e.target.value)}
@@ -538,6 +546,7 @@ const SanctionForm = () => {
                       materialQuantities[material.material_id]
                         .quantitySanctioned
                     }
+                    // onWheel={(e) => e.preventDefault()}
                     onChange={(e) =>
                       handleQuantityChange(
                         material.material_id,

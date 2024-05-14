@@ -7,7 +7,7 @@ from materials.models import *
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
@@ -26,6 +26,8 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
 from django.template import Context, Engine
 from django.core.mail import EmailMultiAlternatives
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 User = get_user_model()
 
 
@@ -67,6 +69,8 @@ def getRoutes(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def testData(request):
     items = User.objects.all()
     serializer = UserSerializer(items, many=True)
@@ -102,6 +106,8 @@ class getUsernameById(APIView):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def get_related_categories(request, category_id):
     # Retrieve the current category
     current_category = Category.objects.get(pk=category_id)
@@ -134,6 +140,8 @@ def departmentData(request, id):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def AllMaterials(request):
     materials = MaterialSerializer(Material.objects.all(), many=True)
     return Response(materials.data)
@@ -147,6 +155,8 @@ def MaterialbyID(request, material_id):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def EditMaterial(request):
     try:
         data = request.data
@@ -187,8 +197,9 @@ def EditMaterial(request):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET', 'POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def SendMail(request):
     # materials = Material.objects.all()  # Retrieve all materials
     data = request.data
@@ -332,35 +343,13 @@ def departments_data(request):
 
 
 class PurchasesBetweenDates(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, start_date, end_date):
-        """
-        settings.USE_TZ set to False to prevent 
-
-        'RuntimeWarning: DateTimeField Purchase.date_time
-        received a naive datetime (YYYY-MM-DD HH:MM:SS)
-        while time zone support is active' 
-
-        warning in API calls.
-
-        Please fix this if you know how to...
-        """
-
-        if start_date == "NULL":
-            start_date = "1970-01-01"
-
-        if end_date == "NULL":
-            end_date = datetime.now().date().__str__()
-
-        try:
-            start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-        except ValueError:
-            return Response({"error": "Invalid date format. Please use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
-
-        purchases = Purchase.objects.filter(
-            date_time__range=[start_date, end_date + timedelta(days=1)])
+        purchases = Purchase.objects.all()
         serializer = PurchaseSerializer(purchases, many=True)
-        print(serializer)
+        # print(serializer)
         # adding price to PurchaseData
         x = serializer.data
         z = 0
@@ -373,6 +362,8 @@ class PurchasesBetweenDates(APIView):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def sanction_material(request):
     data_list = request.data
     # print(data_list)
@@ -389,7 +380,8 @@ def sanction_material(request):
         try:
             department_obj = Department.objects.get(id=int(data["department"]))
             technician_obj = Technician.objects.get(id=data['technician_id'])
-            material_obj = Material.objects.get(material_id=data['material_id'])
+            material_obj = Material.objects.get(
+                material_id=data['material_id'])
 
             sct = Sanction(
                 ticket_id=ticket1,
@@ -445,17 +437,18 @@ def sanction_material(request):
     )
 
 
-
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def purchase_material(request):
-    print(request.data)
+    # print(request.data)
     try:
         data = request.data
 
-        print(data['material_id'])
-        print(data['quantity_purchased'])
-        print(data['vendor_details'])
-        print(data['purchase_type'])
+        # print(data['material_id'])
+        # print(data['quantity_purchased'])
+        # print(data['vendor_details'])
+        # print(data['purchase_type'])
 
         p = Purchase(
             material=Material.objects.filter(
@@ -506,6 +499,8 @@ def purchase_material(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def sanctionsData(request):
 
     data = request.data
@@ -525,17 +520,23 @@ def sanctionsDataId(request, sanct_id):
 
 
 class CategoryCreateView(generics.CreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def techniciansData(request):
     techs = Technician.objects.all()
     return Response(TechnicianSerializer(techs, many=True).data)
 
 
 class MaterialCreateView(generics.CreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
 
@@ -546,6 +547,8 @@ class MaterialCreateView(generics.CreateAPIView):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def modify_sanction(request):
     try:
         data = request.data
@@ -585,6 +588,8 @@ def modify_sanction(request):
 
 @xframe_options_exempt
 @api_view(['GET', 'POST'])
+# @authentication_classes([JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def PurchasePDF(request, purchase_id):
     try:
         try:
@@ -609,6 +614,8 @@ def test(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def update_user(request):
     data = request.data
     pk = data.get('id')
@@ -655,6 +662,8 @@ def update_user(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def get_users(request):
     users = User.objects.all()
     return Response(UserSerializer(users, many=True).data)
@@ -667,6 +676,8 @@ def get_roles(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def get_registerRequests(request):
     reqs = RegisterRequest.objects.all()
     return Response(RegisterRequestSerializer(reqs, many=True).data)
@@ -683,6 +694,8 @@ def add_register_request(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def edit_register_request(request):
     try:
         pk = request.data.get('id')
@@ -700,6 +713,8 @@ def edit_register_request(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_register_request(request, pk):
     try:
         register_request = RegisterRequest.objects.get(pk=pk)
@@ -712,6 +727,8 @@ def delete_register_request(request, pk):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def add_department(request):
     department_name = request.data.get('department_name')
     is_main = request.data.get('is_main')
@@ -739,6 +756,8 @@ def add_department(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def edit_department(request):
     # department_id = request.data.get('department_id')
     department_id = request.data.get('id')
@@ -776,6 +795,8 @@ def edit_department(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def add_technician(request):
     try:
         serializer = TechnicianSerializer(data=request.data)
@@ -788,6 +809,8 @@ def add_technician(request):
 
 
 @api_view(['PUT'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def edit_technician(request, pk):
     try:
         technician = Technician.objects.get(pk=pk)
@@ -803,14 +826,18 @@ def edit_technician(request, pk):
 
 
 @api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_technician(request, pk):
     try:
         technician = Technician.objects.get(pk=pk)
+        print(technician)
         technician.delete()
         return Response({'message': 'Technician deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     except Technician.DoesNotExist:
         return Response({'error': 'Technician does not exist'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
+        print({'error': str(e)})
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -821,6 +848,8 @@ def delete_technician(request, pk):
 #     email
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def send_verification_email(request):
 
     data = request.data
@@ -881,6 +910,8 @@ def verify_email(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def editPurchasePDF(request):
     data = request.data
     purchase_id = data["purchase_id"]

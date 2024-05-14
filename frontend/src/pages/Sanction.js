@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function SanctionFormPage() {
   useEffect(() => {
-    document.title = "Sanction- AILMS";
+    document.title = "Approvals - AILMS";
     window.scrollTo(0, 0);
   }, []);
   return (

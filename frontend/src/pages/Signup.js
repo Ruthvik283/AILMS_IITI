@@ -7,6 +7,7 @@ import { eye } from "react-icons-kit/feather/eye";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import IITILogo from './IITI_logo.png';
 
 const VerificationPopup = ({ onConfirm, onCancel }) => {
   const [verificationCode, setVerificationCode] = useState("");
@@ -220,7 +221,7 @@ const SignupPage = () => {
                   <div className="text-center">
                     <img
                       className="mx-auto md:h-32 h-[10%]"
-                      src="https://upload.wikimedia.org/wikipedia/en/c/c4/Indian_Institute_of_Technology%2C_Indore_Logo.png?20190402045212"
+                      src={IITILogo}
                       alt="logo"
                     />
 

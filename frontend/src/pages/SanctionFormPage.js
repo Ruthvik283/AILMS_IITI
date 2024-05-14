@@ -7,7 +7,7 @@ import SanctionForm from '../components/SanctionForm';
 export default function SanctionFormPage() {
 
     useEffect(() => {
-        document.title = "Modify-Sanction- AILMS";
+        document.title = "Approval - AILMS";
         window.scrollTo(0, 0);
       }, []);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -8,9 +8,20 @@ const PurchasePdf = () => {
   const { purchase_id } = useParams();
   const [src, setSrc] = useState(purchase_id);
   const [invoicePdf, setInvoicePdf] = useState(null);
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    document.title = "Purchase Pdf - AILMS";
+    window.scrollTo(0, 0);
+    document.title = "Approval - AILMS";
+    window.scrollTo(0, 0);
+    const tokenString = localStorage.getItem("authTokens");
+    const token1 = tokenString ? JSON.parse(tokenString).access : null;
+    setToken(token1);
+  }, []);
 
   function setPdf(targ) {
-    setInvoicePdf(targ.files[0])
+    setInvoicePdf(targ.files[0]);
   }
 
   const pdfsubmit = async (event) => {
@@ -20,26 +31,36 @@ const PurchasePdf = () => {
     formData.append("purchase_id", purchase_id);
     formData.append("invoice_pdf", invoicePdf);
 
-    console.log(formData)
+    console.log(formData);
 
     try {
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+    
+        const headers = {
+        //   'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
+
       const response = await fetch("/api/editpdf/", {
         method: "POST",
+        headers:headers,
         body: formData,
       });
 
       if (response.ok) {
-        toast.success("Pdf Edited Successfully")
+        toast.success("Pdf Edited Successfully");
         setSrc(src);
-        window.location.reload()
-
+        window.location.reload();
       } else {
-        toast.error(`Failed to edit pdf ${response.status}`)
+        toast.error(`Failed to edit pdf ${response.status}`);
       }
     } catch (error) {
-      console.error("Error submitting form: ", error)
+      console.error("Error submitting form: ", error);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-500 mb-5">

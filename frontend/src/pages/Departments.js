@@ -245,7 +245,16 @@ const DepartmentsPage = () => {
         toast.error("Parent department for non-main department can't be empty!");
         return;
       }
-      const response = await axios.post("/api/add_department/", newDepartment);
+      const tokenString = localStorage.getItem('authTokens');
+      const token = tokenString ? JSON.parse(tokenString).access : null;
+  
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      const response = await axios.post("/api/add_department/", newDepartment,{headers});
       if (response.status >= 200 && response.status < 300) {
         toast.success("Department added successfully");
         fetchDepartments();
@@ -274,13 +283,20 @@ const DepartmentsPage = () => {
         toast.error("Parent department for non-main department can't be empty!");
         return;
       }
+      const tokenString = localStorage.getItem('authTokens');
+      const token = tokenString ? JSON.parse(tokenString).access : null;
+  
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
       const response = await axios.post(
         "/api/edit_department/",
         JSON.stringify(editDepartment),
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers,
         }
       );
       if (response.status >= 200 && response.status < 300) {

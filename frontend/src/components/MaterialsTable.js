@@ -1,8 +1,11 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import toast from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 const MaterialsTable = () => {
+  const contextData = useContext(AuthContext);
+  let {fetchMaterialsData} = useContext(AuthContext);
   const [materialsData, setMaterialsData] = useState([]);
   const [email, setEmail] = useState(null);
   const [showAllMaterials, setShowAllMaterials] = useState(true);
@@ -27,15 +30,10 @@ const MaterialsTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const materialsResponse = await fetch(
-          "/api/materials"
-        );
 
-        if (!materialsResponse.ok) {
-          throw new Error(`HTTP error! Status: ${materialsResponse.status}`);
-        }
+        fetchMaterialsData();
 
-        const materialsData = await materialsResponse.json();
+        const materialsData = contextData.materialsData;
         const belowCriticalData = materialsData.filter(material => {
             return material.quantity < material.critical_quantity;
           });
@@ -101,11 +99,18 @@ const MaterialsTable = () => {
       }
 
       toast.success("Sending emails");
+      const tokenString = localStorage.getItem('authTokens');
+      const token = tokenString ? JSON.parse(tokenString).access : null;
+  
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
       const response = await fetch("/api/sendmail/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({ selected_materials: globalSelectedMaterials,email: email }),
       });
 

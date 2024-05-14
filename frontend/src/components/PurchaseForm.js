@@ -131,8 +131,18 @@ const PurchaseForm = () => {
 
   const handleConfirmSubmit = async () => {
     try {
+        const tokenString = localStorage.getItem('authTokens');
+        const token = tokenString ? JSON.parse(tokenString).access : null;
+    
+        const headers = {
+        //   'Content-Type': 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
       const response = await fetch("/api/add_purchase/", {
         method: "POST",
+        headers:headers,
         body: formData,
       });
 

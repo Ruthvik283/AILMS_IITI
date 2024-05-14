@@ -27,15 +27,12 @@ const ModifySanctionForm = () => {
       } else {
         const fetchData = async () => {
           try {
-            const response1 = await fetch(
-              `/api/sanctions/${id}`,
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
+            const response1 = await fetch(`/api/sanctions/${id}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
 
             if (!response1.ok) {
               throw new Error(`HTTP error! Status: ${response1.status}`);
@@ -52,15 +49,12 @@ const ModifySanctionForm = () => {
 
             //console.log("sanc_req", data1);
 
-            const response2 = await fetch(
-              `/api/materials/${data1.material}`,
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
+            const response2 = await fetch(`/api/materials/${data1.material}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
 
             if (!response2.ok) {
               throw new Error(`HTTP error! Status: ${response2.status}`);
@@ -88,6 +82,10 @@ const ModifySanctionForm = () => {
       //console.log("sanc_id  ", sanct_id);
     }
   }, [sanct_id, X]);
+  useEffect(() => {
+    document.title = "Modify Approval - AILMS";
+    window.scrollTo(0, 0);
+  }, []);
 
   function modify_sanction() {
     const err = [];
@@ -105,7 +103,12 @@ const ModifySanctionForm = () => {
       err.push("Invalid quantity");
     } else if (Number(quantity) <= 0) {
       err.push("Quantity must be greater than 0");
-    } else if (type === "add" && ((sanctionData.sanct_type === "A" && materialData.quantity_A < quantity) || (sanctionData.sanct_type === "B" && materialData.quantity_B < quantity))) {
+    } else if (
+      type === "add" &&
+      ((sanctionData.sanct_type === "A" &&
+        materialData.quantity_A < quantity) ||
+        (sanctionData.sanct_type === "B" && materialData.quantity_B < quantity))
+    ) {
       err.push(
         `Amount of material left is Insufficient. Only ${materialData.quantity_A} units of category-${sanctionData.sanct_type} left`
       );
@@ -123,21 +126,25 @@ const ModifySanctionForm = () => {
     if (err.length === 0) {
       const submitData = async () => {
         try {
-          const response1 = await fetch(
-            `/api/modifysanction/`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                quantity: Number(quantity),
-                type: type,
-                sanct_id: sanctionData.sanction_id,
-                to_type: totype,
-              }),
-            }
-          );
+          const tokenString = localStorage.getItem("authTokens");
+          const token = tokenString ? JSON.parse(tokenString).access : null;
+
+          const headers = {
+            "Content-Type": "application/json",
+          };
+          if (token) {
+            headers.Authorization = `Bearer ${token}`;
+          }
+          const response1 = await fetch(`/api/modifysanction/`, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({
+              quantity: Number(quantity),
+              type: type,
+              sanct_id: sanctionData.sanction_id,
+              to_type: totype,
+            }),
+          });
 
           if (!response1.ok) {
             throw new Error(`HTTP error! Status: ${response1.status}`);
@@ -285,7 +292,8 @@ const ModifySanctionForm = () => {
                     Category : {sanctionData.sanct_type}
                   </li>
                   <li className="py-3 text-gray-700">
-                    Quantity left: Category A:-{materialData.quantity_A} B:-{materialData.quantity_B}
+                    Quantity left: Category A:-{materialData.quantity_A} B:-
+                    {materialData.quantity_B}
                   </li>
                 </ul>
                 {sanctionData.log && sanctionData.log.length > 0 ? (
@@ -308,13 +316,16 @@ const ModifySanctionForm = () => {
                               })}
                             </div>
                             <div
-                              className={`${Number(entry[1]) > 0
-                                ? "text-green-600"
-                                : "text-red-600"
-                                } font-semibold`}
+                              className={`${
+                                Number(entry[1]) > 0
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              } font-semibold`}
                             >
                               {Number(entry[1]) > 0
                                 ? `${entry[1]} Added(+)`
+                                : entry[2] === "closed"
+                                ? "Closed"
                                 : `${entry[1]} Returned(-) -> ${entry[2]}`}
                             </div>
                           </li>
