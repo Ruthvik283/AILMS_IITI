@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 const TechnicianTable = () => {
   const contextData = useContext(AuthContext);
+  let { fetchTechnicians }= useContext(AuthContext);
   const [technicians, setTechnicians] = useState([]);
   const [editingTechnicianId, setEditingTechnicianId] = useState(null);
   const [editedTechnician, setEditedTechnician] = useState({});
@@ -15,23 +16,7 @@ const TechnicianTable = () => {
     fetchTechnicians();
   }, []);
 
-  const fetchTechnicians = async () => {
-    try {
-      const tokenString = localStorage.getItem("authTokens");
-      const token = tokenString ? JSON.parse(tokenString).access : null;
 
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-      const response = await axios.get("/api/technicians/", { headers });
-      setTechnicians(response.data);
-    } catch (error) {
-      console.error("Error fetching technicians:", error);
-    }
-  };
 
   const handleEditTechnician = (technician) => {
     setEditingTechnicianId(technician.id);
@@ -143,7 +128,7 @@ const TechnicianTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {technicians.map((technician) => (
+                {contextData.techniciansData.map((technician) => (
                   <tr key={technician.id}>
                     <td className="px-5 py-4 border-b border-gray-200 text-sm">
                       {editingTechnicianId === technician.id ? (

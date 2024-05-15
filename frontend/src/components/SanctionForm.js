@@ -92,8 +92,10 @@ const SanctionForm = () => {
   const [formData, setFormData] = useState({});
 
   let { fetchMaterialsData } = useContext(AuthContext);
+  let { fetchTechnicians }= useContext(AuthContext);
   useEffect(() => {
     fetchMaterialsData();
+    fetchTechnicians();    
   }, []);
 
   const handleMaterialChange = (values) => {

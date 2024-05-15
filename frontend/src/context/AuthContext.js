@@ -83,28 +83,35 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const [techniciansData, setTechniciansData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/technicians", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  const fetchTechnicians = async () => {
+    try {
+      const tokenString = localStorage.getItem("authTokens");
+      const token = tokenString ? JSON.parse(tokenString).access : null;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setTechniciansData(data);
-        //console.log("technicians", data);
-      } catch (error) {
-        //console.error("Error fetching data:", error);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
       }
-    };
-    fetchData();
+      const response = await fetch("/api/technicians", {
+        method: "GET",
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setTechniciansData(data);
+      //console.log("technicians", data);
+    } catch (error) {
+      //console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+        fetchTechnicians();
   }, []);
 
   const [departmentData, setDepartmentData] = useState([]);
@@ -477,6 +484,7 @@ export const AuthProvider = ({ children }) => {
     signupUser: signupUser,
     setUserData: setUserData,
     fetchMaterialsData: fetchMaterialsData,
+    fetchTechnicians: fetchTechnicians,
     setUser: setUser,
     setAuthTokens: setAuthTokens,
     materialsData: materialsData,
