@@ -935,3 +935,42 @@ def editPurchasePDF(request):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    try:
+        print(request.data)
+        user_id = request.data['user_id']
+        old_password = request.data['oldPassword']
+        new_password = request.data['newPassword']
+
+        usr = User.objects.get(id = user_id)
+        
+        if not usr.check_password(old_password):
+            return Response(
+                {
+                    "success" : False,
+                }
+                , status=status.HTTP_401_UNAUTHORIZED
+            )
+        
+        usr.set_password(new_password)
+        usr.save()
+
+        return Response(
+            {
+                "success" : True
+            }
+        )
+    
+    except Exception as e:
+        print(e)
+
+        return Response(
+            {
+                "success" : False,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

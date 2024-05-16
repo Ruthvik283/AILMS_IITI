@@ -66,4 +66,5 @@ urlpatterns = [
          name='send_verification_email'),
     path('verify-email/', views.verify_email, name='verify_email'),
     path('editpdf/', views.editPurchasePDF, name='edit_pdf'),
+    path('change-password/', views.change_password, name='change_password'),
 ]

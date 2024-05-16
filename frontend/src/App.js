@@ -27,6 +27,7 @@ import RegisterRequestList from "./pages/RegisterRequestPage";
 import PurchasePdf from "./components/PurchasePdf";
 // import <PurchasePdfPage>from "./components/PurchasePdf";
 import PurchasePdfPage from "./pages/PurchasePdfPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 export default function App() {
   //const contextData = useContext(AuthContext);
@@ -94,6 +95,7 @@ export default function App() {
               element={<PurchasePdfPage />}
             />
             <Route path="/report" element={<ReportPage />} />
+            <Route path="/change-password" element={<ChangePasswordPage/>} />
             {/* </Route> */}
           </Routes>
         </AuthProvider>

@@ -101,6 +101,13 @@ function Navbar() {
                   >
                     Report
                   </Link>
+                  <Link
+                    to="/change-password"
+                    activeClassName="bg-gray-900 text-white"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Change Password
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
@@ -202,6 +209,13 @@ function Navbar() {
               >
                 Report
               </Link>
+              <Link
+                to="/change-password"
+                activeClassName="bg-gray-900 text-white"
+                className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
+              >
+                Change Password
+              </Link>
               <button
                 onClick={handleLogout}
                 className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
@@ -266,6 +280,13 @@ function Navbar() {
                   >
                     Report
                   </Link> */}
+                  <Link
+                    to="/change-password"
+                    activeClassName="bg-gray-900 text-white"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Change Password
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
@@ -353,6 +374,13 @@ function Navbar() {
               >
                 Report
               </Link> */}
+              <Link
+                to="/change-password"
+                activeClassName="bg-gray-900 text-white"
+                className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
+              >
+                Change Password
+              </Link>
               <button
                 onClick={handleLogout}
                 className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white hover:text-gray-200 hover:bg-gray-700"
