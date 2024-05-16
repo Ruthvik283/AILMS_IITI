@@ -9,11 +9,14 @@ const ConfirmationPopup = ({
   formData,
   technician,
   departmentName,
-  materialName,
+  materialDetails,
   engineerName,
   onConfirm,
   onCancel,
 }) => {
+  const ticketId = formData[0]?.ticket_id;
+  const description = formData[0]?.description;
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -39,16 +42,25 @@ const ConfirmationPopup = ({
           </button>
         </div>
         <div className="mb-4">
-          <p className="font-semibold">Ticket ID: {formData.ticket_id}</p>
-          <p className="font-semibold">Description: {formData.description}</p>
+          <p className="font-semibold">Ticket ID: {formData[0]?.ticket_id}</p>
+          <p className="font-semibold">
+            Description: {formData[0]?.description}
+          </p>
           <p className="font-semibold">Department: {departmentName}</p>
           <p className="font-semibold">Engineer: {engineerName}</p>
           <p className="font-semibold">Technician: {technician}</p>
-          <p className="font-semibold">Material: {materialName}</p>
-          <p className="font-semibold">
-            Quantity Sanctioned: {formData.quantity_sanctioned}
-          </p>
-          <p className="font-semibold">Sanction Type: {formData.sanct_type}</p>
+
+          {formData.map((material, index) => (
+            <div key={index} className="mb-4">
+              <p className="font-semibold">Material: {material.materialName}</p>
+              <p className="font-semibold">
+                Quantity Sanctioned: {material.quantity_sanctioned}
+              </p>
+              <p className="font-semibold">
+                Sanction Type: {material.sanct_type}
+              </p>
+            </div>
+          ))}
         </div>
         <div className="flex justify-end">
           <button
@@ -80,43 +92,33 @@ const SanctionForm = () => {
   const [technicianName, setTechnicianName] = useState("");
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [materialQuantities, setMaterialQuantities] = useState({});
-  //const [technicianID, setTechnicianId] = useState("");
   const [material, setMaterial] = useState("");
-  const [selectedMaterialQuantityA, setSelectedMaterialQuantityA] =
-    useState("");
-  const [selectedMaterialQuantityB, setSelectedMaterialQuantityB] =
-    useState("");
   const [sanct_type, setSanct_type] = useState("");
-  const [quantitySanctioned, setQuantitySanctioned] = useState("");
+  const [quantity_sanctioned, setquantity_sanctioned] = useState("");
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [formData, setFormData] = useState({});
 
   let { fetchMaterialsData } = useContext(AuthContext);
-  let { fetchTechnicians }= useContext(AuthContext);
+  let { fetchTechnicians } = useContext(AuthContext);
   useEffect(() => {
     fetchMaterialsData();
-    fetchTechnicians();    
+    fetchTechnicians();
   }, []);
 
   const handleMaterialChange = (values) => {
     const valuesArray = Array.isArray(values) ? values : [values];
     setSelectedMaterials(valuesArray);
-    // const selectedMaterial = contextData.materialsData.find(
-    //     (mat) => mat.material_name === value
-    //   );
     const newQuantities = {};
     valuesArray.forEach((value) => {
-      console.log("value", value);
       newQuantities[value.material_id] = {
         sanct_type: materialQuantities[value.material_id]?.sanct_type || "",
-        quantitySanctioned:
-          materialQuantities[value.material_id]?.quantitySanctioned || "",
+        quantity_sanctioned:
+          materialQuantities[value.material_id]?.quantity_sanctioned || "",
         QuantityA: value.quantity_A,
         QuantityB: value.quantity_B,
         material_name: value.material_name,
       };
     });
-    console.log(newQuantities); // You can remove this line if you don't need it
     setMaterialQuantities(newQuantities);
   };
 
@@ -153,16 +155,14 @@ const SanctionForm = () => {
     const invalidMaterials = [];
     selectedMaterials.forEach((material) => {
       const materialId = material.material_id;
-      console.log(materialQuantities[materialId]);
       const sanct_type = materialQuantities[materialId].sanct_type;
-      const quantitySanctioned =
-        materialQuantities[materialId].quantitySanctioned;
+      const quantity_sanctioned =
+        materialQuantities[materialId].quantity_sanctioned;
       const QuantityA = materialQuantities[materialId].QuantityA;
       const QuantityB = materialQuantities[materialId].QuantityB;
       const material_name = materialQuantities[materialId].material_name;
-      console.log(material_name, materialQuantities[materialId].material_name);
 
-      if (quantitySanctioned === "") {
+      if (quantity_sanctioned === "") {
         invalidMaterials.push(material_name);
         toast.error(`Please enter quantity approved for ${material_name}`);
         return;
@@ -172,7 +172,7 @@ const SanctionForm = () => {
         return;
       } else if (
         sanct_type === "A" &&
-        parseInt(quantitySanctioned) > QuantityA
+        parseInt(quantity_sanctioned) > QuantityA
       ) {
         invalidMaterials.push(material_name);
         toast.error(
@@ -181,7 +181,7 @@ const SanctionForm = () => {
         return;
       } else if (
         sanct_type === "B" &&
-        parseInt(quantitySanctioned) > QuantityB
+        parseInt(quantity_sanctioned) > QuantityB
       ) {
         invalidMaterials.push(material_name);
         toast.error(
@@ -194,37 +194,25 @@ const SanctionForm = () => {
       return;
     }
 
-    // if (quantitySanctioned === "") {
-    //   toast.error("Please enter quantity sanctioned");
-    //   return;
-    // }
-
-    // if (sanct_type === "") {
-    //   toast.error("Please select a sanction type");
-    //   return;
-    // }
-
-    // if (
-    //   sanct_type === "A" &&
-    //   parseInt(quantitySanctioned) > selectedMaterialQuantityA
-    // ) {
-    //   toast.error(
-    //     "Quantity sanctioned for cannot be more than available quantity"
-    //   );
-    //   return;
-    // }
-
-    // if (
-    //   sanct_type === "B" &&
-    //   parseInt(quantitySanctioned) > selectedMaterialQuantityB
-    // ) {
-    //   toast.error("Quantity sanctioned cannot be more than available quantity");
-    //   return;
-    // }
-
+    // const formDataArray = selectedMaterials.map((material) => {
+    //   const materialId = material.material_id;
+    //   const { sanct_type, quantity_sanctioned } = materialQuantities[materialId];
+    //   return {
+    //     ticket_id: ticketId,
+    //     description: description,
+    //     engineer_id: engineerId,
+    //     department: department,
+    //     technician_id: technicianId,
+    //     material_id: materialId,
+    //     quantity_sanctioned: quantity_sanctioned,
+    //     userData: contextData.userData,
+    //     sanct_type: sanct_type,
+    //   };
+    // });
     const formDataArray = selectedMaterials.map((material) => {
       const materialId = material.material_id;
-      const { sanct_type, quantitySanctioned } = materialQuantities[materialId];
+      const { sanct_type, quantity_sanctioned } =
+        materialQuantities[materialId];
       return {
         ticket_id: ticketId,
         description: description,
@@ -232,35 +220,33 @@ const SanctionForm = () => {
         department: department,
         technician_id: technicianId,
         material_id: materialId,
-        quantity_sanctioned: quantitySanctioned,
+        quantity_sanctioned: quantity_sanctioned,
         userData: contextData.userData,
         sanct_type: sanct_type,
       };
     });
+    // console.log("formData", formDataArray);
 
-    setFormData(formDataArray);
-    console.log("formData", formDataArray);
+    const formattedFormData = formDataArray.map((formData) => ({
+      ticket_id: formData.ticket_id,
+      description: formData.description,
+      department: formData.department,
+      materialName: contextData.materialsData.find(
+        (material) => material.material_id === formData.material_id
+      ).material_name,
+      material_id: formData.material_id,
+      engineer_id: formData.engineer_id,
+      technician_id: formData.technician_id,
+      quantity_sanctioned: formData.quantity_sanctioned,
+      sanct_type: formData.sanct_type,
+    }));
+    // console.log("formatted", formattedFormData);
 
-    //setShowConfirmationPopup(true);
-    handleConfirmSubmit(formDataArray);
+    setFormData(formattedFormData);
+    setShowConfirmationPopup(true);
   };
 
-  // useEffect(() => {
-
-  //     const selectedMaterial = contextData.materialsData.find(
-  //       (mat) => mat.material_name == material
-  //     );
-  //     console.log("material",material);
-  //     console.log(contextData.materialsData);
-  //     console.log("Selected material:", selectedMaterial);
-  //     if (selectedMaterial) {
-  //       setSelectedMaterialQuantityA(selectedMaterial.quantity_A);
-  //       setSelectedMaterialQuantityB(selectedMaterial.quantity_B);
-  //     }
-
-  // }, [material]);
-
-  const handleConfirmSubmit = async (formData) => {
+  const handleConfirmSubmit = async () => {
     try {
       const tokenString = localStorage.getItem("authTokens");
       const token = tokenString ? JSON.parse(tokenString).access : null;
@@ -285,16 +271,12 @@ const SanctionForm = () => {
         setTechnicianId("");
         setTechnicianName("");
         setMaterial("");
-        setSelectedMaterialQuantityB("");
-        setSelectedMaterialQuantityA("");
         setSanct_type("");
-        setQuantitySanctioned("");
+        setquantity_sanctioned("");
         toast.success("Successfully Sanctioned!");
-        console.log(response, JSON.stringify(formData));
         Navigate("/sanction");
       } else {
         toast.error("Failed to submit form");
-        console.log(response, JSON.stringify(formData));
       }
     } catch (error) {
       toast.error("Error submitting form:", error);
@@ -318,21 +300,15 @@ const SanctionForm = () => {
     depts.sub_departments.forEach((subDept) => {
       dict.push(subDept);
     });
-    //console.log(dict);
     return dict;
   };
 
-  const [selectedMaterial, setSelectedMaterial] = useState("");
-
   const handleChange = (value) => {
-    setSelectedMaterial(value);
     const selectedMaterial = contextData.materialsData.find(
       (mat) => mat.material_name === value
     );
     if (selectedMaterial) {
       setMaterial(selectedMaterial.material_id.toString());
-      setSelectedMaterialQuantityA(selectedMaterial.quantity_A);
-      setSelectedMaterialQuantityB(selectedMaterial.quantity_B);
     }
   };
 
@@ -346,13 +322,6 @@ const SanctionForm = () => {
           <input
             type="number"
             min="0"
-            style={{
-              "-moz-appearance": "textfield" /* Firefox */,
-              "-webkit-appearance": "none" /* WebKit */,
-              margin: 0 /* Optional: Adjust as needed */,
-              appearance: "textfield" /* Edge and other modern browsers */,
-            }}
-            // onWheel={(e) => e.preventDefault()}
             id="ticketId"
             value={ticketId}
             onChange={(e) => setTicketId(e.target.value)}
@@ -372,7 +341,7 @@ const SanctionForm = () => {
           />
         </div>
         <div>
-          <label htmlFor="materialCode" className="block mb-1">
+          <label htmlFor="department" className="block mb-1">
             Department
           </label>
           <select
@@ -393,24 +362,6 @@ const SanctionForm = () => {
           <label htmlFor="engineerId" className="block mb-1">
             Engineer Name
           </label>
-          {/* {contextData.userData.role === "Manager" ? (
-            <input
-              type="text"
-              id="engineerId"
-              value={engineerId}
-              onChange={(e) => setEngineerId(e.target.value)}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-            />
-          ) : (
-            <input
-              type="text"
-              id="engineerId"
-              value={contextData.userData.id}
-              readOnly
-              style={{ pointerEvents: "none" }}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-            />
-          )} */}
           <input
             type="text"
             id="engineerId"
@@ -427,6 +378,22 @@ const SanctionForm = () => {
           <select
             id="Technician"
             value={technicianId}
+            // onChange={(e) => {
+            //   const selectedTechnicianId = e.target.value;
+            //   const selectedTechnician = contextData.techniciansData.find(
+            //     (technician) => technician.id === parseInt(selectedTechnicianId)
+            //   );
+
+            //   if (selectedTechnician) {
+            //     setTechnicianId(selectedTechnicianId);
+            //     setTechnicianName(
+            //       '${selectedTechnician.technician_name}-${selectedTechnician.technician_id}'
+            //     );
+            //   } else {
+            //     setTechnicianId("");
+            //     setTechnicianName("");
+            //   }
+            // }}
             onChange={(e) => {
               const selectedTechnicianId = e.target.value;
               const selectedTechnician = contextData.techniciansData.find(
@@ -435,9 +402,16 @@ const SanctionForm = () => {
 
               if (selectedTechnician) {
                 setTechnicianId(selectedTechnicianId);
-                setTechnicianName(
-                  `${selectedTechnician.technician_name}-${selectedTechnician.technician_id}`
-                );
+                const technicianName = `${
+                  selectedTechnician.technician_name ||
+                  selectedTechnician.name ||
+                  ""
+                }-${
+                  selectedTechnician.technician_id ||
+                  selectedTechnician.id ||
+                  ""
+                }`;
+                setTechnicianName(technicianName);
               } else {
                 setTechnicianId("");
                 setTechnicianName("");
@@ -453,33 +427,6 @@ const SanctionForm = () => {
             ))}
           </select>
         </div>
-        {/* <div className="mt-4">
-          <label htmlFor="materialCode" className="block mb-1">
-            Material
-          </label>
-          <SearchableDropdown
-            options={contextData.materialsData}
-            label="material_name"
-            id="materialCode"
-            selectedVal={selectedMaterial}
-            handleChange={handleChange}
-            allLabel="Select a material"
-            display="Select a material"
-          />
-          <div className="mt-2">
-            <label className="block mb-1">Available Quantity</label>
-            {material ? (
-              <p className="text-sm text-gray-900">
-                Category-A: {selectedMaterialQuantityA}, Category-B:{" "}
-                {selectedMaterialQuantityB}
-              </p>
-            ) : (
-              <p className="text-sm text-gray-500">
-                Quantity will be displayed once the material is selected
-              </p>
-            )}
-          </div>
-        </div> */}
         <div className="mt-4">
           <label htmlFor="materialCode" className="block mb-1">
             Select Materials
@@ -497,7 +444,6 @@ const SanctionForm = () => {
 
         {selectedMaterials.length > 0 && (
           <div>
-            {/* <label className="block mb-1">Material Quantities</label> */}
             {selectedMaterials.map((material) => (
               <div
                 key={material.material_id}
@@ -531,28 +477,27 @@ const SanctionForm = () => {
                     }
                     className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                   >
-                    <option value="">Select the category</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
+                    <option value="">Select Category</option>
+                    <option value="A">Category A</option>
+                    <option value="B">Category B</option>
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="quantitySanctioned" className="block mb-1">
-                    QUANTITY APPROVED
+                  <label htmlFor="quantity_sanctioned" className="block mb-1">
+                    Quantity Sanctioned
                   </label>
                   <input
                     type="number"
-                    id="quantitySanctioned"
                     min="1"
+                    id="quantity_sanctioned"
                     value={
                       materialQuantities[material.material_id]
-                        .quantitySanctioned
+                        .quantity_sanctioned
                     }
-                    // onWheel={(e) => e.preventDefault()}
                     onChange={(e) =>
                       handleQuantityChange(
                         material.material_id,
-                        "quantitySanctioned",
+                        "quantity_sanctioned",
                         e.target.value
                       )
                     }
@@ -563,61 +508,47 @@ const SanctionForm = () => {
             ))}
           </div>
         )}
-
-        {/* <div>
-          <label htmlFor="materialCategory" className="block mb-1">
-            Material Category
-          </label>
-          <select
-            id="materialCategory"
-            value={sanct_type}
-            onChange={(e) => setSanct_type(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select the category</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-          </select>
-        </div>
         <div>
-          <label htmlFor="quantitySanctioned" className="block mb-1">
-            QUANTITY APPROVED
-          </label>
-          <input
-            type="number"
-            id="quantitySanctioned"
-            min="1"
-            value={quantitySanctioned}
-            onChange={(e) => setQuantitySanctioned(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </div> */}
-        <button
-          type="submit"
-          className="w-full bg-[#52ab98] text-white py-2 px-4 rounded hover:bg-[#2b6777] transition duration-200"
-        >
-          Submit
-        </button>
+          <button
+            type="submit"
+            className="w-full bg-[#52ab98] text-white py-2 px-4 rounded hover:bg-[#2b6777] transition duration-200"
+          >
+            Submit
+          </button>
+        </div>
       </form>
       {/* {showConfirmationPopup && (
         <ConfirmationPopup
-          formData={formData}
+          formData={{
+            ticket_id: ticketId,
+            description: description,
+            quantity_sanctioned: quantity_sanctioned,
+            sanct_type: sanct_type,
+          }}
           technician={technicianName}
           departmentName={
-            contextData.departmentData.find(
-              (dept) => dept.id === parseInt(department)
-            ).department_name
+            contextData.userData.department.department_name ||
+            contextData.userData.department.sub_department_name
           }
-          materialName={
-            contextData.materialsData.find(
-              (mat) => mat.material_id === parseInt(material)
-            ).material_name
-          }
+          materialName={selectedMaterials.map(
+            (material) => material.material_name
+          )}
           engineerName={contextData.userData.username}
-          onConfirm={handleConfirmSubmit}
+          onConfirm={() => handleConfirmSubmit(formData)}
           onCancel={handleCancelConfirmation}
         />
       )} */}
+      {showConfirmationPopup && (
+        <ConfirmationPopup
+          formData={formData}
+          technician={technicianName}
+          departmentName={contextData.userData.department.department_name}
+          materialDetails={formData.map((material) => material.materialName)}
+          engineerName={contextData.userData.username}
+          onConfirm={() => handleConfirmSubmit()}
+          onCancel={handleCancelConfirmation}
+        />
+      )}
     </div>
   );
 };
