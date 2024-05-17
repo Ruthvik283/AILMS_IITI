@@ -35,6 +35,7 @@ class Material(models.Model):
         Category, on_delete=models.SET_NULL, related_name='materials', null=True, blank=True)
     material_id = models.AutoField(primary_key=True)
     material_name = models.CharField(max_length=255, default="Un-named")
+    unit = models.CharField(max_length=255, default="unit")
     price = models.IntegerField(null=False)
     critical_quantity = models.IntegerField(null=False, default=5)
     rack_number = models.CharField(max_length=255, null=True, blank=True)
@@ -42,7 +43,7 @@ class Material(models.Model):
     quantity_A = models.IntegerField(null=False, default=0)
     quantity_B = models.IntegerField(null=False, default=0)
 
-    def _str_(self):
+    def __str__(self):
         return self.material_name
 
     def belowcriticalquantity(self):
