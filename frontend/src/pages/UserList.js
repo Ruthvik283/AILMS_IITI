@@ -101,7 +101,7 @@ const UserList = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-8 min-h-screen">
        
         <h1 className="text-2xl font-semibold leading-tight px-10">Users</h1>
       <div class="flex justify-end">

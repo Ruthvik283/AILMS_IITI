@@ -327,7 +327,7 @@ const DepartmentsPage = () => {
   return (
     <div>
       <Navbar className="w-full" />
-      <div className="py-4 bg-[#FFFEFA]">
+      <div className="py-4 min-h-screen bg-[#FFFEFA]">
         <div className="mt-4">
           <h2 className="text-2xl font-bold  px-12">Add Department</h2>
           <div className="flex justify-end px-12 mb-4">
