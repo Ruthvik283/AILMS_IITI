@@ -423,7 +423,8 @@ export const AuthProvider = ({ children }) => {
     "/signup",
     "/sanction",
     "/sanctionform",
-    "/modifysanction", //extra code is also wwritten below to handle /<int>
+    "/modifysanction",
+    "/change-password", //extra code is also wwritten below to handle /<int>
   ];
   const nonUserValidRoutes = ["/login","/signup"];
 

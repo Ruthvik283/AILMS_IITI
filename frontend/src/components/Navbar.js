@@ -24,7 +24,7 @@ function Navbar() {
       //In the else you can find engineer's Navbar
       return (
         <nav className="bg-[#1c2434]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
+          <div className="max-w-7xl mx-auto  px-0 sm:px-6 lg:px-0 ">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 {/* <h1 className="text-white font-bold text-xl">
@@ -106,7 +106,7 @@ function Navbar() {
                     activeClassName="bg-gray-900 text-white"
                     className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Change Password
+                    ChangePassword
                   </Link>
                   <button
                     onClick={handleLogout}
