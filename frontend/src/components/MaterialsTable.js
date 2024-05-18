@@ -247,6 +247,9 @@ const MaterialsTable = () => {
                       Price
                     </th>
                     <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                     Unit
+                    </th>
+                    <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                      Critical Quantity
                     </th>
                     <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -299,6 +302,9 @@ const MaterialsTable = () => {
                       </td>
                       <td className="px-8 py-4 border-b border-gray-200 text-sm">
                         {material.price}
+                      </td>
+                      <td className="px-8 py-4 border-b border-gray-200 text-sm">
+                        {material.unit}
                       </td>
                       <td className="px-8 py-4 border-b border-gray-200 text-sm">
                         {material.critical_quantity}

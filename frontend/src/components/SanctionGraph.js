@@ -139,7 +139,7 @@ const SanctionGraph = ({ data }) => {
                 name="Cumulative Quantity Sanctioned"
                 stroke="#FF5733"
                 strokeWidth={2}
-                dot={false}
+                dot={{ stroke: "#FF5733", strokeWidth: 3, fill: "#fff" }}
               />
             </LineChart>
           </div>

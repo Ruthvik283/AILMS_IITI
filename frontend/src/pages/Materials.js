@@ -18,8 +18,8 @@ export default function Materials() {
     material_name: "",
     price: "",
     quantity: "",
-    quantity_A:"",
-    quantity_B:"",
+    quantity_A: "",
+    quantity_B: "",
     critical_quantity: "",
     rack_number: "",
     row_number: "",
@@ -37,17 +37,17 @@ export default function Materials() {
 
   useEffect(() => {
     if (categoryId) {
-        const tokenString = localStorage.getItem('authTokens');
-        const token = tokenString ? JSON.parse(tokenString).access : null;
-    
-        const headers = {
-          'Content-Type': 'application/json',
-        };
-        if (token) {
-          headers.Authorization = `Bearer ${token}`;
-        }
+      const tokenString = localStorage.getItem('authTokens');
+      const token = tokenString ? JSON.parse(tokenString).access : null;
+
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
       axios
-        .get(`/api/categories/${categoryId}/related/`,{headers})
+        .get(`/api/categories/${categoryId}/related/`, { headers })
         .then((response) => {
           setRelatedData(response.data);
         })
@@ -107,7 +107,7 @@ export default function Materials() {
       .post("/api/create-material/", {
         ...editedMaterialsData,
         category: categoryId,
-      },{headers})
+      }, { headers })
       .then((response) => {
         //console.log("Material created successfully:", response.data);
         toast.success("Material created successfully");
@@ -146,7 +146,7 @@ export default function Materials() {
       .post("/api/create-category/", {
         ...CategoryFormData,
         parent_category: categoryId,
-      },{headers})
+      }, { headers })
       .then((response) => {
         //console.log("Category created successfully:", response.data);
         toast.success("Category created successfully");
@@ -177,10 +177,10 @@ export default function Materials() {
     }
     // const newx = editMaterialData;
     // newx["category"] = 1;
-      const { quantity, ...editedMaterialsData } = editMaterialData;
+    const { quantity, ...editedMaterialsData } = editMaterialData;
     // Send a request to update the material information
     axios
-      .post(`/api/edit_material/`, editedMaterialsData,{headers})
+      .post(`/api/edit_material/`, editedMaterialsData, { headers })
       .then((response) => {
         //console.log("Material updated successfully:", response.data);
         toast.success("Material updated successfully");
@@ -278,6 +278,9 @@ export default function Materials() {
                   </h2>
                   <p className="text-gray-700 mb-2">Price: ₹{material.price}</p>
                   <p className="text-gray-700 mb-2">
+                    Unit: {material.unit}
+                  </p>
+                  <p className="text-gray-700 mb-2">
                     Quantity: {material.quantity}
                   </p>
                   <p className="text-gray-700 mb-2">
@@ -309,9 +312,10 @@ export default function Materials() {
             ))}
           </ul>
           {editMaterialData && (
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center">
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-cente">
               <div className="bg-white p-6 rounded-lg">
                 <h2 className="text-2xl font-bold mb-4">Edit Material</h2>
+                <div className=" max-h-[600px] overflow-auto">
                 <form onSubmit={handleEditMaterialSubmit} className="space-y-4 max-w-xl mx-auto">
                   {/* Material Name */}
                   <div>
@@ -337,6 +341,19 @@ export default function Materials() {
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
+                  {/* Unit */}
+                  <div>
+                    <label className="block mb-1 text-gray-700">Unit:</label>
+                    <input
+                      type="text"
+                      name="unit"
+                      value={editMaterialData.unit}
+                      onChange={handleEditMaterialChange}
+                      required
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                    />
+                  </div>
+
                   {/* Quantity */}
                   <div>
                     <label className="block mb-1 text-gray-700">
@@ -402,20 +419,21 @@ export default function Materials() {
                     />
                   </div>
                   <div>
-                  <button
-                    type="submit"
-                    className=" mr-2 bg-[#3c50e0] hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => setEditMaterialData(null)}
-                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Cancel
-                  </button>
+                    <button
+                      type="submit"
+                      className=" mr-2 bg-[#3c50e0] hover:bg-[#6272e6] text-white font-bold py-2 px-4 rounded"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => setEditMaterialData(null)}
+                      className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </form>
+              </div>
               </div>
             </div>
           )}
