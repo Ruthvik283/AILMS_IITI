@@ -47,7 +47,7 @@ const MaterialPieChartSanction = ({ data }) => {
   
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-      <h3 className="text-lg font-semibold mb-2">Number of sanctions</h3>
+      <h3 className="text-lg font-semibold mb-2">Number of Approvals</h3>
       <div style={{ width: "100%", height: "100%" }}>
         <PieChart width={300} height={250}>
          

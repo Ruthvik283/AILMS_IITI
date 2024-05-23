@@ -20,6 +20,7 @@ export default function Materials() {
     quantity: "",
     quantity_A: "",
     quantity_B: "",
+    unit:"",
     critical_quantity: "",
     rack_number: "",
     row_number: "",
@@ -103,13 +104,15 @@ export default function Materials() {
       headers.Authorization = `Bearer ${token}`;
     }
     const { quantity, ...editedMaterialsData } = MaterialFormData;
+    console.log()
     axios
       .post("/api/create-material/", {
         ...editedMaterialsData,
         category: categoryId,
       }, { headers })
       .then((response) => {
-        //console.log("Material created successfully:", response.data);
+        console.log("Material created successfully:", response.data);
+    
         toast.success("Material created successfully");
         setx(!x);
         setShowAddMaterialsForm(!showAddMaterialsForm);
@@ -119,6 +122,7 @@ export default function Materials() {
           quantity: "",
           quantity_A: "",
           quantity_B: "",
+          unit:"",
           critical_quantity: "",
           rack_number: "",
           row_number: "",
@@ -327,6 +331,7 @@ export default function Materials() {
                       name="material_name"
                       value={editMaterialData.material_name}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -338,6 +343,7 @@ export default function Materials() {
                       name="price"
                       value={editMaterialData.price}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -364,6 +370,7 @@ export default function Materials() {
                       name="quantity_A"
                       value={editMaterialData.quantity_A}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -376,6 +383,7 @@ export default function Materials() {
                       name="quantity_B"
                       value={editMaterialData.quantity_B}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -389,6 +397,7 @@ export default function Materials() {
                       name="critical_quantity"
                       value={editMaterialData.critical_quantity}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -402,6 +411,7 @@ export default function Materials() {
                       name="rack_number"
                       value={editMaterialData.rack_number}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -415,6 +425,7 @@ export default function Materials() {
                       name="row_number"
                       value={editMaterialData.row_number}
                       onChange={handleEditMaterialChange}
+                      required
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
                     />
                   </div>
@@ -469,6 +480,19 @@ export default function Materials() {
                     type="number"
                     name="price"
                     value={MaterialFormData.price}
+                    onChange={handleMaterialChange}
+                    required
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-gray-700">
+                    Unit(s):
+                  </label>
+                  <input
+                    type="text"
+                    name="unit"
+                    value={MaterialFormData.unit}
                     onChange={handleMaterialChange}
                     required
                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"

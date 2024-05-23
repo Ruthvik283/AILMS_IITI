@@ -247,12 +247,6 @@ const MaterialsTable = () => {
                       Price
                     </th>
                     <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                     Unit
-                    </th>
-                    <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                     Critical Quantity
-                    </th>
-                    <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Quantity
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         <span>A</span>
@@ -261,6 +255,12 @@ const MaterialsTable = () => {
                     </th>
                     <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Total Quantity
+                    </th>
+                    <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                     UNIT(s)
+                    </th>
+                    <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                     Critical Quantity
                     </th>
                     <th className="px-8 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Rack Number
@@ -304,12 +304,6 @@ const MaterialsTable = () => {
                         {material.price}
                       </td>
                       <td className="px-8 py-4 border-b border-gray-200 text-sm">
-                        {material.unit}
-                      </td>
-                      <td className="px-8 py-4 border-b border-gray-200 text-sm">
-                        {material.critical_quantity}
-                      </td>
-                      <td className="px-8 py-4 border-b border-gray-200 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <span>{material.quantity_A}</span>
                           <span>{material.quantity_B}</span>
@@ -323,6 +317,12 @@ const MaterialsTable = () => {
                         }`}
                       >
                         {material.quantity}
+                      </td>
+                      <td className="px-8 py-4 border-b border-gray-200 text-sm">
+                        {material.unit}
+                      </td>
+                      <td className="px-8 py-4 border-b border-gray-200 text-sm">
+                        {material.critical_quantity}
                       </td>
                       <td className="px-8 py-4 border-b border-gray-200 text-sm">
                         {material.rack_number}

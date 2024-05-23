@@ -34,7 +34,7 @@ class Material(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, related_name='materials', null=True, blank=True)
     material_id = models.AutoField(primary_key=True)
-    material_name = models.CharField(max_length=255, default="Un-named")
+    material_name = models.CharField(max_length=255, unique=True)
     unit = models.CharField(max_length=255, default="unit")
     price = models.IntegerField(null=False)
     critical_quantity = models.IntegerField(null=False, default=5)
@@ -161,7 +161,7 @@ class Sanction(models.Model):
         if self.closed:
             return False
         self.closed = True
-        self.log = self.log + [[str(datetime.now()), 0,'closed']]
+        self.log = self.log + [[str(datetime.now()), 0, 'closed']]
         super().save()
         return True
 

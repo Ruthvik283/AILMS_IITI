@@ -4,6 +4,7 @@ import AuthContext from "../context/AuthContext";
 import MaterialGraph from "./Graph";
 import SanctionGraph from "./SanctionGraph";
 import MaterialPieChartSanction from "./MaterialPieChartSanction";
+import PricePieChartPurchase from "./PricePieChartPurchase";
 import { Link } from "react-router-dom";
 import "./Report.css";
 import toast from "react-hot-toast";
@@ -554,7 +555,7 @@ export default function Report() {
         {showSanction && (
           <div className="SANCTION_REPORT shadow-inner bg-[#FFFEFA] p-10 rounded my-5">
             <h1 className="text-3xl font-bold text-left pb-5">
-              Sanction Report
+              Approval Report
             </h1>
             <hr class="border-t border-gray-150" />
 
@@ -712,7 +713,7 @@ export default function Report() {
             </div>
             <div className="bg-gray-200 p-4 m-2 flex-1">
               <header className="font-bold mb-2">
-                Price worth of Sanctions
+                Price worth of Purchases
               </header>
               <p className="text-lg">
                 {Object.entries(materialPurchaseWisePrice).map(
@@ -731,7 +732,7 @@ export default function Report() {
           <div className="Graphical Stats my-10">
             <div class="flex flex-row flex-wrap justify-around">
               <MaterialPieChartPurchase data={filteredPurchaseList} />
-              {/* <PricePieChartSanction data={filteredPurchaseList} /> */}
+              <PricePieChartPurchase data={filteredPurchaseList} />
             </div>
           </div>
 

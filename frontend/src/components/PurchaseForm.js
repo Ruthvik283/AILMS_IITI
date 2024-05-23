@@ -176,14 +176,24 @@ const PurchaseForm = () => {
     { name: "AMC/CMC" },
   ];
   const [selectedMaterial, setSelectedMaterial] = useState("");
+  const [selectedMaterialDetails, setSelectedMaterialDetails] = useState(null);
 
   const handleChange = (value) => {
     setSelectedMaterial(value);
+    console.log(value);
+    if(value==="All"){
+        setMaterial("");
+        setSelectedMaterial("");
+        setSelectedMaterialDetails(null);
+        return;
+    }
+    
     const selectedMaterial = contextData.materialsData.find(
       (mat) => mat.material_name === value
     );
     if (selectedMaterial) {
       setMaterial(selectedMaterial.material_id.toString());
+      setSelectedMaterialDetails(selectedMaterial);
     }
   };
 
@@ -206,7 +216,7 @@ const PurchaseForm = () => {
         </div>
         <div>
           <label htmlFor="quantityPurchased" className="block mb-1">
-            QUANTITY PURCHASED
+            QUANTITY PURCHASED {(selectedMaterialDetails)?`(in ${selectedMaterialDetails.unit})`:``}
           </label>
           <input
             type="number"
@@ -227,7 +237,7 @@ const PurchaseForm = () => {
             onChange={(e) => setPurchase_type(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
           >
-            <option value="">Select a Purchase</option>
+            <option value="">Select Purchase Type</option>
             {purchaseType.map((unit) => (
               <option key={unit.name} value={unit.name}>
                 {unit.name}

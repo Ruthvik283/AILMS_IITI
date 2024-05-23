@@ -1,16 +1,16 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-const PricePieChartSanction = ({ data }) => {
+const PricePieChartPurchase = ({ data }) => {
     // console.log(data);
   // Group data by material and calculate total quantity
   const materialData = data.reduce(    (acc, purchase) => {
       acc["Total Price"] = acc["Total Price"] || 0;
-      acc["Total Price"] += purchase.price * purchase.quantity_sanctioned;
+      acc["Total Price"] += purchase.price * purchase.quantity_purchased;
 
       acc[purchase.material_name] = acc[purchase.material_name] || 0;
       acc[purchase.material_name] +=
-        purchase.price * purchase.quantity_sanctioned;
+        purchase.price * purchase.quantity_purchased;
       return acc;
     },
     {}
@@ -42,7 +42,7 @@ const PricePieChartSanction = ({ data }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-      <h3 className="text-lg font-semibold mb-2">Approvals Cost</h3>
+      <h3 className="text-lg font-semibold mb-2">Purchases Cost</h3>
       <div style={{ width: "100%", height: "100%" }}>
         <PieChart width={300} height={250}>
 
@@ -79,4 +79,4 @@ const PricePieChartSanction = ({ data }) => {
   );
 };
 
-export default PricePieChartSanction;
+export default PricePieChartPurchase;

@@ -484,7 +484,7 @@ const SanctionForm = () => {
                 </div>
                 <div>
                   <label htmlFor="quantity_sanctioned" className="block mb-1">
-                    Quantity Sanctioned
+                    Quantity Approved (in {material.unit})
                   </label>
                   <input
                     type="number"
