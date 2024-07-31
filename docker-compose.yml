@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/code
+    ports:
+      - "8088:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    command: npm start
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3033:3000"
+      
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
