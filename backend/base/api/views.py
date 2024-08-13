@@ -848,8 +848,8 @@ def delete_technician(request, pk):
 #     email
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def send_verification_email(request):
 
     data = request.data
