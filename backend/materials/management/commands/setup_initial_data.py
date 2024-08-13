@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Create or get the Default department
-        default_department, created_dept = Department.objects.get_or_create(department_name="Default")
+        default_department, created_dept = Department.objects.get_or_create(department_name="Default",is_main=True)
         if created_dept:
             self.stdout.write(self.style.SUCCESS('Created Department: Default'))
         else:
