@@ -54,10 +54,10 @@ const ConfirmationPopup = ({
             <div key={index} className="mb-4">
               <p className="font-semibold">Material: {material.materialName}</p>
               <p className="font-semibold">
-                Quantity Sanctioned: {material.quantity_sanctioned}
+                Quantity Approved Category A: {material.quantity_sanctionedA}
               </p>
               <p className="font-semibold">
-                Sanction Type: {material.sanct_type}
+                Quantity Approved Category B: {material.quantity_sanctionedB}
               </p>
             </div>
           ))}
@@ -114,6 +114,10 @@ const SanctionForm = () => {
         sanct_type: materialQuantities[value.material_id]?.sanct_type || "",
         quantity_sanctioned:
           materialQuantities[value.material_id]?.quantity_sanctioned || "",
+        quantity_sanctionedA:
+          materialQuantities[value.material_id]?.quantity_sanctionedA || 0,
+        quantity_sanctionedB:
+          materialQuantities[value.material_id]?.quantity_sanctionedB || 0,
         QuantityA: value.quantity_A,
         QuantityB: value.quantity_B,
         material_name: value.material_name,
@@ -158,34 +162,32 @@ const SanctionForm = () => {
       const sanct_type = materialQuantities[materialId].sanct_type;
       const quantity_sanctioned =
         materialQuantities[materialId].quantity_sanctioned;
+      const quantity_sanctionedA =
+        materialQuantities[materialId].quantity_sanctionedA;
+      const quantity_sanctionedB =
+        materialQuantities[materialId].quantity_sanctionedB;
       const QuantityA = materialQuantities[materialId].QuantityA;
       const QuantityB = materialQuantities[materialId].QuantityB;
       const material_name = materialQuantities[materialId].material_name;
 
-      if (quantity_sanctioned === "") {
+      if (quantity_sanctionedA + quantity_sanctionedB == 0) {
         invalidMaterials.push(material_name);
         toast.error(`Please enter quantity approved for ${material_name}`);
         return;
-      } else if (sanct_type === "") {
-        invalidMaterials.push(material_name);
-        toast.error(`Please select approval category for ${material_name}`);
-        return;
-      } else if (
-        sanct_type === "A" &&
-        parseInt(quantity_sanctioned) > QuantityA
+      }else if (
+        parseInt(quantity_sanctionedA) > QuantityA
       ) {
         invalidMaterials.push(material_name);
         toast.error(
-          `Quantity approved for ${material_name} cannot be more than available quantity`
+          `Quantity approved for Category A ${material_name}  cannot be more than available quantity`
         );
         return;
       } else if (
-        sanct_type === "B" &&
-        parseInt(quantity_sanctioned) > QuantityB
+        parseInt(quantity_sanctionedB) > QuantityB
       ) {
         invalidMaterials.push(material_name);
         toast.error(
-          `Quantity sanctioned for ${material_name} cannot be more than available quantity`
+          `Quantity sanctioned for Category B ${material_name} cannot be more than available quantity`
         );
         return;
       }
@@ -211,7 +213,7 @@ const SanctionForm = () => {
     // });
     const formDataArray = selectedMaterials.map((material) => {
       const materialId = material.material_id;
-      const { sanct_type, quantity_sanctioned } =
+      const { sanct_type, quantity_sanctionedA,quantity_sanctionedB } =
         materialQuantities[materialId];
       return {
         ticket_id: ticketId,
@@ -220,7 +222,8 @@ const SanctionForm = () => {
         department: department,
         technician_id: technicianId,
         material_id: materialId,
-        quantity_sanctioned: quantity_sanctioned,
+        quantity_sanctionedA: quantity_sanctionedA,
+        quantity_sanctionedB: quantity_sanctionedB,
         userData: contextData.userData,
         sanct_type: sanct_type,
       };
@@ -237,7 +240,9 @@ const SanctionForm = () => {
       material_id: formData.material_id,
       engineer_id: formData.engineer_id,
       technician_id: formData.technician_id,
-      quantity_sanctioned: formData.quantity_sanctioned,
+      // quantity_sanctioned: formData.quantity_sanctioned,
+      quantity_sanctionedA: parseInt(formData.quantity_sanctionedA, 10),
+      quantity_sanctionedB: parseInt(formData.quantity_sanctionedB, 10),
       sanct_type: formData.sanct_type,
     }));
     // console.log("formatted", formattedFormData);
@@ -447,7 +452,7 @@ const SanctionForm = () => {
             {selectedMaterials.map((material) => (
               <div
                 key={material.material_id}
-                className="mb-4 rounded-lg p-2 bg-slate-50"
+                className="mb-4 rounded-lg p-2 bg-slate-50 border-2"
               >
                 <h3 className="text-lg font-semibold mb-2">
                   {material.material_name}
@@ -461,7 +466,7 @@ const SanctionForm = () => {
                     {materialQuantities[material.material_id].QuantityB}
                   </p>
                 </div>
-                <div>
+                {/* <div>
                   <label htmlFor="materialCategory" className="block mb-1">
                     Material Category
                   </label>
@@ -481,23 +486,48 @@ const SanctionForm = () => {
                     <option value="A">Category A</option>
                     <option value="B">Category B</option>
                   </select>
-                </div>
+                </div> */}
+                <label htmlFor="quantity_sanctioned" className="block mb-1">
+                  Quantity Approved
+                </label>
                 <div>
-                  <label htmlFor="quantity_sanctioned" className="block mb-1">
-                    Quantity Approved (in {material.unit})
+                  <label htmlFor="quantity_sanctionedA" className="block mb-1">
+                    Category A (in {material.unit})
                   </label>
                   <input
                     type="number"
-                    min="1"
-                    id="quantity_sanctioned"
+                    min="0"
+                    id="quantity_sanctionedA"
                     value={
                       materialQuantities[material.material_id]
-                        .quantity_sanctioned
+                        .quantity_sanctionedA
                     }
                     onChange={(e) =>
                       handleQuantityChange(
                         material.material_id,
-                        "quantity_sanctioned",
+                        "quantity_sanctionedA",
+                        e.target.value
+                      )
+                    }
+                    className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="quantity_sanctionedB" className="block mb-1">
+                    Category B (in {material.unit})
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    id="quantity_sanctionedB"
+                    value={
+                      materialQuantities[material.material_id]
+                        .quantity_sanctionedB
+                    }
+                    onChange={(e) =>
+                      handleQuantityChange(
+                        material.material_id,
+                        "quantity_sanctionedB",
                         e.target.value
                       )
                     }
@@ -543,7 +573,8 @@ const SanctionForm = () => {
           formData={formData}
           technician={technicianName}
           departmentName={contextData.userData.department.department_name}
-          materialDetails={formData.map((material) => material.materialName)}
+          // materialDetails={formData.map((material) => material.materialName)}
+          materialDetails={formData}
           engineerName={contextData.userData.username}
           onConfirm={() => handleConfirmSubmit()}
           onCancel={handleCancelConfirmation}

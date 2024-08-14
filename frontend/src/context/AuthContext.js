@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         const tokenString = localStorage.getItem("authTokens");
         const token = tokenString ? JSON.parse(tokenString).access : null;
         
-        console.log("token",token)
+        // console.log("token",token)
         const headers = {
           'Content-Type': 'application/json',
         };

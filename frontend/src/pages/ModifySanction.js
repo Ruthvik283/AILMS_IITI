@@ -39,6 +39,7 @@ const ModifySanctionForm = () => {
             }
 
             const data1 = await response1.json();
+            // console.log(data1.ticket_id);
             setsanctionData(data1);
             if (contextData.userData.role != "Manager") {
               if (data1.engineer_id != contextData.userData.id) {
@@ -106,13 +107,20 @@ const ModifySanctionForm = () => {
     } else if (
       type === "add" &&
       ((sanctionData.sanct_type === "A" &&
-        materialData.quantity_A < quantity) ||
-        (sanctionData.sanct_type === "B" && materialData.quantity_B < quantity))
+        materialData.quantity_A < quantity))
     ) {
       err.push(
         `Amount of material left is Insufficient. Only ${materialData.quantity_A} units of category-${sanctionData.sanct_type} left`
       );
-    } else if (
+    } 
+    else if(
+      type === "add" &&
+      (sanctionData.sanct_type === "B" && materialData.quantity_B < quantity)){
+        err.push(
+          `Amount of material left is Insufficient. Only ${materialData.quantity_B} units of category-${sanctionData.sanct_type} left`
+        );
+    }
+    else if (
       type === "return" &&
       Number(quantity) > sanctionData.quantity_sanctioned
     ) {
@@ -281,6 +289,9 @@ const ModifySanctionForm = () => {
                       minute: "numeric",
                       hour12: true,
                     })}
+                  </li>
+                  <li className="py-3 text-gray-700 font-bold">
+                    Ticket ID: {sanctionData.ticket_id}
                   </li>
                   <li className="py-3 text-gray-700 font-bold">
                     Net quantity approved: {sanctionData.quantity_sanctioned}
