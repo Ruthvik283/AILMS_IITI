@@ -341,7 +341,8 @@ def departments_data(request):
 
     return Response(department_data)
 
-
+# The backend date filter was originally used, hence the initial naming.
+# However, this view now returns all purchases, with filtering handled by the React frontend.
 class PurchasesBetweenDates(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

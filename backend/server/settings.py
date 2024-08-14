@@ -169,8 +169,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-# Set to False for base.api.views.PurchasesBetweenDates() api warning
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
