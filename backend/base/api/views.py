@@ -341,7 +341,8 @@ def departments_data(request):
 
     return Response(department_data)
 
-
+# The backend date filter was originally used, hence the initial naming.
+# However, this view now returns all purchases, with filtering handled by the React frontend.
 class PurchasesBetweenDates(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -382,27 +383,49 @@ def sanction_material(request):
             technician_obj = Technician.objects.get(id=data['technician_id'])
             material_obj = Material.objects.get(
                 material_id=data['material_id'])
+            a=int(data['quantity_sanctionedA'])
+            b=int(data['quantity_sanctionedB'])
+            if a>0:
+                sct = Sanction(
+                    ticket_id=ticket1,
+                    description=data['description'],
+                    department=department_obj,
+                    engineer_id=data['engineer_id'],
+                    technician=technician_obj,
+                    material=material_obj,
+                    quantity_sanctioned=a,
+                    sanct_type='A'
+                )
+                is_valid = sct.is_valid()
 
-            sct = Sanction(
-                ticket_id=ticket1,
-                description=data['description'],
-                department=department_obj,
-                engineer_id=data['engineer_id'],
-                technician=technician_obj,
-                material=material_obj,
-                quantity_sanctioned=int(data['quantity_sanctioned']),
-                sanct_type=data['sanct_type']
-            )
+                if is_valid[0]:
+                    valid_sanctions.append(sct)
+                else:
+                    invalid_sanctions.append({
+                        "data": data,
+                        "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
+                    })
+            if b>0:
+                sct = Sanction(
+                    ticket_id=ticket1,
+                    description=data['description'],
+                    department=department_obj,
+                    engineer_id=data['engineer_id'],
+                    technician=technician_obj,
+                    material=material_obj,
+                    quantity_sanctioned=b,
+                    sanct_type='B'
+                )
 
-            is_valid = sct.is_valid()
+                is_valid = sct.is_valid()
 
-            if is_valid[0]:
-                valid_sanctions.append(sct)
-            else:
-                invalid_sanctions.append({
-                    "data": data,
-                    "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
-                })
+                if is_valid[0]:
+                    valid_sanctions.append(sct)
+                else:
+                    invalid_sanctions.append({
+                        "data": data,
+                        "message": f"Amount of Material to be Sanctioned not available. (Requested {is_valid[1]}, available {is_valid[2]})"
+                    })
 
         except ObjectDoesNotExist as e:
             invalid_sanctions.append({

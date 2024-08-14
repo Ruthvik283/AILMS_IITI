@@ -375,7 +375,7 @@ export default function Report() {
         return;
       }
       if (selectedSanctionType.length === 0) {
-        toast.error("Please select a Sanction type");
+        toast.error("Please select a Sanction Category");
         return;
       }
     } else if (isSanction) {
@@ -389,7 +389,7 @@ export default function Report() {
         return;
       }
       if (selectedSanctionType.length === 0) {
-        toast.error("Please select a Sanction type");
+        toast.error("Please select a Sanction Category");
         return;
       }
     } else if (isPurchase) {
@@ -499,7 +499,7 @@ export default function Report() {
                   onChange={(e) => setSelectedSanctionType(e.value)}
                   options={sanctionType}
                   optionLabel="name"
-                  placeholder="Select Sanction Type"
+                  placeholder="Select Sanction Category"
                   maxSelectedLabels={10}
                   className="w-full md:w-20rem border border-gray-100"
                 />

@@ -124,15 +124,15 @@ class Sanction(models.Model):
             if to_type == 'A':
                 self.quantity_sanctioned -= quantity
                 self.material.quantity_A += quantity
-                self.log = self.log + [[str(datetime.now()), -quantity, 'A']]
+                self.log = self.log + [[str(timezone.now()), -quantity, 'A']]
             else:
                 self.quantity_sanctioned -= quantity
                 self.material.quantity_B += quantity
-                self.log = self.log + [[str(datetime.now()), -quantity, 'B']]
+                self.log = self.log + [[str(timezone.now()), -quantity, 'B']]
         else:
             self.quantity_sanctioned -= quantity
             self.material.quantity_B += quantity
-            self.log = self.log + [[str(datetime.now()), -quantity, 'B']]
+            self.log = self.log + [[str(timezone.now()), -quantity, 'B']]
 
         super().save()
         self.material.save()
@@ -143,14 +143,14 @@ class Sanction(models.Model):
             if self.material.quantity_A >= quantity and quantity > 0:
                 self.material.quantity_A -= quantity
                 self.quantity_sanctioned += quantity
-                self.log = self.log + [[str(datetime.now()), quantity]]
+                self.log = self.log + [[str(timezone.now()), quantity]]
             else:
                 return False
         else:
             if self.material.quantity_B >= quantity and quantity > 0:
                 self.material.quantity_B -= quantity
                 self.quantity_sanctioned += quantity
-                self.log = self.log + [[str(datetime.now()), quantity]]
+                self.log = self.log + [[str(timezone.now()), quantity]]
             else:
                 return False
         super().save()
