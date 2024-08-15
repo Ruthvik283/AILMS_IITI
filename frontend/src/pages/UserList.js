@@ -9,6 +9,7 @@ import {Link} from "react-router-dom"
 const UserList = () => {
   const contextData = useContext(AuthContext);
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [editUser, setEditUser] = useState(null);
   const [formData, setFormData] = useState({
     id: null,
@@ -17,6 +18,18 @@ const UserList = () => {
     department: "",
     role: "",
   });
+  const [selectedRole, setSelectedRole] = useState('All');
+
+  const roles = ['All', 'Manager', 'Engineer'];
+  const handleRoleChange = (role) => {
+    setSelectedRole(role);
+    if (role === 'All') {
+      setFilteredUsers(users);
+    } else {
+      setFilteredUsers(users.filter(user => user.role_name == role));
+    }
+    // console.log(users);
+  };
 
   useEffect(() => {
     document.title = "Users- AILMS";
@@ -37,6 +50,7 @@ const UserList = () => {
       .get("/api/get_users/",{ headers })
       .then((response) => {
         setUsers(response.data);
+        setFilteredUsers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
@@ -88,6 +102,12 @@ const UserList = () => {
           .get("/api/get_users/",{headers})
           .then((response) => {
             setUsers(response.data);
+            //handleRoleChange code
+            if (selectedRole === 'All') {
+              setFilteredUsers(response.data);
+            } else {
+              setFilteredUsers((response.data).filter(user => user.role_name == selectedRole));
+            }
           })
           .catch((error) => {
             console.error("Error fetching user data:", error);
@@ -98,18 +118,51 @@ const UserList = () => {
       });
   };
 
+
   return (
     <>
       <Navbar />
       <div className="container mx-auto py-8 min-h-screen">
        
         <h1 className="text-2xl font-semibold leading-tight px-10">Users</h1>
-      <div class="flex justify-end">
+        <div className="bg-white shadow-md rounded-lg px-8 py-6 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+              <div className="w-full sm:w-auto">
+                <label htmlFor="role-filter" className="block text-sm font-medium text-gray-700 mb-2">Filter by role:</label>
+                <select
+                  id="role-filter"
+                  value={selectedRole}
+                  onChange={(e) => handleRoleChange(e.target.value)}
+                  className="block w-full sm:w-auto bg-white border border-gray-300 rounded-md py-2 px-3 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  {roles.map(role => (
+                    <option key={role} value={role}>{role}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-wrap justify-center sm:justify-end space-x-0 sm:space-x-4 space-y-2 sm:space-y-0">
+                <a 
+                  href="/register_requests" 
+                  className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                >
+                  Register Requests
+                </a>
+                <a 
+                  href="/technicians" 
+                  className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                >
+                  Technicians
+                </a>
+              </div>
+            </div>
+          </div>
+
+      {/* <div class="flex justify-end">
   <a href="/register_requests" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-2 mt-1 rounded">Register Requests</a>
   <a href="/technicians" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-2 mt-1 rounded">Technicians</a>
-</div>
+</div> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <div
               key={user.id}
               className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
