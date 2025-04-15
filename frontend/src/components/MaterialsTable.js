@@ -31,9 +31,7 @@ const MaterialsTable = () => {
     const fetchData = async () => {
       try {
 
-        fetchMaterialsData();
-
-        const materialsData = contextData.materialsData;
+        const materialsData = await fetchMaterialsData();
         const belowCriticalData = materialsData.filter(material => {
             return material.quantity < material.critical_quantity;
           });
@@ -45,7 +43,8 @@ const MaterialsTable = () => {
           ),
         }));
         setCurrentPage(1);
-
+        const currentEntries = mergedData.slice(0, perPage);
+        setCurrentEntries(currentEntries);
         setMaterialsData(mergedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -76,15 +75,18 @@ const MaterialsTable = () => {
 
   useEffect(() => {
     setIndexOfLastEntry  (currentPage * perPage);
-    setIndexOfFirstEntry( indexOfLastEntry - perPage);
-    const currentEntries = filteredMaterials.slice(indexOfFirstEntry, indexOfLastEntry);
+    
+    const lastEntryIndex = currentPage * perPage;
+    const firstEntryIndex = lastEntryIndex - perPage;
+    setIndexOfFirstEntry(lastEntryIndex - perPage);
+    const currentEntries = filteredMaterials.slice(firstEntryIndex, lastEntryIndex);
     setCurrentEntries(currentEntries);
-  }, [currentPage, perPage, filteredMaterials, search]);
+  }, [currentPage, perPage, search]);
   
   
   useEffect(()=>{
     setCurrentPage(1);
-  },[search,selectedMaterials])
+  },[search,selectedMaterials]);
   const handleSendEmail = async () => {
     try {
       if (globalSelectedMaterials.length === 0) {

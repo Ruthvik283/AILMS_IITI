@@ -72,6 +72,8 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       setMaterialsData(data);
+
+      return data;
       //toast.success("hi");
       //console.log(data);
     } catch (error) {
