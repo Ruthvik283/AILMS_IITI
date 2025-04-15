@@ -34,7 +34,7 @@ urlpatterns = [
     path('create-material/', MaterialCreateView.as_view(), name='create-material'),
     path('modifysanction/', views.modify_sanction, name='modify-sanction'),
     path('purchase-pdf/<int:purchase_id>',
-         views.PurchasePDF, name='purchase-pdf'),
+         views.purchase_pdf, name='purchase-pdf'),
     path('api_test/', views.test, name='apitest'),
     path('update_user/', views.update_user, name='update_user'),
     path('get_users/', views.get_users, name='get_users'),

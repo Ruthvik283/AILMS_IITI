@@ -9,12 +9,44 @@ const PurchasePdf = () => {
   const [src, setSrc] = useState(purchase_id);
   const [invoicePdf, setInvoicePdf] = useState(null);
   const [token, setToken] = useState();
+  const [pdfUrl, setPdfUrl] = useState(null);
+
+  const fetchPdf = async () => {
+    const tokenString = localStorage.getItem("authTokens");
+    const token = tokenString ? JSON.parse(tokenString).access : null;
+
+    if (!token) {
+      toast.error("No token found. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/purchase-pdf/${purchase_id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch PDF (${response.status})`);
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setPdfUrl(url);
+    } catch (error) {
+      console.error("Error fetching PDF:", error);
+      toast.error("Failed to load PDF");
+    }
+  };
 
   useEffect(() => {
     document.title = "Purchase Pdf - AILMS";
     window.scrollTo(0, 0);
     document.title = "Approval - AILMS";
     window.scrollTo(0, 0);
+    fetchPdf();
     const tokenString = localStorage.getItem("authTokens");
     const token1 = tokenString ? JSON.parse(tokenString).access : null;
     setToken(token1);
@@ -60,6 +92,7 @@ const PurchasePdf = () => {
     } catch (error) {
       console.error("Error submitting form: ", error);
     }
+
   };
 
   return (
@@ -68,7 +101,7 @@ const PurchasePdf = () => {
       <iframe
         id="purchase-pdf"
         title="Purchase PDF"
-        src={`http://127.0.0.1:8000/api/purchase-pdf/${src}`}
+        src={pdfUrl}
         className="w-[1000px] h-[700px] border border-gray-300 rounded-lg overflow-hidden"
       />
       <form onSubmit={pdfsubmit} className="space-y-4 py-8">

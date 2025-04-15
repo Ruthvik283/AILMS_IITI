@@ -21,7 +21,7 @@ from django.utils import timezone
 from django.db.models import F
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, FileResponse, Http404
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
 from django.template import Context, Engine
@@ -997,3 +997,21 @@ def change_password(request):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def purchase_pdf(request, purchase_id):
+    try:
+        filename = f"purchase_{purchase_id}"
+        filepath = os.path.join("files", f"{filename}.pdf")
+
+        if not os.path.exists(filepath):
+            return HttpResponse("<h1>PDF not found</h1>", status=status.HTTP_404_NOT_FOUND)
+
+        pdf = open(filepath, "rb")
+        response = FileResponse(pdf, content_type='application/pdf', filename=f"{filename}.pdf")
+        response['Content-Disposition'] = f"inline; filename={filename}.pdf"
+        return response
+
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

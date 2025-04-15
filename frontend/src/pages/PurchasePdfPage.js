@@ -16,7 +16,7 @@ export default function PurchasePdfPage() {
             
             <PurchasePdf/>
             </div>
-            <Footer2></Footer2>
+            {/* <Footer2></Footer2> */}
 
         </>
     )
