@@ -45,7 +45,7 @@ export default function ChangePasswordPage() {
     }
     console.log("usrid: ", user_id);
     const response1 = await fetch(
-      `http://127.0.0.1:8000/api/change-password/`,
+      `/api/change-password/`,
       {
         method: "POST",
         body: JSON.stringify({ user_id, oldPassword, newPassword }),
